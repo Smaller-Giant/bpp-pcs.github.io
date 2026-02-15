@@ -50,10 +50,10 @@
         <section id="basket-rows" class="basket-list" aria-live="polite"></section>
         <aside class="panel">
           <div id="basket-summary"></div>
-          <button id="checkout-button" class="button primary" type="button" style="width:100%;margin-top:0.6rem;">Checkout with Stripe</button>
+          <button id="checkout-button" class="button primary" type="button" style="width:100%;margin-top:0.6rem;">Proceed to Checkout</button>
           <button id="clear-basket" class="button secondary" type="button" style="width:100%;margin-top:0.45rem;">Clear Basket</button>
           <p class="meta-note" style="margin-top:0.75rem;">
-            Stripe key is configured in <code>js/config.js</code>. Product Stripe Price IDs are in <code>js/products.js</code>.
+            Checkout redirects to the Stripe Payment Link configured in <code>js/config.js</code>.
           </p>
         </aside>
       </div>
@@ -78,7 +78,6 @@
     </div>
   </footer>
 
-  <script src="https://js.stripe.com/v3/"></script>
   <script src="js/config.js"></script>
   <script src="js/products.js"></script>
   <script src="js/store.js"></script>

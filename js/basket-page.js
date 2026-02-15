@@ -52,7 +52,7 @@ window.BPP = window.BPP || {};
 
     if (checkoutBtn) {
       checkoutBtn.disabled = totals.itemCount === 0 || checkoutBusy;
-      checkoutBtn.textContent = checkoutBusy ? "Redirecting..." : "Checkout with Stripe";
+      checkoutBtn.textContent = checkoutBusy ? "Redirecting..." : "Proceed to Checkout";
     }
   }
 
@@ -79,16 +79,6 @@ window.BPP = window.BPP || {};
     renderSummary();
   }
 
-  function buildCheckoutUrls() {
-    const current = new URL(window.location.href);
-    const basePath = current.pathname.slice(0, current.pathname.lastIndexOf("/") + 1);
-    const base = `${current.origin}${basePath}`;
-    return {
-      successUrl: `${base}success.html?session_id={CHECKOUT_SESSION_ID}`,
-      cancelUrl: `${base}cancel.html`
-    };
-  }
-
   async function startCheckout() {
     if (!ns.store || !ns.ui || checkoutBusy) {
       return;
@@ -100,20 +90,11 @@ window.BPP = window.BPP || {};
       return;
     }
 
-    const key = String(window.BPP_CONFIG.stripePublishableKey || "");
-    if (!key.startsWith("pk_") || key.includes("REPLACE_WITH")) {
-      ns.ui.showToast("Set Stripe key in js/config.js");
-      return;
-    }
-
-    const missingPrice = rows.find((row) => !String(row.product.stripePriceId || "").startsWith("price_"));
-    if (missingPrice) {
-      ns.ui.showToast(`Missing Stripe price ID: ${missingPrice.product.title}`);
-      return;
-    }
-
-    if (typeof window.Stripe !== "function") {
-      ns.ui.showToast("Stripe library did not load");
+    // Stripe Payment Link redirect:
+    // all checkout flows should route through this configured URL.
+    const checkoutUrl = String(window.BPP_CONFIG.stripePaymentLink || "").trim();
+    if (!checkoutUrl || !checkoutUrl.startsWith("https://buy.stripe.com/")) {
+      ns.ui.showToast("Stripe payment link is not configured");
       return;
     }
 
@@ -121,21 +102,7 @@ window.BPP = window.BPP || {};
     renderSummary();
 
     try {
-      const stripe = window.Stripe(key);
-      const urls = buildCheckoutUrls();
-      const response = await stripe.redirectToCheckout({
-        mode: window.BPP_CONFIG.stripeMode || "payment",
-        lineItems: rows.map((row) => ({
-          price: row.product.stripePriceId,
-          quantity: row.quantity
-        })),
-        successUrl: urls.successUrl,
-        cancelUrl: urls.cancelUrl
-      });
-
-      if (response && response.error) {
-        ns.ui.showToast(response.error.message || "Checkout failed");
-      }
+      window.location.href = checkoutUrl;
     } catch (error) {
       ns.ui.showToast("Checkout failed");
     } finally {

@@ -10,7 +10,7 @@ window.BPP_DEFAULT_PRODUCTS = [
     description: "Quiet high-airflow build tuned for smooth 1440p play and day-to-day creator workloads.",
     specs: ["RTX-class graphics", "32GB DDR5", "2TB NVMe"],
     stockSeed: 17,
-    stripePriceId: "price_1BPPvantaS1Replace",
+    stripePriceId: "",
     images: [
       "images/products/vanta-s1.svg",
       "images/products/helios-r2.svg",
@@ -28,7 +28,7 @@ window.BPP_DEFAULT_PRODUCTS = [
     description: "Competitive frame rates with headroom for streaming, clipping, and multi-display battle stations.",
     specs: ["RTX 4080-class", "Liquid cooling", "Wi-Fi 7 ready"],
     stockSeed: 12,
-    stripePriceId: "price_1BPPheliosR2Replace",
+    stripePriceId: "",
     images: [
       "images/products/helios-r2.svg",
       "images/products/aurora-x9.svg",
@@ -46,7 +46,7 @@ window.BPP_DEFAULT_PRODUCTS = [
     description: "Elite thermal design and flagship graphics for 4K ultra settings and ray-traced workloads.",
     specs: ["Flagship GPU", "Premium airflow loop", "4K optimized"],
     stockSeed: 8,
-    stripePriceId: "price_1BPPauroraX9Replace",
+    stripePriceId: "",
     images: [
       "images/products/aurora-x9.svg",
       "images/products/titan-z8.svg",
@@ -64,7 +64,7 @@ window.BPP_DEFAULT_PRODUCTS = [
     description: "Workstation-first chassis tuned for rendering, simulation, and timeline-heavy editing stacks.",
     specs: ["High-core CPU", "64GB DDR5", "Dual NVMe"],
     stockSeed: 10,
-    stripePriceId: "price_1BPPforgeC6Replace",
+    stripePriceId: "",
     images: [
       "images/products/forge-c6.svg",
       "images/products/studio-n5.svg",
@@ -82,7 +82,7 @@ window.BPP_DEFAULT_PRODUCTS = [
     description: "Balanced creator tower for design, photo workflows, and reliable exports on a lean budget.",
     specs: ["Creator presets", "Silent profile", "1TB NVMe"],
     stockSeed: 15,
-    stripePriceId: "price_1BPPstudioN5Replace",
+    stripePriceId: "",
     images: [
       "images/products/studio-n5.svg",
       "images/products/forge-c6.svg",
@@ -100,7 +100,7 @@ window.BPP_DEFAULT_PRODUCTS = [
     description: "Reliable office and productivity desktop with premium cable routing and long-session stability.",
     specs: ["Office optimized", "Low acoustic profile", "Upgradeable"],
     stockSeed: 20,
-    stripePriceId: "price_1BPPatlasP4Replace",
+    stripePriceId: "",
     images: [
       "images/products/atlas-p4.svg",
       "images/products/studio-n5.svg",
@@ -118,7 +118,7 @@ window.BPP_DEFAULT_PRODUCTS = [
     description: "Heavy compute tower for AI-assisted tooling, simulation pipelines, and parallel workloads.",
     specs: ["Workstation board", "ECC ready", "Top-end power delivery"],
     stockSeed: 7,
-    stripePriceId: "price_1BPPtitanZ8Replace",
+    stripePriceId: "",
     images: [
       "images/products/titan-z8.svg",
       "images/products/aurora-x9.svg",
@@ -136,7 +136,7 @@ window.BPP_DEFAULT_PRODUCTS = [
     description: "Small footprint build with premium materials and strong 1440p output for clean desk setups.",
     specs: ["SFF chassis", "GPU support bracket", "Portable profile"],
     stockSeed: 11,
-    stripePriceId: "price_1BPPdriftMiniReplace",
+    stripePriceId: "",
     images: [
       "images/products/drift-mini.svg",
       "images/products/vanta-s1.svg",

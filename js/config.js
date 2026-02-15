@@ -1,5 +1,7 @@
 window.BPP_CONFIG = {
-  stripePublishableKey: "pk_test_REPLACE_WITH_YOUR_STRIPE_PUBLISHABLE_KEY",
+  // Stripe Payment Link used for all client-side checkout redirects (test mode).
+  stripePaymentLink: "https://buy.stripe.com/test_9B6aEW11x5Wo3Ed3Sz6kg00",
+  stripePublishableKey: "",
   stripeMode: "payment",
   currency: "usd",
   shippingFlatRate: 45,
