@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Basket | BPP PCs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="index.html">
+        <span class="brand-main">BPP PCs</span>
+        <span class="brand-tag">Buy it, Plug it, Play it</span>
+      </a>
+      <nav class="main-nav" aria-label="Main navigation">
+        <a href="index.html">Home</a>
+        <a href="products.html">Products</a>
+        <a href="about.html">About</a>
+        <a href="basket.html" aria-current="page" class="basket-link">Basket <span id="basketCount" class="count-pill">0</span></a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <section class="container subhero reveal">
+      <p class="eyebrow">Checkout staging</p>
+      <h1>Lock In Your Build</h1>
+      <p>Adjust quantities, verify totals, and confirm terms before checkout.</p>
+    </section>
+
+    <section class="container section basket-layout reveal">
+      <section>
+        <div id="basketItems" class="basket-items"></div>
+        <a class="button ghost" href="products.html">Continue Shopping</a>
+      </section>
+
+      <aside class="panel summary" aria-label="Basket summary">
+        <h2>Summary</h2>
+        <dl>
+          <div><dt>Items</dt><dd id="summaryItems">0</dd></div>
+          <div><dt>Subtotal</dt><dd id="summarySubtotal">GBP 0.00</dd></div>
+          <div><dt>Shipping</dt><dd>Free</dd></div>
+        </dl>
+        <p class="summary-total">Total <span id="summaryTotal">GBP 0.00</span></p>
+        <label class="consent-check">
+          <input type="checkbox" id="legalConsent" />
+          I agree to the <a href="terms.html">Terms</a> and <a href="privacy.html">Privacy Policy</a>.
+        </label>
+        <button id="checkoutButton" class="button primary full">Proceed To Checkout</button>
+        <p class="tiny-note">Need finance or payment integration? Connect this action to your provider in `scripts/basket.js`.</p>
+      </aside>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <p class="footer-title">BPP PCs</p>
+        <p class="muted">Buy it, Plug it, Play it</p>
+      </div>
+      <nav class="footer-links" aria-label="Legal links">
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms and Conditions</a>
+        <a href="returns.html">Returns and Refunds</a>
+        <a href="accessibility.html">Accessibility</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </div>
+    <div class="container footer-bottom">Copyright <span id="year"></span> BPP PCs</div>
+  </footer>
+
+  <script src="scripts/data.js"></script>
+  <script src="scripts/basket.js"></script>
+  <script src="scripts/main.js"></script>
+</body>
+</html>
