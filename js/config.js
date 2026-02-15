@@ -1,14 +1,14 @@
-window.BPP = window.BPP || {};
-
-window.BPP.config = {
+window.BPP_CONFIG = {
   stripePublishableKey: "pk_test_REPLACE_WITH_YOUR_STRIPE_PUBLISHABLE_KEY",
-  currency: "usd",
   stripeMode: "payment",
-  shippingFlatRate: 49,
-  freeShippingThreshold: 2600,
+  currency: "usd",
+  shippingFlatRate: 45,
+  freeShippingThreshold: 2500,
+  adminCode: "901",
   storageKeys: {
-    basket: "bpp_basket_v1",
-    wishlist: "bpp_wishlist_v1",
-    recentlyViewed: "bpp_recently_viewed_v1"
+    basket: "bpp_basket_v3",
+    products: "bpp_products_v3",
+    cookieConsent: "bpp_cookie_consent_v1",
+    adminSession: "bpp_admin_session_v1"
   }
 };

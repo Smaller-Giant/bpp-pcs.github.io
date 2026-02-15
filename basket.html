@@ -4,85 +4,82 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Basket | BPP PCs</title>
-  <meta name="description" content="Review your selected BPP PCs and complete checkout with Stripe.">
+  <meta name="description" content="Manage your BPP PCs basket and checkout through Stripe.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
   <header class="site-header">
-    <div class="container top-bar">
-      <a class="logo" href="index.html" aria-label="BPP PCs homepage">
-        <span class="logo-mark">BPP</span>
-        <span class="logo-text">
-          <span class="logo-title">BPP PCs</span>
-          <span class="logo-subtitle">Buy it, Plug it, Play it</span>
+    <div class="container header-inner">
+      <a class="logo" href="index.html" aria-label="BPP PCs home">
+        <span class="logo-badge">BPP</span>
+        <span class="logo-copy">
+          <strong>BPP PCs</strong>
+          <span>BUY IT. PLUG IT. PLAY IT.</span>
         </span>
       </a>
-
-      <button class="mobile-menu-toggle" type="button" data-menu-toggle aria-label="Toggle navigation">☰</button>
-
-      <nav class="nav-links" aria-label="Primary navigation">
+      <button class="mobile-toggle" type="button" data-mobile-toggle aria-label="Toggle site navigation">Menu</button>
+      <nav class="nav-menu" data-nav-menu aria-label="Primary navigation">
         <a data-nav="index.html" href="index.html">Home</a>
         <a data-nav="products.html" href="products.html">Products</a>
         <a data-nav="basket.html" href="basket.html">Basket</a>
+        <a data-nav="admin.html" href="admin.html">Admin</a>
       </nav>
-
-      <a class="basket-pill" href="basket.html">
+      <a class="basket-pill" href="basket.html" aria-label="Go to basket">
         Basket
-        <span class="basket-count">0</span>
+        <strong data-basket-count>0</strong>
       </a>
     </div>
   </header>
 
   <main class="section">
     <div class="container">
-      <div class="section-header">
+      <div class="section-top">
         <div>
-          <span class="eyebrow">Checkout</span>
-          <h1 style="font-size:clamp(2rem,4.2vw,3.4rem);">Your basket</h1>
+          <p class="kicker">Basket</p>
+          <h1 style="font-size:clamp(2rem,4.8vw,3.6rem);">Checkout Queue</h1>
         </div>
       </div>
 
       <div class="basket-layout">
-        <section id="basket-list" class="basket-list"></section>
-
+        <section id="basket-rows" class="basket-list" aria-live="polite"></section>
         <aside class="panel">
           <div id="basket-summary"></div>
-          <button id="checkout-button" type="button" class="btn btn-primary" style="width:100%;margin-top:0.6rem;">Proceed to Checkout</button>
-          <button id="clear-basket" type="button" class="btn btn-secondary" style="width:100%;margin-top:0.6rem;">Clear Basket</button>
-          <p class="summary-note" style="margin-top:0.75rem;">
-            Stripe Checkout is configured client-side with your publishable key and Stripe Price IDs.
+          <button id="checkout-button" class="button primary" type="button" style="width:100%;margin-top:0.6rem;">Checkout with Stripe</button>
+          <button id="clear-basket" class="button secondary" type="button" style="width:100%;margin-top:0.45rem;">Clear Basket</button>
+          <p class="meta-note" style="margin-top:0.75rem;">
+            Stripe key is configured in <code>js/config.js</code>. Product Stripe Price IDs are in <code>js/products.js</code>.
           </p>
         </aside>
       </div>
     </div>
   </main>
 
-  <footer class="site-footer">
+  <footer class="footer">
     <div class="container footer-grid">
       <div>
-        <strong>BPP PCs</strong>
-        <p style="margin-top:0.35rem;">Buy it, Plug it, Play it.</p>
-        <p style="margin-top:0.35rem;font-size:0.82rem;color:var(--muted);">© <span data-year></span> BPP PCs. All rights reserved.</p>
+        <h3 style="margin-bottom:0.4rem;">BPP PCs</h3>
+        <p>Fast, secure checkout and premium systems.</p>
+        <p class="meta-line" style="margin-top:0.5rem;">© <span data-year></span> BPP PCs</p>
       </div>
       <div class="footer-links">
         <a href="products.html">Products</a>
         <a href="basket.html">Basket</a>
+        <a href="admin.html">Admin</a>
         <a href="privacy.html">Privacy Policy</a>
-        <a href="terms.html">Terms & Conditions</a>
-        <a href="refund.html">Refund Policy</a>
+        <a href="terms.html">Terms</a>
+        <a href="refund.html">Refunds</a>
       </div>
     </div>
   </footer>
 
   <script src="https://js.stripe.com/v3/"></script>
   <script src="js/config.js"></script>
-  <script src="js/product-data.js"></script>
+  <script src="js/products.js"></script>
   <script src="js/store.js"></script>
-  <script src="js/ui.js"></script>
-  <script src="js/main.js"></script>
+  <script src="js/app.js"></script>
   <script src="js/basket-page.js"></script>
 </body>
 </html>

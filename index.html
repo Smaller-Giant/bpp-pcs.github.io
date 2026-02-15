@@ -3,189 +3,220 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BPP PCs | Buy it, Plug it, Play it</title>
-  <meta name="description" content="Premium prebuilt PCs from BPP PCs. Buy it, Plug it, Play it.">
+  <title>BPP PCs | Futuristic Premium PC Store</title>
+  <meta name="description" content="BPP PCs futuristic premium desktop systems. Buy it, Plug it, Play it.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
   <header class="site-header">
-    <div class="container top-bar">
-      <a class="logo" href="index.html" aria-label="BPP PCs homepage">
-        <span class="logo-mark">BPP</span>
-        <span class="logo-text">
-          <span class="logo-title">BPP PCs</span>
-          <span class="logo-subtitle">Buy it, Plug it, Play it</span>
+    <div class="container header-inner">
+      <a class="logo" href="index.html" aria-label="BPP PCs home">
+        <span class="logo-badge">BPP</span>
+        <span class="logo-copy">
+          <strong>BPP PCs</strong>
+          <span>BUY IT. PLUG IT. PLAY IT.</span>
         </span>
       </a>
 
-      <button class="mobile-menu-toggle" type="button" data-menu-toggle aria-label="Toggle navigation">☰</button>
+      <button class="mobile-toggle" type="button" data-mobile-toggle aria-label="Toggle site navigation">Menu</button>
 
-      <nav class="nav-links" aria-label="Primary navigation">
+      <nav class="nav-menu" data-nav-menu aria-label="Primary navigation">
         <a data-nav="index.html" href="index.html">Home</a>
         <a data-nav="products.html" href="products.html">Products</a>
         <a data-nav="basket.html" href="basket.html">Basket</a>
+        <a data-nav="admin.html" href="admin.html">Admin</a>
       </nav>
 
-      <a class="basket-pill" href="basket.html">
+      <a class="basket-pill" href="basket.html" aria-label="Go to basket">
         Basket
-        <span class="basket-count">0</span>
+        <strong data-basket-count>0</strong>
       </a>
     </div>
   </header>
 
   <main>
     <section class="hero">
-      <div class="container hero-shell">
-        <div class="hero-grid">
-          <div class="hero-copy">
-            <span class="eyebrow">Premium Systems</span>
-            <h1>Performance desktops, tuned and ready from day one.</h1>
-            <p>
-              BPP PCs delivers premium prebuilt systems with clean thermals, trusted parts, and refined setup support.
-              You choose the build, we handle the hard part.
-            </p>
-            <div class="hero-actions">
-              <a class="btn btn-primary" href="products.html">Shop the Collection</a>
-              <a class="btn btn-secondary" href="basket.html">Review Basket</a>
-            </div>
-            <div class="hero-stats">
-              <div class="stat">
-                <strong>48h</strong>
-                <span>Average dispatch</span>
-              </div>
-              <div class="stat">
-                <strong>3 Year</strong>
-                <span>Premium warranty</span>
-              </div>
-              <div class="stat">
-                <strong>5,000+</strong>
-                <span>Systems delivered</span>
-              </div>
-            </div>
+      <div class="hero-bg" data-parallax="0.1" aria-hidden="true"></div>
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <p class="kicker">Futuristic Performance</p>
+          <h1>Elite desktop builds for gaming, creator, and AI-heavy workflows.</h1>
+          <p>
+            BPP PCs combines premium components, clean thermal engineering, and strict test standards.
+            Pick your build tier, power on, and go live in minutes.
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="products.html">Shop Builds</a>
+            <a class="button secondary" href="#why-bpp">Why BPP PCs</a>
           </div>
-
-          <div class="hero-media" data-reveal>
-            <img src="assets/images/aurora-x9.svg" alt="Premium BPP desktop PC on display">
+          <div class="hero-stats">
+            <article>
+              <strong>48h</strong>
+              <span>Fast dispatch</span>
+            </article>
+            <article>
+              <strong>3 Year</strong>
+              <span>Hardware warranty</span>
+            </article>
+            <article>
+              <strong>5,000+</strong>
+              <span>Systems delivered</span>
+            </article>
           </div>
         </div>
+
+        <aside class="hero-panel">
+          <div class="parallax-shell">
+            <img src="https://images.unsplash.com/photo-1587202372775-e229f172b9d7?auto=format&fit=crop&w=1400&q=80" alt="High-end gaming desktop setup with RGB lighting">
+          </div>
+        </aside>
       </div>
     </section>
 
-    <section class="section">
+    <section id="featured" class="section">
       <div class="container">
-        <div class="section-header">
+        <div class="section-top">
           <div>
-            <span class="eyebrow">Featured Builds</span>
-            <h2>Built for gaming, creator work, and elite productivity.</h2>
+            <p class="kicker">Featured PCs</p>
+            <h2>Top performing BPP configurations</h2>
           </div>
-          <a class="btn btn-soft" href="products.html">View All PCs</a>
+          <a class="button ghost" href="products.html">View Full Catalog</a>
         </div>
-        <div id="featured-products" class="product-grid"></div>
+        <div id="featured-products" class="product-grid" aria-live="polite"></div>
       </div>
     </section>
 
     <section class="section">
+      <div class="container panel">
+        <div class="section-top">
+          <div>
+            <p class="kicker">Highlights / Specs</p>
+            <h2>Technical focus in every build</h2>
+          </div>
+        </div>
+
+        <div class="feature-grid" aria-label="Key technical highlights">
+          <article class="feature-card">
+            <div class="icon-chip" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M13 2 3 14h7v8l11-14h-8z"></path></svg>
+            </div>
+            <h3>Performance Tuning</h3>
+            <p>Fan curves and power profiles tuned for sustained boost clocks.</p>
+          </article>
+          <article class="feature-card">
+            <div class="icon-chip" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 2 4 6v6c0 5 3.4 9.7 8 11 4.6-1.3 8-6 8-11V6z"></path></svg>
+            </div>
+            <h3>Security Tested</h3>
+            <p>Each system is stress-tested and validated before shipment.</p>
+          </article>
+          <article class="feature-card">
+            <div class="icon-chip" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M3 6h18v8H3zm2 10h14v2H5z"></path></svg>
+            </div>
+            <h3>Upgrade Friendly</h3>
+            <p>Clear cable routing and component spacing for future upgrades.</p>
+          </article>
+          <article class="feature-card">
+            <div class="icon-chip" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M2 12h20v2H2zm5-7h2v16H7zm8 0h2v16h-2z"></path></svg>
+            </div>
+            <h3>Fast Connectivity</h3>
+            <p>High-throughput networking and low-latency wireless options.</p>
+          </article>
+        </div>
+
+        <div id="build-highlight-cards" class="highlight-list" style="margin-top:0.8rem;"></div>
+      </div>
+    </section>
+
+    <section id="why-bpp" class="section">
       <div class="container split-grid">
-        <div class="panel" data-reveal>
-          <span class="eyebrow">Testimonials</span>
-          <h2 style="margin-bottom:1rem;">Trusted by first-time and enthusiast buyers.</h2>
+        <article class="panel">
+          <p class="kicker">Why BPP PCs</p>
+          <h2 style="margin-bottom:0.8rem;">Built on trust, performance, and support speed.</h2>
+          <div class="badge-list">
+            <div class="trust-badge">
+              <strong>Burn-In Verified</strong>
+              <p>Load and thermal validation before every dispatch.</p>
+            </div>
+            <div class="trust-badge">
+              <strong>Secure Shipping</strong>
+              <p>Internal bracing and impact-safe packaging.</p>
+            </div>
+            <div class="trust-badge">
+              <strong>Transparent Components</strong>
+              <p>No hidden substitutions. Full listed parts policy.</p>
+            </div>
+            <div class="trust-badge">
+              <strong>Real Support</strong>
+              <p>Fast human support for setup and post-delivery checks.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="panel">
+          <p class="kicker">Testimonials</p>
+          <h2 style="margin-bottom:0.8rem;">What customers say</h2>
           <div class="testimonial-list">
             <article class="testimonial-card">
-              <p>"Packaging, cable management, thermals, and setup guide were all top tier. Zero issues out of the box."</p>
-              <p class="testimonial-author">Jordan R. - Chicago</p>
+              <p>"Thermals were excellent out of the box and cable management looked pro-level."</p>
+              <footer>Jordan R. | Chicago</footer>
             </article>
             <article class="testimonial-card">
-              <p>"I wanted premium without building myself. BPP hit the mark and support replied within minutes."</p>
-              <p class="testimonial-author">Alyssa M. - Austin</p>
+              <p>"Frame rates matched the spec sheet. Setup took under 10 minutes."</p>
+              <footer>Alyssa M. | Austin</footer>
             </article>
             <article class="testimonial-card">
-              <p>"Frame rates are exactly as advertised. Quiet, clean, and genuinely plug-and-play."</p>
-              <p class="testimonial-author">Omar K. - Seattle</p>
+              <p>"I wanted premium without building from scratch. This nailed it."</p>
+              <footer>Omar K. | Seattle</footer>
             </article>
           </div>
-        </div>
-
-        <div class="panel" data-reveal>
-          <span class="eyebrow">Trust & Tiers</span>
-          <h2 style="margin-bottom:1rem;">Premium delivery standards, every order.</h2>
-          <div class="badge-list">
-            <article class="trust-badge">
-              <strong>Burn-In Tested</strong>
-              <span>Each system stress-tested before shipment.</span>
-            </article>
-            <article class="trust-badge">
-              <strong>Secure Packaging</strong>
-              <span>Impact-safe packing and internal support foam.</span>
-            </article>
-            <article class="trust-badge">
-              <strong>Live Setup Support</strong>
-              <span>Fast post-delivery support from the BPP team.</span>
-            </article>
-            <article class="trust-badge">
-              <strong>Transparent Specs</strong>
-              <span>No hidden part swaps. What you order is what you get.</span>
-            </article>
-          </div>
-          <div class="badge-list" id="performance-tier-summary" style="margin-top:0.8rem;"></div>
-        </div>
+        </article>
       </div>
     </section>
 
     <section class="section">
-      <div class="container">
-        <div class="section-header">
-          <div>
-            <span class="eyebrow">Recently Viewed</span>
-            <h2>Pick up where you left off.</h2>
-          </div>
-        </div>
-        <div id="recently-viewed"></div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="container panel newsletter" data-reveal>
+      <div class="container panel newsletter">
         <div>
-          <span class="eyebrow">Newsletter</span>
-          <h2>Stock alerts and launch drops.</h2>
-          <p style="margin-top:0.7rem;">
-            Join the list for product launches, restock signals, and premium bundle promotions.
-          </p>
+          <p class="kicker">Newsletter</p>
+          <h2>Launch alerts, stock drops, and exclusive build bundles.</h2>
+          <p style="margin-top:0.6rem;">Subscribe for future releases and limited configurations.</p>
         </div>
         <form data-newsletter-form>
           <label class="sr-only" for="newsletter-email">Email address</label>
-          <input id="newsletter-email" type="email" required placeholder="you@example.com">
-          <button class="btn btn-primary" type="submit">Subscribe</button>
+          <input id="newsletter-email" type="email" required placeholder="name@email.com">
+          <button class="button primary" type="submit">Subscribe</button>
         </form>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer">
+  <footer class="footer">
     <div class="container footer-grid">
       <div>
-        <strong>BPP PCs</strong>
-        <p style="margin-top:0.35rem;">Buy it, Plug it, Play it.</p>
-        <p style="margin-top:0.35rem;font-size:0.82rem;color:var(--muted);">© <span data-year></span> BPP PCs. All rights reserved.</p>
+        <h3 style="margin-bottom:0.4rem;">BPP PCs</h3>
+        <p>Futuristic premium PC systems built to perform.</p>
+        <p class="meta-line" style="margin-top:0.5rem;">© <span data-year></span> BPP PCs</p>
       </div>
       <div class="footer-links">
         <a href="products.html">Products</a>
         <a href="basket.html">Basket</a>
+        <a href="admin.html">Admin</a>
         <a href="privacy.html">Privacy Policy</a>
-        <a href="terms.html">Terms & Conditions</a>
-        <a href="refund.html">Refund Policy</a>
+        <a href="terms.html">Terms</a>
+        <a href="refund.html">Refunds</a>
       </div>
     </div>
   </footer>
 
   <script src="js/config.js"></script>
-  <script src="js/product-data.js"></script>
+  <script src="js/products.js"></script>
   <script src="js/store.js"></script>
-  <script src="js/ui.js"></script>
-  <script src="js/main.js"></script>
+  <script src="js/app.js"></script>
   <script src="js/home.js"></script>
 </body>
 </html>

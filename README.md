@@ -1,22 +1,21 @@
-# BPP PCs Ecommerce (Static)
+# BPP PCs - Futuristic Static Ecommerce
 
-Premium static ecommerce website for **BPP PCs**  
-Tagline: **Buy it, Plug it, Play it**
+Fully static premium ecommerce website for **BPP PCs** (Buy it, Plug it, Play it), built with:
 
-## Tech Stack
+- HTML
+- CSS
+- Vanilla JavaScript
 
-- Pure HTML, CSS, and vanilla JavaScript
-- Static files only (GitHub Pages friendly)
-- Client-side basket with `localStorage`
-- Stripe Checkout via publishable key + Stripe Price IDs
+Works on GitHub Pages with no backend.
 
-## Project Structure
+## Structure
 
 ```text
 .
 |- index.html
 |- products.html
 |- basket.html
+|- admin.html
 |- privacy.html
 |- terms.html
 |- refund.html
@@ -26,75 +25,87 @@ Tagline: **Buy it, Plug it, Play it**
 |  |- styles.css
 |- js/
 |  |- config.js
-|  |- product-data.js
+|  |- products.js
 |  |- store.js
-|  |- ui.js
-|  |- main.js
+|  |- app.js
 |  |- home.js
 |  |- products-page.js
 |  |- basket-page.js
+|  |- admin.js
 |  |- success-page.js
-|- assets/
-   |- images/
+|- images/
+   |- products/
 ```
 
-## Local Run
+## Stripe Configuration
 
-Because this is static HTML, you can open `index.html` directly, or run a static server:
+1. Open `js/config.js`
+2. Set:
+   - `stripePublishableKey` to your Stripe publishable key (`pk_test_...` or `pk_live_...`)
+3. Open `js/products.js`
+4. Set each product `stripePriceId` (`price_...`)
+
+Checkout flow:
+
+- Starts on `basket.html`
+- Success redirect to `success.html`
+- Cancel redirect to `cancel.html`
+- Basket is cleared on success page
+
+## Product Management (Admin)
+
+Admin page: `admin.html`  
+Login code: `901`
+
+Features:
+
+- Add product
+- Edit product
+- Delete product
+- Reset catalog to defaults
+- Export current catalog as `products.js`
+
+Important static-site note:
+
+- Browsers cannot directly overwrite repository files on GitHub Pages.
+- Admin edits are saved in localStorage for the current browser.
+- Use **Export products.js** and replace `js/products.js` in your repo to persist changes globally.
+
+## Product Data File
+
+Main editable catalog file: `js/products.js`
+
+Each product supports:
+
+- `id`
+- `title`
+- `description`
+- `price`
+- `category`
+- `featured`
+- `specs` (array)
+- `images` (array for carousel)
+- `stockSeed`
+- `stripePriceId`
+
+## Included Features
+
+- Futuristic dark neon UI
+- Product image carousel/slider
+- Featured builds section
+- Newsletter signup (dummy handler)
+- LocalStorage basket
+- Live basket counter
+- Cookie banner (dismiss/accept)
+- Legal pages
+- Responsive desktop/mobile layout
+
+## Local Preview
+
+You can open `index.html` directly, or run:
 
 ```powershell
 python -m http.server 8080
 ```
 
-Then open `http://localhost:8080`.
-
-## Stripe Setup (No Backend)
-
-1. Open `js/config.js`
-2. Replace:
-   - `stripePublishableKey` with your Stripe publishable key (`pk_test_...` or `pk_live_...`)
-3. Open `js/product-data.js`
-4. For every product, replace `priceId` with a real Stripe Price ID (`price_...`)
-
-Checkout uses:
-
-- `mode: "payment"`
-- Success redirect: `success.html`
-- Cancel redirect: `cancel.html`
-
-Basket is cleared on `success.html`.
-
-## How To Edit Products
-
-All catalog details are in one file: `js/product-data.js`
-
-For each product you can edit:
-
-- `name`
-- `price`
-- `shortDescription`
-- `description`
-- `image`
-- `tier`
-- `category`
-- `stockSeed`
-- `priceId`
-
-## Included Premium Features
-
-- Recently viewed products
-- Wishlist
-- Live simulated stock counters
-- Product search/filter/sort
-- Performance tier indicators (Entry / Enthusiast / Elite)
-
-## GitHub Pages Deployment
-
-1. Push this repo to GitHub.
-2. In repository settings, enable **Pages** for the default branch/root.
-3. Wait for deployment, then open the Pages URL.
-
-## Notes
-
-- Legal page content is template text and should be reviewed by legal counsel.
-- Stripe Checkout requires valid publishable key and Price IDs before going live.
+Then visit `http://localhost:8080`.
