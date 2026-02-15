@@ -2,9 +2,72 @@ window.BPP = window.BPP || {};
 
 (function initStore(ns) {
   const config = window.BPP_CONFIG || {};
-  const keys = config.storageKeys || {};
-  const defaultProducts = Array.isArray(window.BPP_DEFAULT_PRODUCTS) ? window.BPP_DEFAULT_PRODUCTS : [];
+  const basketKey = config.storageKeys?.basket || "bpp_basket_v4";
   const memory = {};
+
+  // Product catalog is static on frontend and can later be replaced by Stripe-backed data.
+  const PRODUCTS = [
+    {
+      id: "aurora-5070-ti",
+      name: "Aurora RTX 5070 Ti",
+      category: "Gaming",
+      price: 1999,
+      featured: true,
+      description: "High refresh 1440p build with premium airflow and clean thermals.",
+      image:
+        "https://images.unsplash.com/photo-1593640495253-23196b27a87f?auto=format&fit=crop&w=1200&q=80"
+    },
+    {
+      id: "eclipse-5080",
+      name: "Eclipse RTX 5080",
+      category: "Gaming",
+      price: 2699,
+      featured: true,
+      description: "4K-focused performance tower designed for max visual settings.",
+      image:
+        "https://images.unsplash.com/photo-1624705002806-5d72df19c3ad?auto=format&fit=crop&w=1200&q=80"
+    },
+    {
+      id: "studio-x-pro",
+      name: "Studio X Pro",
+      category: "Creator",
+      price: 2399,
+      featured: true,
+      description: "Creator workstation for editing, rendering, and 3D production.",
+      image:
+        "https://images.unsplash.com/photo-1587202372599-814eb66b3b5d?auto=format&fit=crop&w=1200&q=80"
+    },
+    {
+      id: "starter-4060",
+      name: "Starter RTX 4060",
+      category: "Entry",
+      price: 1199,
+      featured: false,
+      description: "Balanced entry-level gaming and productivity desktop.",
+      image:
+        "https://images.unsplash.com/photo-1587202372708-31f6f5e86c44?auto=format&fit=crop&w=1200&q=80"
+    },
+    {
+      id: "pro-office-i7",
+      name: "Pro Office i7",
+      category: "Work",
+      price: 1299,
+      featured: false,
+      description: "Quiet productivity desktop for multitasking and office workloads.",
+      image:
+        "https://images.unsplash.com/photo-1544731612-de7f96afe55f?auto=format&fit=crop&w=1200&q=80"
+    },
+    {
+      id: "ml-workstation-4090",
+      name: "ML Workstation RTX 4090",
+      category: "Workstation",
+      price: 3299,
+      featured: false,
+      description: "Compute-heavy build for local AI and accelerated rendering workflows.",
+      image:
+        "https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?auto=format&fit=crop&w=1200&q=80"
+    }
+  ];
 
   function clone(value) {
     return JSON.parse(JSON.stringify(value));
@@ -24,7 +87,7 @@ window.BPP = window.BPP || {};
     try {
       window.localStorage.setItem(key, JSON.stringify(value));
     } catch (error) {
-      // Quota/private mode fallback in memory.
+      // Ignore private mode/quota failures; memory fallback is used.
     }
   }
 
@@ -32,199 +95,77 @@ window.BPP = window.BPP || {};
     window.dispatchEvent(new CustomEvent(eventName, { detail }));
   }
 
-  function sanitizeProduct(product) {
-    const id = String(product.id || "")
-      .trim()
-      .toLowerCase()
-      .replace(/[^a-z0-9-]+/g, "-")
-      .replace(/^-+|-+$/g, "");
-    const title = String(product.title || "").trim();
-    const price = Number(product.price || 0);
-    const description = String(product.description || "").trim();
-    const category = String(product.category || "Custom").trim();
-    const featured = Boolean(product.featured);
-    const stockSeed = Math.max(2, Number.parseInt(product.stockSeed || 8, 10) || 8);
-    const stripePriceId = String(product.stripePriceId || "").trim();
-    const safePrice = Number.isFinite(price) ? price : 0;
-    const rawTier = String(product.tier || "")
-      .trim()
-      .toLowerCase();
-    // Keep tier + popularity normalized for products-page filtering/sorting.
-    const tier =
-      rawTier === "entry" || rawTier === "performance" || rawTier === "elite"
-        ? rawTier
-        : safePrice >= 2300
-          ? "elite"
-          : safePrice >= 1500
-            ? "performance"
-            : "entry";
-    const explicitPopularity = Number.parseInt(product.popularity, 10);
-    const popularity = Number.isFinite(explicitPopularity)
-      ? explicitPopularity
-      : Math.max(10, 100 - Math.round(safePrice / 42) + (featured ? 22 : 0));
-
-    const specs = Array.isArray(product.specs)
-      ? product.specs.map((spec) => String(spec || "").trim()).filter(Boolean).slice(0, 4)
-      : [];
-
-    const images = Array.isArray(product.images)
-      ? product.images.map((img) => String(img || "").trim()).filter(Boolean)
-      : [];
-
-    return {
-      id,
-      title,
-      price: safePrice,
-      description,
-      category,
-      tier,
-      popularity,
-      featured,
-      stockSeed,
-      stripePriceId,
-      specs: specs.length ? specs : ["Custom tuned build"],
-      images: images.length ? images : ["images/products/vanta-s1.svg"]
-    };
-  }
-
-  function sanitizeProducts(list) {
-    if (!Array.isArray(list)) {
-      return clone(defaultProducts);
-    }
-
-    const seen = new Set();
-    const clean = [];
-
-    list.forEach((product) => {
-      const item = sanitizeProduct(product);
-      if (!item.id || !item.title || seen.has(item.id)) {
-        return;
-      }
-      seen.add(item.id);
-      clean.push(item);
-    });
-
-    return clean.length ? clean : clone(defaultProducts);
-  }
-
   function getProducts() {
-    return sanitizeProducts(readJson(keys.products, defaultProducts));
-  }
-
-  function saveProducts(list) {
-    const clean = sanitizeProducts(list);
-    writeJson(keys.products, clean);
-    sanitizeBasket();
-    emit("bpp:products-changed", { products: clean });
-    return clone(clean);
+    return clone(PRODUCTS);
   }
 
   function getProductById(id) {
-    return getProducts().find((product) => product.id === String(id)) || null;
+    return PRODUCTS.find((product) => product.id === String(id)) || null;
   }
 
-  function upsertProduct(nextProduct) {
-    const item = sanitizeProduct(nextProduct);
-    if (!item.id || !item.title) {
-      return getProducts();
-    }
-
-    const products = getProducts();
-    const index = products.findIndex((product) => product.id === item.id);
-    if (index >= 0) {
-      products[index] = item;
-    } else {
-      products.push(item);
-    }
-    return saveProducts(products);
-  }
-
-  function deleteProduct(id) {
-    const productId = String(id);
-    const products = getProducts().filter((product) => product.id !== productId);
-    return saveProducts(products);
-  }
-
-  function resetProducts() {
-    writeJson(keys.products, clone(defaultProducts));
-    sanitizeBasket();
-    emit("bpp:products-changed", { products: getProducts() });
-    return getProducts();
-  }
-
-  function getBasket() {
-    const raw = readJson(keys.basket, []);
-    if (!Array.isArray(raw)) {
+  function sanitizeBasket(basket) {
+    if (!Array.isArray(basket)) {
       return [];
     }
 
-    return raw
+    return basket
       .map((entry) => ({
-        id: String(entry.id || ""),
-        quantity: Number.parseInt(entry.quantity, 10)
+        id: String(entry?.id || ""),
+        quantity: Number.parseInt(entry?.quantity, 10)
       }))
-      .filter((entry) => entry.id && Number.isFinite(entry.quantity) && entry.quantity > 0);
+      .filter((entry) => getProductById(entry.id) && Number.isFinite(entry.quantity) && entry.quantity > 0);
+  }
+
+  function getBasket() {
+    return sanitizeBasket(readJson(basketKey, []));
   }
 
   function saveBasket(nextBasket) {
-    const products = getProducts();
-    const validIds = new Set(products.map((product) => product.id));
-
-    const clean = (Array.isArray(nextBasket) ? nextBasket : [])
-      .map((entry) => ({
-        id: String(entry.id || ""),
-        quantity: Number.parseInt(entry.quantity, 10)
-      }))
-      .filter((entry) => validIds.has(entry.id) && Number.isFinite(entry.quantity) && entry.quantity > 0);
-
-    writeJson(keys.basket, clean);
+    const clean = sanitizeBasket(nextBasket);
+    writeJson(basketKey, clean);
     emit("bpp:basket-changed", { basket: clean });
     return clean;
   }
 
-  function sanitizeBasket() {
-    return saveBasket(getBasket());
-  }
-
   function addToBasket(productId, quantity) {
-    const id = String(productId);
-    const amount = Math.max(1, Number.parseInt(quantity || 1, 10) || 1);
-    const product = getProductById(id);
+    const product = getProductById(productId);
     if (!product) {
       return getBasket();
     }
 
+    const amount = Math.max(1, Number.parseInt(quantity || 1, 10) || 1);
     const basket = getBasket();
-    const index = basket.findIndex((item) => item.id === id);
+    const index = basket.findIndex((entry) => entry.id === product.id);
+
     if (index >= 0) {
       basket[index].quantity += amount;
     } else {
-      basket.push({ id, quantity: amount });
+      basket.push({ id: product.id, quantity: amount });
     }
+
     return saveBasket(basket);
   }
 
   function setBasketQuantity(productId, quantity) {
     const id = String(productId);
-    const qty = Number.parseInt(quantity, 10);
+    const nextQuantity = Number.parseInt(quantity, 10);
     const basket = getBasket();
-    const index = basket.findIndex((item) => item.id === id);
+    const index = basket.findIndex((entry) => entry.id === id);
     if (index < 0) {
       return basket;
     }
 
-    if (!Number.isFinite(qty) || qty <= 0) {
+    if (!Number.isFinite(nextQuantity) || nextQuantity <= 0) {
       basket.splice(index, 1);
     } else {
-      basket[index].quantity = qty;
+      basket[index].quantity = nextQuantity;
     }
 
     return saveBasket(basket);
   }
 
   function removeFromBasket(productId) {
-    const id = String(productId);
-    return saveBasket(getBasket().filter((item) => item.id !== id));
+    return saveBasket(getBasket().filter((entry) => entry.id !== String(productId)));
   }
 
   function clearBasket() {
@@ -232,20 +173,16 @@ window.BPP = window.BPP || {};
   }
 
   function getBasketRows() {
-    const products = getProducts();
-    const productMap = new Map(products.map((product) => [product.id, product]));
-
     return getBasket()
       .map((entry) => {
-        const product = productMap.get(entry.id);
+        const product = getProductById(entry.id);
         if (!product) {
           return null;
         }
-        const lineTotal = entry.quantity * Number(product.price || 0);
         return {
           product,
           quantity: entry.quantity,
-          lineTotal
+          lineTotal: entry.quantity * Number(product.price || 0)
         };
       })
       .filter(Boolean);
@@ -260,57 +197,24 @@ window.BPP = window.BPP || {};
         : subtotal >= Number(config.freeShippingThreshold || 0)
           ? 0
           : Number(config.shippingFlatRate || 0);
+
     return {
+      itemCount: rows.reduce((sum, row) => sum + row.quantity, 0),
       subtotal,
       shipping,
-      total: subtotal + shipping,
-      itemCount: rows.reduce((sum, row) => sum + row.quantity, 0)
+      total: subtotal + shipping
     };
-  }
-
-  function getLiveStock(productId) {
-    const product = getProductById(productId);
-    if (!product) {
-      return 0;
-    }
-
-    const dayCode = Math.floor(Date.now() / 86400000);
-    const hash = String(product.id)
-      .split("")
-      .reduce((total, char) => total + char.charCodeAt(0), 0);
-    const variation = (hash + dayCode) % 6;
-    return Math.max(2, Number(product.stockSeed || 10) - variation);
-  }
-
-  function setAdminSession(isLoggedIn) {
-    writeJson(keys.adminSession, Boolean(isLoggedIn));
-  }
-
-  function isAdminSession() {
-    return Boolean(readJson(keys.adminSession, false));
-  }
-
-  function clearAdminSession() {
-    setAdminSession(false);
   }
 
   ns.store = {
     getProducts,
     getProductById,
-    saveProducts,
-    upsertProduct,
-    deleteProduct,
-    resetProducts,
     getBasket,
     addToBasket,
     setBasketQuantity,
     removeFromBasket,
     clearBasket,
     getBasketRows,
-    getBasketTotals,
-    getLiveStock,
-    setAdminSession,
-    isAdminSession,
-    clearAdminSession
+    getBasketTotals
   };
 })(window.BPP);

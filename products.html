@@ -4,33 +4,33 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Products | BPP PCs</title>
-  <meta name="description" content="Browse premium BPP PCs with carousel product previews and fast basket actions.">
+  <meta name="description" content="Browse all BPP PCs systems by category and price.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Sora:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
   <header class="site-header">
     <div class="container header-inner">
       <a class="logo" href="index.html" aria-label="BPP PCs home">
-        <span class="logo-badge">BPP</span>
+        <span class="logo-mark">BPP</span>
         <span class="logo-copy">
           <strong>BPP PCs</strong>
-          <span>BUY IT. PLUG IT. PLAY IT.</span>
+          <span>BUY IT, PLUG IT, PLAY IT</span>
         </span>
       </a>
-      <button class="mobile-toggle" type="button" data-mobile-toggle aria-label="Toggle site navigation">Menu</button>
-      <nav class="nav-menu" data-nav-menu aria-label="Primary navigation">
+
+      <button class="mobile-toggle" type="button" data-mobile-toggle aria-label="Toggle navigation">Menu</button>
+
+      <nav class="nav" aria-label="Primary navigation">
         <a data-nav="index.html" href="index.html">Home</a>
         <a data-nav="products.html" href="products.html">Products</a>
         <a data-nav="basket.html" href="basket.html">Basket</a>
       </nav>
 
-      <!-- Staff access moved to top-right per request. -->
       <div class="header-actions">
-        <a class="staff-login-btn" href="admin.html" aria-label="Staff login">Staff Login</a>
-        <a class="basket-pill" href="basket.html" aria-label="Go to basket">
+        <a class="basket-pill" href="basket.html" aria-label="Open basket">
           Basket
           <strong data-basket-count>0</strong>
         </a>
@@ -38,80 +38,49 @@
     </div>
   </header>
 
-  <main>
-    <section class="section">
-      <div class="container panel">
-        <div class="section-top">
-          <div>
-            <p class="kicker">Catalog</p>
-            <h1 style="font-size:clamp(2rem,4.8vw,3.6rem);">Futuristic Build Collection</h1>
-          </div>
-          <a class="button ghost" href="basket.html">View Basket</a>
+  <main class="section">
+    <div class="container panel">
+      <div class="section-top">
+        <div>
+          <p class="eyebrow">Product Catalog</p>
+          <h1 style="font-size:clamp(1.95rem,4.6vw,3rem);">All BPP Systems</h1>
         </div>
-
-        <div class="parallax-shell" style="margin-bottom:1rem;">
-          <img src="https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?auto=format&fit=crop&w=1800&q=80" alt="High-end RGB gaming PC setup">
-        </div>
-
-        <!-- Restored advanced sort + filter controls (client-side). -->
-        <div class="filters">
-          <label>
-            <span class="sr-only">Search products</span>
-            <input id="product-search" type="search" placeholder="Search builds, specs, or categories">
-          </label>
-          <label>
-            <span class="sr-only">Filter by category</span>
-            <select id="category-filter">
-              <option value="all">All categories</option>
-            </select>
-          </label>
-          <label>
-            <span class="sr-only">Filter by performance tier</span>
-            <select id="tier-filter">
-              <option value="all">All tiers</option>
-              <option value="entry">Entry</option>
-              <option value="performance">Performance</option>
-              <option value="elite">Elite</option>
-            </select>
-          </label>
-          <label>
-            <span class="sr-only">Sort products</span>
-            <select id="sort-filter">
-              <option value="popularity">Sort: Popularity</option>
-              <option value="name-asc">Sort: Name A-Z</option>
-              <option value="name-desc">Sort: Name Z-A</option>
-              <option value="price-asc">Sort: Price Low-High</option>
-              <option value="price-desc">Sort: Price High-Low</option>
-            </select>
-          </label>
-        </div>
-
-        <p id="products-count" class="meta-line" aria-live="polite"></p>
-        <div id="products-grid" class="product-grid" aria-live="polite"></div>
       </div>
-    </section>
+
+      <div class="filters">
+        <label>
+          <span class="sr-only">Search products</span>
+          <input id="product-search" type="search" aria-label="Search by product name or category">
+        </label>
+        <label>
+          <span class="sr-only">Filter by category</span>
+          <select id="category-filter">
+            <option value="all">All categories</option>
+          </select>
+        </label>
+      </div>
+
+      <p id="products-count" class="meta-line" aria-live="polite"></p>
+      <div id="products-grid" class="product-grid" aria-live="polite"></div>
+    </div>
   </main>
 
   <footer class="footer">
     <div class="container footer-grid">
       <div>
-        <h3 style="margin-bottom:0.4rem;">BPP PCs</h3>
-        <p>Premium performance desktops for gaming and creator workflows.</p>
-        <p class="meta-line" style="margin-top:0.5rem;">© <span data-year></span> BPP PCs</p>
+        <strong>BPP PCs</strong>
+        <p style="margin-top:0.35rem;">Buy it, Plug it, Play it.</p>
+        <p class="meta-line" style="margin-top:0.35rem;">© <span data-year></span> BPP PCs</p>
       </div>
       <div class="footer-links">
+        <a href="index.html">Home</a>
         <a href="products.html">Products</a>
         <a href="basket.html">Basket</a>
-        <a href="admin.html">Admin</a>
-        <a href="privacy.html">Privacy Policy</a>
-        <a href="terms.html">Terms</a>
-        <a href="refund.html">Refunds</a>
       </div>
     </div>
   </footer>
 
   <script src="js/config.js"></script>
-  <script src="js/products.js"></script>
   <script src="js/store.js"></script>
   <script src="js/app.js"></script>
   <script src="js/products-page.js"></script>

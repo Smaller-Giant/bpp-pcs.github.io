@@ -1,111 +1,65 @@
-# BPP PCs - Futuristic Static Ecommerce
+# BPP PCs Website
 
-Fully static premium ecommerce website for **BPP PCs** (Buy it, Plug it, Play it), built with:
+Clean static ecommerce site for **BPP PCs** (Buy it, Plug it, Play it).
+
+Built with:
 
 - HTML
 - CSS
 - Vanilla JavaScript
 
-Works on GitHub Pages with no backend.
+No backend is required for deployment on GitHub Pages.
 
-## Structure
+## Project Structure
 
 ```text
 .
 |- index.html
 |- products.html
 |- basket.html
-|- admin.html
-|- privacy.html
-|- terms.html
-|- refund.html
-|- success.html
-|- cancel.html
 |- css/
 |  |- styles.css
 |- js/
-|  |- config.js
-|  |- products.js
-|  |- store.js
-|  |- app.js
-|  |- home.js
-|  |- products-page.js
-|  |- basket-page.js
-|  |- admin.js
-|  |- success-page.js
-|- images/
-   |- products/
+   |- config.js
+   |- store.js
+   |- app.js
+   |- home.js
+   |- products-page.js
+   |- basket-page.js
 ```
 
-## Stripe Configuration
+## Checkout
 
-1. Open `js/config.js`
-2. Set:
-   - `stripePublishableKey` to your Stripe publishable key (`pk_test_...` or `pk_live_...`)
-3. Open `js/products.js`
-4. Set each product `stripePriceId` (`price_...`)
+Checkout uses a static Stripe test link configured in `js/config.js`:
 
-Checkout flow:
+`stripeCheckoutLink`
 
-- Starts on `basket.html`
-- Success redirect to `success.html`
-- Cancel redirect to `cancel.html`
-- Basket is cleared on success page
+Current value:
 
-## Product Management (Admin)
+`https://buy.stripe.com/test_9B6aEW11x5Wo3Ed3Sz6kg00`
 
-Admin page: `admin.html`  
-Login code: `901`
+In `js/basket-page.js`, there is a comment marking where to replace this redirect with a dynamic serverless Stripe Checkout Session in the future.
 
-Features:
+## Basket Behavior
 
-- Add product
-- Edit product
-- Delete product
-- Reset catalog to defaults
-- Export current catalog as `products.js`
+- Basket is stored in `localStorage`
+- Quantity updates and remove actions are supported
+- Subtotal, shipping, and total are calculated client-side
 
-Important static-site note:
+## Product Source
 
-- Browsers cannot directly overwrite repository files on GitHub Pages.
-- Admin edits are saved in localStorage for the current browser.
-- Use **Export products.js** and replace `js/products.js` in your repo to persist changes globally.
+Products are defined in `js/store.js` as static catalog data.
 
-## Product Data File
-
-Main editable catalog file: `js/products.js`
-
-Each product supports:
-
-- `id`
-- `title`
-- `description`
-- `price`
-- `category`
-- `featured`
-- `specs` (array)
-- `images` (array for carousel)
-- `stockSeed`
-- `stripePriceId`
-
-## Included Features
-
-- Futuristic dark neon UI
-- Product image carousel/slider
-- Featured builds section
-- Newsletter signup (dummy handler)
-- LocalStorage basket
-- Live basket counter
-- Cookie banner (dismiss/accept)
-- Legal pages
-- Responsive desktop/mobile layout
+This is intentionally simple for now and can later be replaced with Stripe-backed product/session APIs.
 
 ## Local Preview
 
-You can open `index.html` directly, or run:
+Run a static server:
 
 ```powershell
 python -m http.server 8080
 ```
 
-Then visit `http://localhost:8080`.
+Open:
+
+`http://localhost:8080`
