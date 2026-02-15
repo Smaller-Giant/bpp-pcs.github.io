@@ -8,65 +8,16 @@ window.BPP = window.BPP || {};
   // Product catalog is static on frontend and can later be replaced by Stripe-backed data.
   const PRODUCTS = [
     {
-      id: "aurora-5070-ti",
-      name: "Aurora RTX 5070 Ti",
+      id: "block_loader",
+      name: "Blocks Loader",
       category: "Gaming",
-      price: 1999,
+      price: 6767,
       featured: true,
       description: "High refresh 1440p build with premium airflow and clean thermals.",
       image:
         "https://images.unsplash.com/photo-1593640495253-23196b27a87f?auto=format&fit=crop&w=1200&q=80"
     },
-    {
-      id: "eclipse-5080",
-      name: "Eclipse RTX 5080",
-      category: "Gaming",
-      price: 2699,
-      featured: true,
-      description: "4K-focused performance tower designed for max visual settings.",
-      image:
-        "https://images.unsplash.com/photo-1624705002806-5d72df19c3ad?auto=format&fit=crop&w=1200&q=80"
-    },
-    {
-      id: "studio-x-pro",
-      name: "Studio X Pro",
-      category: "Creator",
-      price: 2399,
-      featured: true,
-      description: "Creator workstation for editing, rendering, and 3D production.",
-      image:
-        "https://images.unsplash.com/photo-1587202372599-814eb66b3b5d?auto=format&fit=crop&w=1200&q=80"
-    },
-    {
-      id: "starter-4060",
-      name: "Starter RTX 4060",
-      category: "Entry",
-      price: 1199,
-      featured: false,
-      description: "Balanced entry-level gaming and productivity desktop.",
-      image:
-        "https://images.unsplash.com/photo-1587202372708-31f6f5e86c44?auto=format&fit=crop&w=1200&q=80"
-    },
-    {
-      id: "pro-office-i7",
-      name: "Pro Office i7",
-      category: "Work",
-      price: 1299,
-      featured: false,
-      description: "Quiet productivity desktop for multitasking and office workloads.",
-      image:
-        "https://images.unsplash.com/photo-1544731612-de7f96afe55f?auto=format&fit=crop&w=1200&q=80"
-    },
-    {
-      id: "ml-workstation-4090",
-      name: "ML Workstation RTX 4090",
-      category: "Workstation",
-      price: 3299,
-      featured: false,
-      description: "Compute-heavy build for local AI and accelerated rendering workflows.",
-      image:
-        "https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?auto=format&fit=crop&w=1200&q=80"
-    }
+
   ];
 
   function clone(value) {
