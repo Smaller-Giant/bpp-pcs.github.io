@@ -45,6 +45,23 @@ window.BPP = window.BPP || {};
     const featured = Boolean(product.featured);
     const stockSeed = Math.max(2, Number.parseInt(product.stockSeed || 8, 10) || 8);
     const stripePriceId = String(product.stripePriceId || "").trim();
+    const safePrice = Number.isFinite(price) ? price : 0;
+    const rawTier = String(product.tier || "")
+      .trim()
+      .toLowerCase();
+    // Keep tier + popularity normalized for products-page filtering/sorting.
+    const tier =
+      rawTier === "entry" || rawTier === "performance" || rawTier === "elite"
+        ? rawTier
+        : safePrice >= 2300
+          ? "elite"
+          : safePrice >= 1500
+            ? "performance"
+            : "entry";
+    const explicitPopularity = Number.parseInt(product.popularity, 10);
+    const popularity = Number.isFinite(explicitPopularity)
+      ? explicitPopularity
+      : Math.max(10, 100 - Math.round(safePrice / 42) + (featured ? 22 : 0));
 
     const specs = Array.isArray(product.specs)
       ? product.specs.map((spec) => String(spec || "").trim()).filter(Boolean).slice(0, 4)
@@ -57,9 +74,11 @@ window.BPP = window.BPP || {};
     return {
       id,
       title,
-      price: Number.isFinite(price) ? price : 0,
+      price: safePrice,
       description,
       category,
+      tier,
+      popularity,
       featured,
       stockSeed,
       stripePriceId,

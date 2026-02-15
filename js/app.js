@@ -39,6 +39,24 @@ window.BPP = window.BPP || {};
     return "Ready to ship";
   }
 
+  function getTierLabel(product) {
+    const explicit = String(product?.tier || "")
+      .trim()
+      .toLowerCase();
+    if (explicit === "entry" || explicit === "performance" || explicit === "elite") {
+      return explicit.charAt(0).toUpperCase() + explicit.slice(1);
+    }
+
+    const price = Number(product?.price || 0);
+    if (price >= 2300) {
+      return "Elite";
+    }
+    if (price >= 1500) {
+      return "Performance";
+    }
+    return "Entry";
+  }
+
   function productCarousel(product) {
     const images = Array.isArray(product.images) && product.images.length ? product.images : ["images/products/vanta-s1.svg"];
     const imageNodes = images
@@ -90,13 +108,15 @@ window.BPP = window.BPP || {};
     const showSpecs = settings.showSpecs !== false;
     const stock = ns.store ? ns.store.getLiveStock(product.id) : Number(product.stockSeed || 10);
     const specs = Array.isArray(product.specs) ? product.specs.slice(0, 3) : [];
+    const tierLabel = getTierLabel(product);
 
     return `
       <article class="product-card" data-product-id="${escapeHtml(product.id)}">
         ${productCarousel(product)}
         <div class="product-content">
           <div class="product-top">
-            <p class="product-category">${escapeHtml(product.category || "Custom")}</p>
+            <!-- Show category + tier so tier filtering is visible to users. -->
+            <p class="product-category">${escapeHtml(product.category || "Custom")} | ${escapeHtml(tierLabel)}</p>
             <p class="product-price">${formatCurrency(product.price)}</p>
           </div>
           <h3>${escapeHtml(product.title)}</h3>

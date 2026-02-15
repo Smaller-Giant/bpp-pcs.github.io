@@ -25,12 +25,16 @@
         <a data-nav="index.html" href="index.html">Home</a>
         <a data-nav="products.html" href="products.html">Products</a>
         <a data-nav="basket.html" href="basket.html">Basket</a>
-        <a data-nav="admin.html" href="admin.html">Admin</a>
       </nav>
-      <a class="basket-pill" href="basket.html" aria-label="Go to basket">
-        Basket
-        <strong data-basket-count>0</strong>
-      </a>
+
+      <!-- Staff access moved to top-right per request. -->
+      <div class="header-actions">
+        <a class="staff-login-btn" href="admin.html" aria-label="Staff login">Staff Login</a>
+        <a class="basket-pill" href="basket.html" aria-label="Go to basket">
+          Basket
+          <strong data-basket-count>0</strong>
+        </a>
+      </div>
     </div>
   </header>
 
@@ -49,6 +53,7 @@
           <img src="https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?auto=format&fit=crop&w=1800&q=80" alt="High-end RGB gaming PC setup">
         </div>
 
+        <!-- Restored advanced sort + filter controls (client-side). -->
         <div class="filters">
           <label>
             <span class="sr-only">Search products</span>
@@ -58,6 +63,25 @@
             <span class="sr-only">Filter by category</span>
             <select id="category-filter">
               <option value="all">All categories</option>
+            </select>
+          </label>
+          <label>
+            <span class="sr-only">Filter by performance tier</span>
+            <select id="tier-filter">
+              <option value="all">All tiers</option>
+              <option value="entry">Entry</option>
+              <option value="performance">Performance</option>
+              <option value="elite">Elite</option>
+            </select>
+          </label>
+          <label>
+            <span class="sr-only">Sort products</span>
+            <select id="sort-filter">
+              <option value="popularity">Sort: Popularity</option>
+              <option value="name-asc">Sort: Name A-Z</option>
+              <option value="name-desc">Sort: Name Z-A</option>
+              <option value="price-asc">Sort: Price Low-High</option>
+              <option value="price-desc">Sort: Price High-Low</option>
             </select>
           </label>
         </div>

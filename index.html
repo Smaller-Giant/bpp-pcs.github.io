@@ -27,13 +27,16 @@
         <a data-nav="index.html" href="index.html">Home</a>
         <a data-nav="products.html" href="products.html">Products</a>
         <a data-nav="basket.html" href="basket.html">Basket</a>
-        <a data-nav="admin.html" href="admin.html">Admin</a>
       </nav>
 
-      <a class="basket-pill" href="basket.html" aria-label="Go to basket">
-        Basket
-        <strong data-basket-count>0</strong>
-      </a>
+      <!-- Staff access moved to top-right per request. -->
+      <div class="header-actions">
+        <a class="staff-login-btn" href="admin.html" aria-label="Staff login">Staff Login</a>
+        <a class="basket-pill" href="basket.html" aria-label="Go to basket">
+          Basket
+          <strong data-basket-count>0</strong>
+        </a>
+      </div>
     </div>
   </header>
 

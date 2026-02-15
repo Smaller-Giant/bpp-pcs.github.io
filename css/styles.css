@@ -1,7 +1,7 @@
 :root {
-  --bg-0: #06090f;
-  --bg-1: #0b111b;
-  --bg-2: #0f1725;
+  --bg-0: #04070c;
+  --bg-1: #090f19;
+  --bg-2: #0d1420;
   --surface-0: #111a2b;
   --surface-1: #0f1929;
   --surface-2: #172235;
@@ -10,12 +10,12 @@
   --text: #ecf3ff;
   --text-soft: #9fb3d8;
   --muted: #7e93bb;
-  --accent: #35ffe2;
-  --accent-soft: #1fc0af;
-  --accent-alt: #8be9ff;
+  --accent: #21ffd9;
+  --accent-soft: #1ca893;
+  --accent-alt: #67dcff;
   --danger: #ff6f8a;
   --success: #6dff9f;
-  --glow: 0 0 0 1px rgba(53, 255, 226, 0.16), 0 0 24px rgba(53, 255, 226, 0.28);
+  --glow: 0 0 0 1px rgba(33, 255, 217, 0.22), 0 0 30px rgba(33, 255, 217, 0.32);
   --radius-lg: 20px;
   --radius-md: 14px;
   --radius-sm: 10px;
@@ -234,8 +234,38 @@ p {
 .nav-menu a:hover,
 .nav-menu a.is-active {
   color: var(--text);
-  background: rgba(53, 255, 226, 0.1);
-  box-shadow: 0 0 0 1px rgba(53, 255, 226, 0.16) inset;
+  background: rgba(33, 255, 217, 0.14);
+  box-shadow: 0 0 0 1px rgba(33, 255, 217, 0.22) inset, 0 0 18px rgba(33, 255, 217, 0.2);
+}
+
+/* Header action cluster:
+   Staff Login is intentionally pinned to top-right on every page. */
+.header-actions {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.staff-login-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(33, 255, 217, 0.38);
+  border-radius: 999px;
+  background: rgba(8, 23, 33, 0.92);
+  color: var(--accent);
+  font-size: 0.84rem;
+  font-weight: 600;
+  padding: 0.45rem 0.85rem;
+  box-shadow: 0 0 0 1px rgba(33, 255, 217, 0.18) inset;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.staff-login-btn:hover {
+  transform: translateY(-1px);
+  border-color: rgba(33, 255, 217, 0.65);
+  box-shadow: 0 0 0 1px rgba(33, 255, 217, 0.28) inset, 0 0 18px rgba(33, 255, 217, 0.32);
 }
 
 .basket-pill {
@@ -275,12 +305,12 @@ p {
 .button.primary {
   color: #022321;
   background: linear-gradient(140deg, var(--accent), var(--accent-alt));
-  box-shadow: 0 8px 20px rgba(53, 255, 226, 0.22);
+  box-shadow: 0 8px 20px rgba(33, 255, 217, 0.25), 0 0 0 1px rgba(33, 255, 217, 0.24) inset;
 }
 
 .button.primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 24px rgba(53, 255, 226, 0.26);
+  box-shadow: 0 12px 26px rgba(33, 255, 217, 0.32), 0 0 20px rgba(33, 255, 217, 0.3);
 }
 
 .button.secondary {
@@ -290,8 +320,8 @@ p {
 }
 
 .button.secondary:hover {
-  border-color: rgba(53, 255, 226, 0.45);
-  box-shadow: 0 0 0 1px rgba(53, 255, 226, 0.26) inset;
+  border-color: rgba(33, 255, 217, 0.55);
+  box-shadow: 0 0 0 1px rgba(33, 255, 217, 0.28) inset, 0 0 16px rgba(33, 255, 217, 0.18);
 }
 
 .button.ghost {
@@ -302,7 +332,8 @@ p {
 
 .button.ghost:hover {
   color: var(--text);
-  border-color: rgba(53, 255, 226, 0.42);
+  border-color: rgba(33, 255, 217, 0.5);
+  box-shadow: 0 0 14px rgba(33, 255, 217, 0.16);
 }
 
 .button.danger {
@@ -661,7 +692,7 @@ p {
 
 .filters {
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
   gap: 0.7rem;
   margin-bottom: 1rem;
 }
@@ -1027,3 +1058,6 @@ th {
     align-items: start;
   }
 }
+  .header-actions {
+    margin-left: 0;
+  }
