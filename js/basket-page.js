@@ -102,6 +102,30 @@ window.BPP = window.BPP || {};
     renderSummary();
 
     try {
+      // Save the full basket snapshot as one checkout payload before redirect.
+      // This keeps all items grouped for this single Stripe Payment Link handoff.
+      const payloadKey = window.BPP_CONFIG.storageKeys?.checkoutPayload;
+      if (payloadKey) {
+        const totals = ns.store.getBasketTotals();
+        const payload = {
+          createdAt: new Date().toISOString(),
+          checkoutUrl,
+          items: rows.map((row) => ({
+            id: row.product.id,
+            title: row.product.title,
+            quantity: row.quantity,
+            unitPrice: row.product.price,
+            lineTotal: row.lineTotal
+          })),
+          totals
+        };
+        try {
+          window.localStorage.setItem(payloadKey, JSON.stringify(payload));
+        } catch (error) {
+          // Ignore storage failures; checkout redirect still proceeds.
+        }
+      }
+
       window.location.href = checkoutUrl;
     } catch (error) {
       ns.ui.showToast("Checkout failed");

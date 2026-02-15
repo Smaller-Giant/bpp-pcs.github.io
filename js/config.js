@@ -10,6 +10,7 @@ window.BPP_CONFIG = {
   storageKeys: {
     basket: "bpp_basket_v3",
     products: "bpp_products_v3",
+    checkoutPayload: "bpp_checkout_payload_v1",
     cookieConsent: "bpp_cookie_consent_v1",
     adminSession: "bpp_admin_session_v1"
   }
