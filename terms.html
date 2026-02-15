@@ -1,64 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Terms and Conditions | BPP PCs</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terms & Conditions | BPP PCs</title>
+  <meta name="description" content="Terms and Conditions for BPP PCs ecommerce website.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-  <a class="skip-link" href="#main-content">Skip to content</a>
-
   <header class="site-header">
-    <div class="container nav-wrap">
-      <a class="brand" href="index.html">
-        <span class="brand-main">BPP PCs</span>
-        <span class="brand-tag">Buy it, Plug it, Play it</span>
+    <div class="container top-bar">
+      <a class="logo" href="index.html" aria-label="BPP PCs homepage">
+        <span class="logo-mark">BPP</span>
+        <span class="logo-text">
+          <span class="logo-title">BPP PCs</span>
+          <span class="logo-subtitle">Buy it, Plug it, Play it</span>
+        </span>
       </a>
-      <nav class="main-nav" aria-label="Main navigation">
-        <a href="index.html">Home</a>
-        <a href="products.html">Products</a>
-        <a href="about.html">About</a>
-        <a href="basket.html" class="basket-link">Basket <span id="basketCount" class="count-pill">0</span></a>
+      <button class="mobile-menu-toggle" type="button" data-menu-toggle aria-label="Toggle navigation">☰</button>
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a data-nav="index.html" href="index.html">Home</a>
+        <a data-nav="products.html" href="products.html">Products</a>
+        <a data-nav="basket.html" href="basket.html">Basket</a>
       </nav>
+      <a class="basket-pill" href="basket.html">Basket <span class="basket-count">0</span></a>
     </div>
   </header>
 
-  <main id="main-content" class="container section">
-    <section class="legal-page reveal">
-      <h1>Terms and Conditions</h1>
-      <p>By placing an order, you agree to our sales terms, delivery windows, and returns process.</p>
-      <h2>Order Terms</h2>
-      <ul class="clean-list">
-        <li>All listed products are sold as new unless explicitly stated otherwise.</li>
-        <li>Pricing includes applicable VAT where required.</li>
-        <li>Orders are accepted when dispatch confirmation is issued.</li>
-      </ul>
-      <h2>Warranty and Liability</h2>
-      <p>Hardware warranty coverage and exclusions are supplied in your order confirmation and support documentation.</p>
-    </section>
+  <main class="section">
+    <div class="container policy-shell">
+      <div class="section-header">
+        <div>
+          <span class="eyebrow">Legal</span>
+          <h1 style="font-size:clamp(2rem,4.2vw,3.4rem);">Terms & Conditions</h1>
+        </div>
+      </div>
+
+      <article>
+        <h3>1. Orders</h3>
+        <p>By placing an order, you agree that all submitted information is accurate and that you are authorized to use the provided payment method.</p>
+      </article>
+
+      <article>
+        <h3>2. Product Availability</h3>
+        <p>Inventory indicators are estimates and can change. We reserve the right to cancel or limit orders if stock is unavailable.</p>
+      </article>
+
+      <article>
+        <h3>3. Pricing</h3>
+        <p>Prices are displayed in USD unless otherwise noted. Taxes and shipping may be applied at checkout depending on destination and local rules.</p>
+      </article>
+
+      <article>
+        <h3>4. Warranty and Support</h3>
+        <p>Warranty coverage and support terms are provided with each order confirmation and may vary by component and region.</p>
+      </article>
+
+      <article>
+        <h3>5. Liability</h3>
+        <p>To the maximum extent permitted by law, BPP PCs is not liable for indirect or consequential damages resulting from product use.</p>
+      </article>
+    </div>
   </main>
 
   <footer class="site-footer">
     <div class="container footer-grid">
       <div>
-        <p class="footer-title">BPP PCs</p>
-        <p class="muted">Buy it, Plug it, Play it</p>
+        <strong>BPP PCs</strong>
+        <p style="margin-top:0.35rem;">Buy it, Plug it, Play it.</p>
+        <p style="margin-top:0.35rem;font-size:0.82rem;color:var(--muted);">© <span data-year></span> BPP PCs. All rights reserved.</p>
       </div>
-      <nav class="footer-links" aria-label="Legal links">
+      <div class="footer-links">
         <a href="privacy.html">Privacy Policy</a>
-        <a href="terms.html">Terms and Conditions</a>
-        <a href="returns.html">Returns and Refunds</a>
-        <a href="accessibility.html">Accessibility</a>
-        <a href="contact.html">Contact</a>
-      </nav>
+        <a href="terms.html">Terms & Conditions</a>
+        <a href="refund.html">Refund Policy</a>
+      </div>
     </div>
-    <div class="container footer-bottom">Copyright <span id="year"></span> BPP PCs</div>
   </footer>
 
-  <script src="scripts/main.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/product-data.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/main.js"></script>
 </body>
 </html>

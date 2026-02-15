@@ -1,82 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Basket | BPP PCs</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
+  <meta name="description" content="Review your selected BPP PCs and complete checkout with Stripe.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-  <a class="skip-link" href="#main-content">Skip to content</a>
-
   <header class="site-header">
-    <div class="container nav-wrap">
-      <a class="brand" href="index.html">
-        <span class="brand-main">BPP PCs</span>
-        <span class="brand-tag">Buy it, Plug it, Play it</span>
+    <div class="container top-bar">
+      <a class="logo" href="index.html" aria-label="BPP PCs homepage">
+        <span class="logo-mark">BPP</span>
+        <span class="logo-text">
+          <span class="logo-title">BPP PCs</span>
+          <span class="logo-subtitle">Buy it, Plug it, Play it</span>
+        </span>
       </a>
-      <nav class="main-nav" aria-label="Main navigation">
-        <a href="index.html">Home</a>
-        <a href="products.html">Products</a>
-        <a href="about.html">About</a>
-        <a href="basket.html" aria-current="page" class="basket-link">Basket <span id="basketCount" class="count-pill">0</span></a>
+
+      <button class="mobile-menu-toggle" type="button" data-menu-toggle aria-label="Toggle navigation">☰</button>
+
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a data-nav="index.html" href="index.html">Home</a>
+        <a data-nav="products.html" href="products.html">Products</a>
+        <a data-nav="basket.html" href="basket.html">Basket</a>
       </nav>
+
+      <a class="basket-pill" href="basket.html">
+        Basket
+        <span class="basket-count">0</span>
+      </a>
     </div>
   </header>
 
-  <main id="main-content">
-    <section class="container subhero reveal">
-      <p class="eyebrow">Checkout staging</p>
-      <h1>Lock In Your Build</h1>
-      <p>Adjust quantities, verify totals, and confirm terms before checkout.</p>
-    </section>
+  <main class="section">
+    <div class="container">
+      <div class="section-header">
+        <div>
+          <span class="eyebrow">Checkout</span>
+          <h1 style="font-size:clamp(2rem,4.2vw,3.4rem);">Your basket</h1>
+        </div>
+      </div>
 
-    <section class="container section basket-layout reveal">
-      <section>
-        <div id="basketItems" class="basket-items"></div>
-        <a class="button ghost" href="products.html">Continue Shopping</a>
-      </section>
+      <div class="basket-layout">
+        <section id="basket-list" class="basket-list"></section>
 
-      <aside class="panel summary" aria-label="Basket summary">
-        <h2>Summary</h2>
-        <dl>
-          <div><dt>Items</dt><dd id="summaryItems">0</dd></div>
-          <div><dt>Subtotal</dt><dd id="summarySubtotal">GBP 0.00</dd></div>
-          <div><dt>Shipping</dt><dd>Free</dd></div>
-        </dl>
-        <p class="summary-total">Total <span id="summaryTotal">GBP 0.00</span></p>
-        <label class="consent-check">
-          <input type="checkbox" id="legalConsent" />
-          I agree to the <a href="terms.html">Terms</a> and <a href="privacy.html">Privacy Policy</a>.
-        </label>
-        <button id="checkoutButton" class="button primary full">Proceed To Checkout</button>
-        <p class="tiny-note">Need finance or payment integration? Connect this action to your provider in `scripts/basket.js`.</p>
-      </aside>
-    </section>
+        <aside class="panel">
+          <div id="basket-summary"></div>
+          <button id="checkout-button" type="button" class="btn btn-primary" style="width:100%;margin-top:0.6rem;">Proceed to Checkout</button>
+          <button id="clear-basket" type="button" class="btn btn-secondary" style="width:100%;margin-top:0.6rem;">Clear Basket</button>
+          <p class="summary-note" style="margin-top:0.75rem;">
+            Stripe Checkout is configured client-side with your publishable key and Stripe Price IDs.
+          </p>
+        </aside>
+      </div>
+    </div>
   </main>
 
   <footer class="site-footer">
     <div class="container footer-grid">
       <div>
-        <p class="footer-title">BPP PCs</p>
-        <p class="muted">Buy it, Plug it, Play it</p>
+        <strong>BPP PCs</strong>
+        <p style="margin-top:0.35rem;">Buy it, Plug it, Play it.</p>
+        <p style="margin-top:0.35rem;font-size:0.82rem;color:var(--muted);">© <span data-year></span> BPP PCs. All rights reserved.</p>
       </div>
-      <nav class="footer-links" aria-label="Legal links">
+      <div class="footer-links">
+        <a href="products.html">Products</a>
+        <a href="basket.html">Basket</a>
         <a href="privacy.html">Privacy Policy</a>
-        <a href="terms.html">Terms and Conditions</a>
-        <a href="returns.html">Returns and Refunds</a>
-        <a href="accessibility.html">Accessibility</a>
-        <a href="contact.html">Contact</a>
-      </nav>
+        <a href="terms.html">Terms & Conditions</a>
+        <a href="refund.html">Refund Policy</a>
+      </div>
     </div>
-    <div class="container footer-bottom">Copyright <span id="year"></span> BPP PCs</div>
   </footer>
 
-  <script src="scripts/data.js"></script>
-  <script src="scripts/basket.js"></script>
-  <script src="scripts/main.js"></script>
+  <script src="https://js.stripe.com/v3/"></script>
+  <script src="js/config.js"></script>
+  <script src="js/product-data.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/basket-page.js"></script>
 </body>
 </html>

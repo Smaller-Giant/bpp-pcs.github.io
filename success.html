@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Success | BPP PCs</title>
+  <meta name="description" content="Your payment was successful. Thank you for your BPP PCs order.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container top-bar">
+      <a class="logo" href="index.html" aria-label="BPP PCs homepage">
+        <span class="logo-mark">BPP</span>
+        <span class="logo-text">
+          <span class="logo-title">BPP PCs</span>
+          <span class="logo-subtitle">Buy it, Plug it, Play it</span>
+        </span>
+      </a>
+      <button class="mobile-menu-toggle" type="button" data-menu-toggle aria-label="Toggle navigation">☰</button>
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a data-nav="index.html" href="index.html">Home</a>
+        <a data-nav="products.html" href="products.html">Products</a>
+        <a data-nav="basket.html" href="basket.html">Basket</a>
+      </nav>
+      <a class="basket-pill" href="basket.html">Basket <span class="basket-count">0</span></a>
+    </div>
+  </header>
+
+  <main class="status-page" data-success-page>
+    <article class="status-card">
+      <div class="status-icon status-success">✓</div>
+      <h1 style="font-size:clamp(2rem,4vw,3rem);">Payment successful</h1>
+      <p style="margin-top:0.8rem;">Your order is confirmed. Our team will begin final validation and dispatch prep shortly.</p>
+      <p id="session-id" style="margin-top:0.9rem;font-size:0.82rem;color:var(--muted);"></p>
+      <div style="margin-top:1.2rem;display:flex;gap:0.65rem;justify-content:center;flex-wrap:wrap;">
+        <a class="btn btn-primary" href="products.html">Shop More PCs</a>
+        <a class="btn btn-secondary" href="index.html">Back to Home</a>
+      </div>
+    </article>
+  </main>
+
+  <script src="js/config.js"></script>
+  <script src="js/product-data.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/success-page.js"></script>
+</body>
+</html>

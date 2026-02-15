@@ -1,97 +1,191 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BPP PCs | Buy it, Plug it, Play it</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
+  <meta name="description" content="Premium prebuilt PCs from BPP PCs. Buy it, Plug it, Play it.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-  <a class="skip-link" href="#main-content">Skip to content</a>
-
   <header class="site-header">
-    <div class="container nav-wrap">
-      <a class="brand" href="index.html">
-        <span class="brand-main">BPP PCs</span>
-        <span class="brand-tag">Buy it, Plug it, Play it</span>
+    <div class="container top-bar">
+      <a class="logo" href="index.html" aria-label="BPP PCs homepage">
+        <span class="logo-mark">BPP</span>
+        <span class="logo-text">
+          <span class="logo-title">BPP PCs</span>
+          <span class="logo-subtitle">Buy it, Plug it, Play it</span>
+        </span>
       </a>
-      <nav class="main-nav" aria-label="Main navigation">
-        <a href="index.html" aria-current="page">Home</a>
-        <a href="products.html">Products</a>
-        <a href="about.html">About</a>
-        <a href="basket.html" class="basket-link">Basket <span id="basketCount" class="count-pill">0</span></a>
+
+      <button class="mobile-menu-toggle" type="button" data-menu-toggle aria-label="Toggle navigation">☰</button>
+
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a data-nav="index.html" href="index.html">Home</a>
+        <a data-nav="products.html" href="products.html">Products</a>
+        <a data-nav="basket.html" href="basket.html">Basket</a>
       </nav>
+
+      <a class="basket-pill" href="basket.html">
+        Basket
+        <span class="basket-count">0</span>
+      </a>
     </div>
   </header>
 
-  <main id="main-content">
-    <section class="container hero reveal">
-      <div>
-        <p class="eyebrow">Next-gen custom systems</p>
-        <h1>Build Loud. Play Clean.</h1>
-        <p class="hero-copy">
-          Extreme airflow, tuned thermals, and precision cable work. BPP machines are built to hit hard in-game and still look like concept art on your desk.
-        </p>
-        <div class="hero-actions">
-          <a class="button primary" href="products.html">Shop The Lineup</a>
-          <a class="button ghost" href="about.html">How We Build</a>
+  <main>
+    <section class="hero">
+      <div class="container hero-shell">
+        <div class="hero-grid">
+          <div class="hero-copy">
+            <span class="eyebrow">Premium Systems</span>
+            <h1>Performance desktops, tuned and ready from day one.</h1>
+            <p>
+              BPP PCs delivers premium prebuilt systems with clean thermals, trusted parts, and refined setup support.
+              You choose the build, we handle the hard part.
+            </p>
+            <div class="hero-actions">
+              <a class="btn btn-primary" href="products.html">Shop the Collection</a>
+              <a class="btn btn-secondary" href="basket.html">Review Basket</a>
+            </div>
+            <div class="hero-stats">
+              <div class="stat">
+                <strong>48h</strong>
+                <span>Average dispatch</span>
+              </div>
+              <div class="stat">
+                <strong>3 Year</strong>
+                <span>Premium warranty</span>
+              </div>
+              <div class="stat">
+                <strong>5,000+</strong>
+                <span>Systems delivered</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="hero-media" data-reveal>
+            <img src="assets/images/aurora-x9.svg" alt="Premium BPP desktop PC on display">
+          </div>
         </div>
       </div>
-      <figure class="hero-art">
-        <img src="assets/hero-pc.svg" alt="Stylized high-performance desktop setup" />
-      </figure>
     </section>
 
-    <section class="container section grid-3 reveal">
-      <article class="panel feature-stat">
-        <strong>48h</strong>
-        <span>Final validation burn-in on flagship builds</span>
-      </article>
-      <article class="panel feature-stat">
-        <strong>100%</strong>
-        <span>Brand-new components in all listed systems</span>
-      </article>
-      <article class="panel feature-stat">
-        <strong>0 Noise</strong>
-        <span>About pricing surprises in the basket</span>
-      </article>
+    <section class="section">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <span class="eyebrow">Featured Builds</span>
+            <h2>Built for gaming, creator work, and elite productivity.</h2>
+          </div>
+          <a class="btn btn-soft" href="products.html">View All PCs</a>
+        </div>
+        <div id="featured-products" class="product-grid"></div>
+      </div>
     </section>
 
-    <section class="container section grid-2 reveal">
-      <article class="panel">
-        <p class="eyebrow">Live drop</p>
-        <h2>Frostline and Nova models are in stock now.</h2>
-        <p class="muted">Limited quantities this cycle. Filter by category, price, and style in the product lab.</p>
-        <a class="button accent" href="products.html">Open Products</a>
-      </article>
-      <article class="panel">
-        <p class="eyebrow">Policy first</p>
-        <h2>Clear terms, privacy, returns, and accessibility.</h2>
-        <p class="muted">The site includes straightforward policy pages so checkout decisions are simple and transparent.</p>
-      </article>
+    <section class="section">
+      <div class="container split-grid">
+        <div class="panel" data-reveal>
+          <span class="eyebrow">Testimonials</span>
+          <h2 style="margin-bottom:1rem;">Trusted by first-time and enthusiast buyers.</h2>
+          <div class="testimonial-list">
+            <article class="testimonial-card">
+              <p>"Packaging, cable management, thermals, and setup guide were all top tier. Zero issues out of the box."</p>
+              <p class="testimonial-author">Jordan R. - Chicago</p>
+            </article>
+            <article class="testimonial-card">
+              <p>"I wanted premium without building myself. BPP hit the mark and support replied within minutes."</p>
+              <p class="testimonial-author">Alyssa M. - Austin</p>
+            </article>
+            <article class="testimonial-card">
+              <p>"Frame rates are exactly as advertised. Quiet, clean, and genuinely plug-and-play."</p>
+              <p class="testimonial-author">Omar K. - Seattle</p>
+            </article>
+          </div>
+        </div>
+
+        <div class="panel" data-reveal>
+          <span class="eyebrow">Trust & Tiers</span>
+          <h2 style="margin-bottom:1rem;">Premium delivery standards, every order.</h2>
+          <div class="badge-list">
+            <article class="trust-badge">
+              <strong>Burn-In Tested</strong>
+              <span>Each system stress-tested before shipment.</span>
+            </article>
+            <article class="trust-badge">
+              <strong>Secure Packaging</strong>
+              <span>Impact-safe packing and internal support foam.</span>
+            </article>
+            <article class="trust-badge">
+              <strong>Live Setup Support</strong>
+              <span>Fast post-delivery support from the BPP team.</span>
+            </article>
+            <article class="trust-badge">
+              <strong>Transparent Specs</strong>
+              <span>No hidden part swaps. What you order is what you get.</span>
+            </article>
+          </div>
+          <div class="badge-list" id="performance-tier-summary" style="margin-top:0.8rem;"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <span class="eyebrow">Recently Viewed</span>
+            <h2>Pick up where you left off.</h2>
+          </div>
+        </div>
+        <div id="recently-viewed"></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container panel newsletter" data-reveal>
+        <div>
+          <span class="eyebrow">Newsletter</span>
+          <h2>Stock alerts and launch drops.</h2>
+          <p style="margin-top:0.7rem;">
+            Join the list for product launches, restock signals, and premium bundle promotions.
+          </p>
+        </div>
+        <form data-newsletter-form>
+          <label class="sr-only" for="newsletter-email">Email address</label>
+          <input id="newsletter-email" type="email" required placeholder="you@example.com">
+          <button class="btn btn-primary" type="submit">Subscribe</button>
+        </form>
+      </div>
     </section>
   </main>
 
   <footer class="site-footer">
     <div class="container footer-grid">
       <div>
-        <p class="footer-title">BPP PCs</p>
-        <p class="muted">Buy it, Plug it, Play it</p>
+        <strong>BPP PCs</strong>
+        <p style="margin-top:0.35rem;">Buy it, Plug it, Play it.</p>
+        <p style="margin-top:0.35rem;font-size:0.82rem;color:var(--muted);">© <span data-year></span> BPP PCs. All rights reserved.</p>
       </div>
-      <nav class="footer-links" aria-label="Legal links">
+      <div class="footer-links">
+        <a href="products.html">Products</a>
+        <a href="basket.html">Basket</a>
         <a href="privacy.html">Privacy Policy</a>
-        <a href="terms.html">Terms and Conditions</a>
-        <a href="returns.html">Returns and Refunds</a>
-        <a href="accessibility.html">Accessibility</a>
-        <a href="contact.html">Contact</a>
-      </nav>
+        <a href="terms.html">Terms & Conditions</a>
+        <a href="refund.html">Refund Policy</a>
+      </div>
     </div>
-    <div class="container footer-bottom">Copyright <span id="year"></span> BPP PCs</div>
   </footer>
 
-  <script src="scripts/main.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/product-data.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/home.js"></script>
 </body>
 </html>

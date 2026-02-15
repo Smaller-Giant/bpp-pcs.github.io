@@ -1,97 +1,100 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Products | BPP PCs</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
+  <meta name="description" content="Browse premium gaming, creator, and workstation desktops from BPP PCs.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-  <a class="skip-link" href="#main-content">Skip to content</a>
-
   <header class="site-header">
-    <div class="container nav-wrap">
-      <a class="brand" href="index.html">
-        <span class="brand-main">BPP PCs</span>
-        <span class="brand-tag">Buy it, Plug it, Play it</span>
+    <div class="container top-bar">
+      <a class="logo" href="index.html" aria-label="BPP PCs homepage">
+        <span class="logo-mark">BPP</span>
+        <span class="logo-text">
+          <span class="logo-title">BPP PCs</span>
+          <span class="logo-subtitle">Buy it, Plug it, Play it</span>
+        </span>
       </a>
-      <nav class="main-nav" aria-label="Main navigation">
-        <a href="index.html">Home</a>
-        <a href="products.html" aria-current="page">Products</a>
-        <a href="about.html">About</a>
-        <a href="basket.html" class="basket-link">Basket <span id="basketCount" class="count-pill">0</span></a>
+
+      <button class="mobile-menu-toggle" type="button" data-menu-toggle aria-label="Toggle navigation">☰</button>
+
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a data-nav="index.html" href="index.html">Home</a>
+        <a data-nav="products.html" href="products.html">Products</a>
+        <a data-nav="basket.html" href="basket.html">Basket</a>
       </nav>
+
+      <a class="basket-pill" href="basket.html">
+        Basket
+        <span class="basket-count">0</span>
+      </a>
     </div>
   </header>
 
-  <main id="main-content">
-    <section class="container subhero reveal">
-      <p class="eyebrow">The product lab</p>
-      <h1>Find Your Next Monster Build</h1>
-      <p>Use the controls to search, filter, and sort systems by style and budget.</p>
-    </section>
+  <main class="section">
+    <div class="container">
+      <div class="section-header">
+        <div>
+          <span class="eyebrow">Build Library</span>
+          <h1 style="font-size:clamp(2rem,4.2vw,3.4rem);">Find your performance tier.</h1>
+        </div>
+        <button id="wishlist-only-btn" type="button" class="btn btn-soft">Wishlist Only</button>
+      </div>
 
-    <section class="container section reveal">
-      <section class="controls panel" aria-label="Product controls">
-        <label for="searchInput">Search
-          <input type="search" id="searchInput" placeholder="Name, use case, or keyword" />
-        </label>
-        <label for="categoryFilter">Category
-          <select id="categoryFilter">
+      <div class="panel" data-reveal>
+        <div class="filters">
+          <input id="search-input" type="search" placeholder="Search builds, tier, or use case...">
+          <select id="category-filter">
             <option value="all">All categories</option>
-            <option value="gaming">Gaming</option>
-            <option value="creator">Creator</option>
-            <option value="office">Office</option>
           </select>
-        </label>
-        <label for="priceFilter">Price
-          <select id="priceFilter">
-            <option value="all">All prices</option>
-            <option value="0-999">Under GBP 1,000</option>
-            <option value="1000-1499">GBP 1,000 - 1,499</option>
-            <option value="1500-9999">GBP 1,500+</option>
+          <select id="tier-filter">
+            <option value="all">All tiers</option>
           </select>
-        </label>
-        <label for="sortBy">Sort
-          <select id="sortBy">
-            <option value="featured">Featured</option>
+          <select id="sort-filter">
+            <option value="featured">Sort: Featured</option>
             <option value="price-asc">Price: Low to High</option>
             <option value="price-desc">Price: High to Low</option>
-            <option value="name-asc">Name: A to Z</option>
-            <option value="name-desc">Name: Z to A</option>
+            <option value="stock-desc">Stock: Highest</option>
           </select>
-        </label>
-      </section>
-    </section>
+        </div>
 
-    <section class="container section reveal">
-      <p id="resultsCount" class="results-count"></p>
-      <div id="productGrid" class="product-grid"></div>
-    </section>
+        <p id="results-meta" class="result-meta"></p>
+        <div id="products-grid" class="product-grid"></div>
+      </div>
+    </div>
   </main>
 
   <footer class="site-footer">
     <div class="container footer-grid">
       <div>
-        <p class="footer-title">BPP PCs</p>
-        <p class="muted">Buy it, Plug it, Play it</p>
+        <strong>BPP PCs</strong>
+        <p style="margin-top:0.35rem;">Buy it, Plug it, Play it.</p>
+        <p style="margin-top:0.35rem;font-size:0.82rem;color:var(--muted);">© <span data-year></span> BPP PCs. All rights reserved.</p>
       </div>
-      <nav class="footer-links" aria-label="Legal links">
+      <div class="footer-links">
+        <a href="products.html">Products</a>
+        <a href="basket.html">Basket</a>
         <a href="privacy.html">Privacy Policy</a>
-        <a href="terms.html">Terms and Conditions</a>
-        <a href="returns.html">Returns and Refunds</a>
-        <a href="accessibility.html">Accessibility</a>
-        <a href="contact.html">Contact</a>
-      </nav>
+        <a href="terms.html">Terms & Conditions</a>
+        <a href="refund.html">Refund Policy</a>
+      </div>
     </div>
-    <div class="container footer-bottom">Copyright <span id="year"></span> BPP PCs</div>
   </footer>
 
-  <script src="scripts/data.js"></script>
-  <script src="scripts/products.js"></script>
-  <script src="scripts/main.js"></script>
+  <div id="product-modal" class="modal" hidden>
+    <div id="product-modal-body" class="modal-card" role="dialog" aria-modal="true" aria-label="Product details"></div>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/product-data.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/products-page.js"></script>
 </body>
 </html>
