@@ -1,0 +1,7 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" role="img" aria-labelledby="logoTitle">
+  <title id="logoTitle">BPP PCs mouse logo</title>
+  <rect x="16" y="4" width="32" height="56" rx="16" stroke="#FFFFFF" stroke-width="3.2"/>
+  <path d="M16 32h32" stroke="#FFFFFF" stroke-width="3.2"/>
+  <path d="M32 4v22" stroke="#FFFFFF" stroke-width="3.2"/>
+  <rect x="29.8" y="14" width="4.4" height="8.2" rx="2.2" stroke="#FFFFFF" stroke-width="2.8"/>
+</svg>
