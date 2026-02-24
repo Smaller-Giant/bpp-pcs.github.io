@@ -14,7 +14,7 @@ window.PC_PRODUCTS = [
       "240mm liquid CPU cooler"
     ],
     image: "assets/images/aurora-5070-ti.svg",
-    stripeCheckoutLink: "https://buy.stripe.com/test_aurora5070ti"
+    stripeCheckoutLink: "https://buy.stripe.com/test_28EaEW6lR98AgqZ88P6kg01"
   },
   {
     id: "bpp-ultimate-pc",
@@ -31,7 +31,7 @@ window.PC_PRODUCTS = [
       "360mm liquid CPU cooler"
     ],
     image: "assets/images/eclipse-5080.svg",
-    stripeCheckoutLink: "https://buy.stripe.com/test_eclipse5080"
+    stripeCheckoutLink: "https://buy.stripe.com/test_8x214m11x5Wob6F74L6kg02"
   },
   {
     id: "fortnite-ready",
