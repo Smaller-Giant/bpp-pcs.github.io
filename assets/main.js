@@ -192,9 +192,10 @@ function createProductCard(product) {
     .map((item) => `<li>${escapeHtml(item)}</li>`)
     .join("");
   const productImage = getProductImage(product);
+  const productUrl = `product-${product.slug}.html`;
 
   return `
-    <article class="product-card">
+    <article class="product-card" data-product-url="${escapeHtml(productUrl)}" role="link" tabindex="0" aria-label="Open ${escapeHtml(product.name)} details">
       <img class="product-card-image" src="${escapeHtml(productImage)}" alt="${escapeHtml(product.name)} desktop PC">
       <div class="product-card-body">
         <h3 class="product-card-title">${escapeHtml(product.name)}</h3>
@@ -202,12 +203,47 @@ function createProductCard(product) {
         <p>${escapeHtml(getProductDescription(product))}</p>
         <ul class="product-specs">${specificationItems}</ul>
         <div class="card-actions">
-          <a class="button button-secondary" href="product-${escapeHtml(product.slug)}.html">View details</a>
+          <a class="button button-secondary" href="${escapeHtml(productUrl)}">View details</a>
           <a class="button button-primary" href="${escapeHtml(product.stripeCheckoutLink)}">Buy Now</a>
         </div>
       </div>
     </article>
   `;
+}
+
+function initProductCardNavigation() {
+  function isInteractiveTarget(target) {
+    return Boolean(target.closest("a, button, input, select, textarea, label"));
+  }
+
+  document.addEventListener("click", (event) => {
+    const card = event.target.closest(".product-card[data-product-url]");
+    if (!card || isInteractiveTarget(event.target)) {
+      return;
+    }
+
+    const productUrl = card.getAttribute("data-product-url");
+    if (productUrl) {
+      window.location.href = productUrl;
+    }
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter" && event.key !== " ") {
+      return;
+    }
+
+    const card = event.target.closest(".product-card[data-product-url]");
+    if (!card || event.target !== card) {
+      return;
+    }
+
+    event.preventDefault();
+    const productUrl = card.getAttribute("data-product-url");
+    if (productUrl) {
+      window.location.href = productUrl;
+    }
+  });
 }
 
 function createProductDetail(product) {
@@ -561,6 +597,7 @@ document.addEventListener("DOMContentLoaded", () => {
   setActiveNavigation();
   initMobileNavigation();
   initAccessibilityMenu();
+  initProductCardNavigation();
   initProductsControls();
   renderFeaturedProducts();
   renderProductsPage();
