@@ -246,6 +246,35 @@ function initProductCardNavigation() {
   });
 }
 
+function initBackButtons() {
+  document.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-back-button]");
+    if (!button) {
+      return;
+    }
+
+    const fallback = button.getAttribute("data-back-fallback") || "index.html";
+    const hasHistory = window.history.length > 1;
+    let isSameOriginReferrer = false;
+
+    if (document.referrer) {
+      try {
+        const referrerUrl = new URL(document.referrer, window.location.href);
+        isSameOriginReferrer = referrerUrl.origin === window.location.origin;
+      } catch (error) {
+        isSameOriginReferrer = false;
+      }
+    }
+
+    if (hasHistory && isSameOriginReferrer) {
+      window.history.back();
+      return;
+    }
+
+    window.location.href = fallback;
+  });
+}
+
 function createProductDetail(product) {
   const specificationItems = product.specifications
     .map((item) => `<li>${escapeHtml(item)}</li>`)
@@ -598,6 +627,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initMobileNavigation();
   initAccessibilityMenu();
   initProductCardNavigation();
+  initBackButtons();
   initProductsControls();
   renderFeaturedProducts();
   renderProductsPage();
