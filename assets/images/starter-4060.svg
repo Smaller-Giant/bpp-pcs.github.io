@@ -1,0 +1,18 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="1000" viewBox="0 0 1400 1000" role="img" aria-labelledby="title desc">
+  <title id="title">BPP Starter RTX 4060 desktop PC</title>
+  <desc id="desc">Stylized desktop tower illustration for the Starter RTX 4060.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#252015" />
+      <stop offset="100%" stop-color="#5d4a25" />
+    </linearGradient>
+  </defs>
+  <rect width="1400" height="1000" fill="url(#bg)" />
+  <rect x="280" y="120" width="840" height="760" rx="36" fill="#252015" stroke="#f1cf7e" stroke-width="8" />
+  <rect x="350" y="200" width="320" height="520" rx="20" fill="#3a2f19" stroke="#f8d991" stroke-width="6" />
+  <circle cx="430" cy="310" r="48" fill="#ffd98c" />
+  <circle cx="430" cy="470" r="48" fill="#ffd98c" />
+  <rect x="760" y="220" width="280" height="210" rx="12" fill="#3a2f19" stroke="#f8d991" stroke-width="6" />
+  <rect x="760" y="500" width="280" height="210" rx="12" fill="#3a2f19" stroke="#f8d991" stroke-width="6" />
+  <text x="700" y="930" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="58" fill="#fff6dc">Starter RTX 4060</text>
+</svg>

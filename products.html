@@ -1,66 +1,73 @@
-﻿<!DOCTYPE html>
+﻿<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Shop PCs | BPP PCs</title>
-  <meta name="description" content="Static product catalog for BPP PCs with direct Stripe checkout links.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Sora:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Products | BPP PCs</title>
+  <meta name="description" content="Browse all BPP desktop PCs with individual product pages and direct Stripe Checkout payment links.">
+  <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
   <header class="site-header">
-    <div class="container header-inner">
-      <a class="logo" href="index.html" aria-label="BPP PCs home">
-        <span class="logo-mark">BPP</span>
-        <span class="logo-copy">
+    <div class="container header-grid">
+      <a class="brand" href="index.html" aria-label="BPP PCs home">
+        <span class="brand-mark">BPP</span>
+        <span class="brand-copy">
           <strong>BPP PCs</strong>
-          <span>BUY IT, PLUG IT, PLAY IT</span>
+          <small>Desktop Systems</small>
         </span>
       </a>
 
-      <button class="mobile-toggle" type="button" data-mobile-toggle aria-label="Toggle navigation">Menu</button>
+      <button class="nav-toggle" type="button" data-nav-toggle aria-label="Toggle navigation" aria-expanded="false" aria-controls="primary-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
 
-      <nav class="nav" aria-label="Primary navigation">
-        <a href="index.html">Home</a>
-        <a class="active" href="products.html">Products</a>
+      <nav id="primary-nav" class="site-nav" aria-label="Primary navigation">
+        <a href="index.html" data-nav="index.html">Home</a>
+        <a href="products.html" data-nav="products.html">Products</a>
       </nav>
-    </div>
-  </header>
 
-  <main class="section">
-    <div class="container panel">
-      <div class="section-top">
-        <div>
-          <p class="eyebrow">Direct Checkout</p>
-          <h1 style="font-size:clamp(1.95rem,4.6vw,3rem);">Shop BPP Systems</h1>
+      <div class="accessibility-wrap" data-a11y-root>
+        <button class="accessibility-trigger" type="button" data-a11y-toggle aria-label="Accessibility options" aria-haspopup="true" aria-expanded="false" aria-controls="a11y-menu">
+          Accessibility
+        </button>
+        <div class="accessibility-menu" id="a11y-menu" data-a11y-menu role="menu" hidden>
+          <button type="button" role="menuitemcheckbox" data-a11y-action="largeText" aria-checked="false" aria-label="Increase text size">Increase text size</button>
+          <button type="button" role="menuitemcheckbox" data-a11y-action="highContrast" aria-checked="false" aria-label="Toggle high contrast mode">High contrast mode</button>
+          <button type="button" role="menuitemcheckbox" data-a11y-action="reduceMotion" aria-checked="false" aria-label="Reduce motion">Reduce motion</button>
+          <button type="button" role="menuitemcheckbox" data-a11y-action="dyslexiaFont" aria-checked="false" aria-label="Toggle dyslexia-friendly font">Dyslexia-friendly font</button>
+          <button type="button" role="menuitem" data-a11y-action="reset" aria-label="Reset accessibility settings">Reset to default</button>
         </div>
       </div>
-
-      <p class="meta-line" style="margin-bottom:1rem;">Each build links directly to its Stripe Checkout page.</p>
-      <div id="products-grid" class="product-grid" aria-live="polite"></div>
     </div>
+  </header>
+  <main id="main-content" class="page-main">
+    <section class="container">
+      <header class="page-header">
+        <p class="kicker">Desktop Product Range</p>
+        <h1>Choose your prebuilt PC</h1>
+        <p>Every desktop has a dedicated product page and direct Buy Now link to Stripe Checkout.</p>
+      </header>
+      <div class="product-grid" data-products-grid aria-live="polite"></div>
+    </section>
   </main>
-
-  <footer class="footer">
+  <footer class="site-footer">
     <div class="container footer-grid">
-      <div>
-        <strong>BPP PCs</strong>
-        <p style="margin-top:0.35rem;">Buy it, Plug it, Play it.</p>
-        <p class="meta-line" style="margin-top:0.35rem;">&copy; <span data-year></span> BPP PCs</p>
-      </div>
-      <div class="footer-links">
-        <a href="index.html">Home</a>
-        <a href="products.html">Products</a>
-        <a href="terms-and-conditions.html">Terms</a>
-        <a href="privacy-policy.html">Privacy</a>
-        <a href="returns-and-refund-policy.html">Returns</a>
-      </div>
+      <p class="footer-copy">BPP PCs prebuilt desktop systems for UK customers.</p>
+      <nav class="footer-links" aria-label="Footer links">
+        <a href="shipping.html">Shipping</a>
+        <a href="warranty.html">Warranty</a>
+        <a href="returns.html">Returns</a>
+        <a href="terms.html">Terms</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="mailto:[Contact Email]">Contact Email</a>
+      </nav>
+      <p class="footer-meta">Copyright <span data-year></span> BPP PCs</p>
     </div>
   </footer>
-
-  <script src="js/products-page.js"></script>
+  <script src="assets/main.js"></script>
 </body>
 </html>
