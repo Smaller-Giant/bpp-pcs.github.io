@@ -103,6 +103,14 @@
   }
 ];
 
+// Product edits should be made in assets/products.js.
+if (Array.isArray(window.PC_PRODUCTS)) {
+  PRODUCTS.length = 0;
+  window.PC_PRODUCTS.forEach((product) => {
+    PRODUCTS.push(product);
+  });
+}
+
 const DEFAULT_A11Y_STATE = {
   highContrast: false,
   reduceMotion: false,
@@ -116,6 +124,7 @@ const A11Y_CLASS_MAP = {
 };
 
 const A11Y_STORAGE_KEY = "pc_site_accessibility";
+const PRODUCT_DETAIL_PAGE = "product.html";
 
 function escapeHtml(value) {
   return String(value)
@@ -140,8 +149,36 @@ function getCurrentFileName() {
   return fileName.toLowerCase();
 }
 
+function normalizeProductKey(value) {
+  return String(value || "").trim().toLowerCase();
+}
+
+function getProductKey(product) {
+  const candidates = [product?.slug, product?.id, product?.name];
+  for (const candidate of candidates) {
+    const normalized = normalizeProductKey(candidate);
+    if (normalized) {
+      return normalized;
+    }
+  }
+
+  return "";
+}
+
+function getProductByKey(key) {
+  const target = normalizeProductKey(key);
+  if (!target) {
+    return null;
+  }
+
+  return PRODUCTS.find((product) => {
+    const productCandidates = [product.slug, product.id, product.name];
+    return productCandidates.some((candidate) => normalizeProductKey(candidate) === target);
+  }) || null;
+}
+
 function getProductBySlug(slug) {
-  return PRODUCTS.find((product) => product.slug === slug) || null;
+  return getProductByKey(slug);
 }
 
 function getProductImage(product) {
@@ -176,14 +213,19 @@ function getProductArrayField(product, key, fallbackItems) {
 }
 
 function getSlugFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  const paramSlug = normalizeProductKey(params.get("slug"));
+  if (paramSlug) {
+    return paramSlug;
+  }
+
   const fileName = getCurrentFileName();
   const match = fileName.match(/^product-(.+)\.html$/);
   if (match) {
-    return decodeURIComponent(match[1]);
+    return normalizeProductKey(decodeURIComponent(match[1]));
   }
 
-  const params = new URLSearchParams(window.location.search);
-  return String(params.get("slug") || "").toLowerCase();
+  return "";
 }
 
 function createProductCard(product) {
@@ -192,7 +234,8 @@ function createProductCard(product) {
     .map((item) => `<li>${escapeHtml(item)}</li>`)
     .join("");
   const productImage = getProductImage(product);
-  const productUrl = `product-${product.slug}.html`;
+  const productKey = getProductKey(product);
+  const productUrl = `${PRODUCT_DETAIL_PAGE}?slug=${encodeURIComponent(productKey)}`;
 
   return `
     <article class="product-card" data-product-url="${escapeHtml(productUrl)}" role="link" tabindex="0" aria-label="Open ${escapeHtml(product.name)} details">
@@ -334,7 +377,7 @@ function setCopyrightYear() {
 
 function setActiveNavigation() {
   const fileName = getCurrentFileName();
-  const navKey = fileName.startsWith("product-") ? "products.html" : fileName;
+  const navKey = fileName.startsWith("product-") || fileName === "product.html" ? "products.html" : fileName;
 
   document.querySelectorAll("[data-nav]").forEach((link) => {
     const isActive = link.getAttribute("data-nav") === navKey;
