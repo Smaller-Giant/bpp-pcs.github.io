@@ -1,4 +1,4 @@
-# BPP PCs Website
+﻿# BPP PCs Website
 
 Clean static ecommerce site for **BPP PCs** (Buy it, Plug it, Play it).
 
@@ -16,7 +16,9 @@ No backend is required for deployment on GitHub Pages.
 .
 |- index.html
 |- products.html
-|- basket.html
+|- terms-and-conditions.html
+|- privacy-policy.html
+|- returns-and-refund-policy.html
 |- css/
 |  |- styles.css
 |- js/
@@ -25,32 +27,18 @@ No backend is required for deployment on GitHub Pages.
    |- app.js
    |- home.js
    |- products-page.js
-   |- basket-page.js
 ```
 
 ## Checkout
 
-Checkout uses a static Stripe test link configured in `js/config.js`:
-
-`stripeCheckoutLink`
-
-Current value:
-
-`https://buy.stripe.com/test_9B6aEW11x5Wo3Ed3Sz6kg00`
-
-In `js/basket-page.js`, there is a comment marking where to replace this redirect with a dynamic serverless Stripe Checkout Session in the future.
-
-## Basket Behavior
-
-- Basket is stored in `localStorage`
-- Quantity updates and remove actions are supported
-- Subtotal, shipping, and total are calculated client-side
+Each product opens a Stripe Checkout Payment Link directly.
 
 ## Product Source
 
-Products are defined in `js/store.js` as static catalog data.
+Products are defined as static catalog data in:
 
-This is intentionally simple for now and can later be replaced with Stripe-backed product/session APIs.
+- `js/store.js` (homepage featured products)
+- `js/products-page.js` (full products page)
 
 ## Local Preview
 

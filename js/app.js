@@ -1,10 +1,10 @@
-window.BPP = window.BPP || {};
+﻿window.BPP = window.BPP || {};
 
 (function initApp(ns) {
   const config = window.BPP_CONFIG || {};
-  const formatter = new Intl.NumberFormat("en-US", {
+  const formatter = new Intl.NumberFormat("en-GB", {
     style: "currency",
-    currency: String(config.currency || "usd").toUpperCase(),
+    currency: String(config.currency || "GBP").toUpperCase(),
     maximumFractionDigits: 0
   });
 
@@ -13,7 +13,7 @@ window.BPP = window.BPP || {};
       .replace(/&/g, "&amp;")
       .replace(/</g, "&lt;")
       .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
+      .replace(/\"/g, "&quot;")
       .replace(/'/g, "&#39;");
   }
 
@@ -22,6 +22,15 @@ window.BPP = window.BPP || {};
   }
 
   function productCard(product) {
+    const specs = Array.isArray(product.specs) ? product.specs.filter(Boolean) : [];
+    const specsHtml = specs.length
+      ? `
+        <ul class="product-specs">
+          ${specs.map((spec) => `<li>${escapeHtml(spec)}</li>`).join("")}
+        </ul>
+      `
+      : "";
+
     return `
       <article class="product-card">
         <img class="product-image" src="${escapeHtml(product.image)}" alt="${escapeHtml(product.name)} desktop PC">
@@ -32,34 +41,13 @@ window.BPP = window.BPP || {};
           </div>
           <h3>${escapeHtml(product.name)}</h3>
           <p class="product-description">${escapeHtml(product.description)}</p>
+          ${specsHtml}
           <div class="card-actions">
-            <button class="button primary" type="button" data-add-to-basket="${escapeHtml(product.id)}">Add to Basket</button>
+            <button class="button primary" type="button" data-buy-now="${escapeHtml(product.id)}">Buy Now</button>
           </div>
         </div>
       </article>
     `;
-  }
-
-  function showToast(message) {
-    let wrap = document.querySelector(".toast-stack");
-    if (!wrap) {
-      wrap = document.createElement("div");
-      wrap.className = "toast-stack";
-      document.body.append(wrap);
-    }
-
-    const toast = document.createElement("div");
-    toast.className = "toast";
-    toast.textContent = message;
-    wrap.append(toast);
-    window.setTimeout(() => toast.remove(), 2300);
-  }
-
-  function updateBasketBadge() {
-    const count = ns.store ? ns.store.getBasketTotals().itemCount : 0;
-    document.querySelectorAll("[data-basket-count]").forEach((el) => {
-      el.textContent = String(count);
-    });
   }
 
   function setYear() {
@@ -83,41 +71,38 @@ window.BPP = window.BPP || {};
     });
   }
 
-  function bindAddToBasket() {
+  function bindBuyNow() {
     document.addEventListener("click", (event) => {
-      const button = event.target.closest("[data-add-to-basket]");
+      const button = event.target.closest("[data-buy-now]");
       if (!button || !ns.store) {
         return;
       }
 
-      const id = button.getAttribute("data-add-to-basket");
+      const id = button.getAttribute("data-buy-now");
       const product = ns.store.getProductById(id);
-      if (!product) {
+      const fallbackLink = config.stripeFallbackCheckoutLink;
+      const checkoutLink = product?.stripeCheckoutLink || fallbackLink;
+
+      if (!checkoutLink) {
         return;
       }
 
-      ns.store.addToBasket(id, 1);
-      updateBasketBadge();
-      showToast(`${product.name} added to basket`);
+      window.location.href = checkoutLink;
     });
   }
 
   function init() {
     setYear();
     setActiveNav();
-    updateBasketBadge();
     initMobileNav();
-    bindAddToBasket();
+    bindBuyNow();
   }
 
-  window.addEventListener("bpp:basket-changed", updateBasketBadge);
   document.addEventListener("DOMContentLoaded", init);
 
   ns.ui = {
     escapeHtml,
     formatCurrency,
-    productCard,
-    showToast,
-    updateBasketBadge
+    productCard
   };
 })(window.BPP);

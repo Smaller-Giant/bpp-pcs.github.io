@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Products | BPP PCs</title>
-  <meta name="description" content="Browse all BPP PCs systems by category and price.">
+  <title>Shop PCs | BPP PCs</title>
+  <meta name="description" content="Static product catalog for BPP PCs with direct Stripe checkout links.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Sora:wght@500;600;700&display=swap" rel="stylesheet">
@@ -24,17 +24,9 @@
       <button class="mobile-toggle" type="button" data-mobile-toggle aria-label="Toggle navigation">Menu</button>
 
       <nav class="nav" aria-label="Primary navigation">
-        <a data-nav="index.html" href="index.html">Home</a>
-        <a data-nav="products.html" href="products.html">Products</a>
-        <a data-nav="basket.html" href="basket.html">Basket</a>
+        <a href="index.html">Home</a>
+        <a class="active" href="products.html">Products</a>
       </nav>
-
-      <div class="header-actions">
-        <a class="basket-pill" href="basket.html" aria-label="Open basket">
-          Basket
-          <strong data-basket-count>0</strong>
-        </a>
-      </div>
     </div>
   </header>
 
@@ -42,25 +34,12 @@
     <div class="container panel">
       <div class="section-top">
         <div>
-          <p class="eyebrow">Product Catalog</p>
-          <h1 style="font-size:clamp(1.95rem,4.6vw,3rem);">All BPP Systems</h1>
+          <p class="eyebrow">Direct Checkout</p>
+          <h1 style="font-size:clamp(1.95rem,4.6vw,3rem);">Shop BPP Systems</h1>
         </div>
       </div>
 
-      <div class="filters">
-        <label>
-          <span class="sr-only">Search products</span>
-          <input id="product-search" type="search" aria-label="Search by product name or category">
-        </label>
-        <label>
-          <span class="sr-only">Filter by category</span>
-          <select id="category-filter">
-            <option value="all">All categories</option>
-          </select>
-        </label>
-      </div>
-
-      <p id="products-count" class="meta-line" aria-live="polite"></p>
+      <p class="meta-line" style="margin-bottom:1rem;">Each build links directly to its Stripe Checkout page.</p>
       <div id="products-grid" class="product-grid" aria-live="polite"></div>
     </div>
   </main>
@@ -70,19 +49,18 @@
       <div>
         <strong>BPP PCs</strong>
         <p style="margin-top:0.35rem;">Buy it, Plug it, Play it.</p>
-        <p class="meta-line" style="margin-top:0.35rem;">© <span data-year></span> BPP PCs</p>
+        <p class="meta-line" style="margin-top:0.35rem;">&copy; <span data-year></span> BPP PCs</p>
       </div>
       <div class="footer-links">
         <a href="index.html">Home</a>
         <a href="products.html">Products</a>
-        <a href="basket.html">Basket</a>
+        <a href="terms-and-conditions.html">Terms</a>
+        <a href="privacy-policy.html">Privacy</a>
+        <a href="returns-and-refund-policy.html">Returns</a>
       </div>
     </div>
   </footer>
 
-  <script src="js/config.js"></script>
-  <script src="js/store.js"></script>
-  <script src="js/app.js"></script>
   <script src="js/products-page.js"></script>
 </body>
 </html>
