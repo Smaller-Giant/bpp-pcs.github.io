@@ -14,14 +14,14 @@ window.PC_PRODUCTS = [
       "240mm liquid CPU cooler"
     ],
     image: "assets/images/aurora-5070-ti.svg",
-    stripeCheckoutLink: "https://buy.stripe.com/test_28EaEW6lR98AgqZ88P6kg01"
+    stripeCheckoutLink: "https://buy.stripe.com/test_fZucN49y30C4gqZ9cT6kg03"
   },
   {
     id: "bpp-ultimate-pc",
     name: "The BPP Ultimate PC",
     slug: "The BPP Ultimate PC",
     price: 2699,
-    description: "The highest performance PC that BPP offers. Its a 4K ready gaming tower built for ultra settings, high refresh displays, and demanding workloads that need fast GPU acceleration.",
+    description: "The highest performance PC that BPP offers. Its a 4K ready gaming tower built for ultra settings and high refresh displays.",
     specifications: [
       "Intel Core Ultra 7 265K",
       "NVIDIA GeForce RTX 5080 16GB",
@@ -38,7 +38,7 @@ window.PC_PRODUCTS = [
     name: "240FPS Fortnite Ready PC",
     slug: "240FPS Fortnite Ready PC",
     price: 1199,
-    description: "A PC designed to get 240FPS on fornite to give the smoothest gameplay",
+    description: "A PC designed to get 240FPS on Fornite to give the smoothest gameplay",
     specifications: [
       "AMD Ryzen 9 7900X",
       "NVIDIA GeForce RTX 5080",
