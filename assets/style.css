@@ -138,6 +138,7 @@ ul {
   font-size: 0.74rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .nav-toggle {
@@ -188,6 +189,7 @@ ul {
 
 .accessibility-wrap {
   position: relative;
+  justify-self: end;
 }
 
 .accessibility-trigger {
@@ -213,6 +215,7 @@ ul {
 .accessibility-menu {
   position: absolute;
   right: 0;
+  left: auto;
   top: calc(100% + 0.45rem);
   width: min(18.5rem, 86vw);
   background: var(--panel);
@@ -224,6 +227,7 @@ ul {
   box-shadow: var(--shadow);
   opacity: 0;
   transform: translateY(-0.35rem) scale(0.98);
+  transform-origin: top right;
   pointer-events: none;
   visibility: hidden;
   transition: opacity 0.16s ease, transform 0.16s ease, visibility 0.16s ease;
@@ -653,6 +657,34 @@ body.a11y-dyslexia-font {
 @media (max-width: 860px) {
   .header-grid {
     grid-template-columns: auto 1fr auto auto;
+  }
+
+  .brand {
+    min-width: 0;
+  }
+
+  .brand-copy {
+    min-width: 0;
+  }
+
+  .brand-copy strong {
+    font-size: 0.92rem;
+  }
+
+  .brand-copy small {
+    font-size: 0.62rem;
+    letter-spacing: 0.02em;
+  }
+
+  .accessibility-wrap {
+    justify-self: end;
+  }
+
+  .accessibility-menu {
+    right: 0;
+    left: auto;
+    width: min(18.5rem, calc(100vw - 1rem));
+    transform-origin: top right;
   }
 
   .nav-toggle {
