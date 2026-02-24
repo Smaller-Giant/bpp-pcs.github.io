@@ -216,6 +216,18 @@ ul {
   display: grid;
   gap: 0.34rem;
   box-shadow: var(--shadow);
+  opacity: 0;
+  transform: translateY(-0.35rem) scale(0.98);
+  pointer-events: none;
+  visibility: hidden;
+  transition: opacity 0.16s ease, transform 0.16s ease, visibility 0.16s ease;
+}
+
+.accessibility-menu.is-open {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+  visibility: visible;
 }
 
 .accessibility-menu button {
@@ -422,6 +434,45 @@ a:focus-visible {
   margin-top: 0.55rem;
 }
 
+.catalog-controls {
+  margin-bottom: 0.95rem;
+  padding: 0.8rem;
+  display: grid;
+  grid-template-columns: 2.1fr 1fr 1fr auto;
+  gap: 0.6rem;
+  align-items: end;
+}
+
+.catalog-control {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.catalog-control label {
+  font-size: 0.84rem;
+  color: var(--muted);
+}
+
+.catalog-controls input,
+.catalog-controls select {
+  min-height: 2.75rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line);
+  background: var(--panel-soft);
+  color: var(--text);
+  padding: 0.48rem 0.65rem;
+}
+
+.catalog-controls input::placeholder {
+  color: var(--muted);
+}
+
+.products-empty {
+  padding: 1rem;
+  display: grid;
+  gap: 0.4rem;
+}
+
 .product-layout {
   padding: clamp(0.95rem, 2vw, 1.4rem);
   display: grid;
@@ -448,6 +499,15 @@ a:focus-visible {
 
 .product-detail-copy h1 {
   font-size: clamp(1.7rem, 3.6vw, 2.6rem);
+}
+
+.product-detail-section {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.product-detail-section h2 {
+  font-size: clamp(1.15rem, 2.1vw, 1.45rem);
 }
 
 .specification-list {
@@ -543,10 +603,6 @@ a:focus-visible {
   gap: 0.8rem;
 }
 
-body.a11y-large-text {
-  font-size: 112%;
-}
-
 body.a11y-high-contrast {
   --bg: #000000;
   --bg-soft: #050505;
@@ -613,6 +669,10 @@ body.a11y-dyslexia-font {
   }
 
   .card-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .catalog-controls {
     grid-template-columns: 1fr;
   }
 }

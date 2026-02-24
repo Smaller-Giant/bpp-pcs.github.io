@@ -104,14 +104,12 @@
 ];
 
 const DEFAULT_A11Y_STATE = {
-  largeText: false,
   highContrast: false,
   reduceMotion: false,
   dyslexiaFont: false
 };
 
 const A11Y_CLASS_MAP = {
-  largeText: "a11y-large-text",
   highContrast: "a11y-high-contrast",
   reduceMotion: "a11y-reduce-motion",
   dyslexiaFont: "a11y-dyslexia-font"
@@ -146,6 +144,37 @@ function getProductBySlug(slug) {
   return PRODUCTS.find((product) => product.slug === slug) || null;
 }
 
+function getProductImage(product) {
+  if (typeof product.image === "string" && product.image.trim()) {
+    return product.image.trim();
+  }
+
+  return "assets/images/aurora-5070-ti.svg";
+}
+
+function getProductDescription(product) {
+  if (typeof product.longDescription === "string" && product.longDescription.trim()) {
+    return product.longDescription.trim();
+  }
+
+  return product.description;
+}
+
+function getProductArrayField(product, key, fallbackItems) {
+  const value = product[key];
+  if (Array.isArray(value)) {
+    const normalized = value
+      .map((item) => String(item || "").trim())
+      .filter((item) => item.length > 0);
+
+    if (normalized.length > 0) {
+      return normalized;
+    }
+  }
+
+  return fallbackItems;
+}
+
 function getSlugFromUrl() {
   const fileName = getCurrentFileName();
   const match = fileName.match(/^product-(.+)\.html$/);
@@ -162,14 +191,15 @@ function createProductCard(product) {
     .slice(0, 3)
     .map((item) => `<li>${escapeHtml(item)}</li>`)
     .join("");
+  const productImage = getProductImage(product);
 
   return `
     <article class="product-card">
-      <img class="product-card-image" src="${escapeHtml(product.image)}" alt="${escapeHtml(product.name)} desktop PC">
+      <img class="product-card-image" src="${escapeHtml(productImage)}" alt="${escapeHtml(product.name)} desktop PC">
       <div class="product-card-body">
         <h3 class="product-card-title">${escapeHtml(product.name)}</h3>
         <p class="product-price">${formatPrice(product.price)}</p>
-        <p>${escapeHtml(product.description)}</p>
+        <p>${escapeHtml(getProductDescription(product))}</p>
         <ul class="product-specs">${specificationItems}</ul>
         <div class="card-actions">
           <a class="button button-secondary" href="product-${escapeHtml(product.slug)}.html">View details</a>
@@ -184,18 +214,46 @@ function createProductDetail(product) {
   const specificationItems = product.specifications
     .map((item) => `<li>${escapeHtml(item)}</li>`)
     .join("");
+  const whyBuyItems = getProductArrayField(product, "whyBuy", [
+    "Balanced hardware for reliable day-to-day performance.",
+    "Built for straightforward setup and immediate use.",
+    "Direct Stripe Checkout buying flow with no account required."
+  ])
+    .map((item) => `<li>${escapeHtml(item)}</li>`)
+    .join("");
+  const otherInfoItems = getProductArrayField(product, "otherInfo", [
+    "UK delivery only. See the shipping page for delivery timing and rates.",
+    "Returns are available under our returns policy and UK consumer law.",
+    "Warranty support is available for eligible hardware defects."
+  ])
+    .map((item) => `<li>${escapeHtml(item)}</li>`)
+    .join("");
+  const productImage = getProductImage(product);
 
   return `
     <figure class="product-image-frame">
-      <img src="${escapeHtml(product.image)}" alt="${escapeHtml(product.name)} desktop PC">
+      <img src="${escapeHtml(productImage)}" alt="${escapeHtml(product.name)} desktop PC">
     </figure>
     <div class="product-detail-copy">
       <p class="kicker">Prebuilt Desktop PC</p>
       <h1>${escapeHtml(product.name)}</h1>
       <p class="product-price">${formatPrice(product.price)}</p>
-      <p>${escapeHtml(product.description)}</p>
-      <h2>Specifications</h2>
-      <ul class="specification-list">${specificationItems}</ul>
+      <section class="product-detail-section">
+        <h2>Description</h2>
+        <p>${escapeHtml(getProductDescription(product))}</p>
+      </section>
+      <section class="product-detail-section">
+        <h2>Why you should buy it</h2>
+        <ul class="specification-list">${whyBuyItems}</ul>
+      </section>
+      <section class="product-detail-section">
+        <h2>Specifications</h2>
+        <ul class="specification-list">${specificationItems}</ul>
+      </section>
+      <section class="product-detail-section">
+        <h2>Other information</h2>
+        <ul class="specification-list">${otherInfoItems}</ul>
+      </section>
       <p class="checkout-disclaimer">You will be redirected to Stripe to securely complete your purchase. Stripe is the payment processor, and payment details are handled by Stripe.</p>
       <a class="button button-primary button-large" href="${escapeHtml(product.stripeCheckoutLink)}">Buy Now</a>
     </div>
@@ -254,7 +312,6 @@ function loadAccessibilityState() {
   try {
     const saved = JSON.parse(localStorage.getItem(A11Y_STORAGE_KEY) || "{}");
     return {
-      largeText: Boolean(saved.largeText),
       highContrast: Boolean(saved.highContrast),
       reduceMotion: Boolean(saved.reduceMotion),
       dyslexiaFont: Boolean(saved.dyslexiaFont)
@@ -298,19 +355,43 @@ function initAccessibilityMenu() {
   let accessibilityState = loadAccessibilityState();
   applyAccessibilityState(accessibilityState);
   updateAccessibilityButtons(accessibilityState);
+  let closeMenuTimeout = null;
+
+  function finalizeClose() {
+    if (closeMenuTimeout) {
+      clearTimeout(closeMenuTimeout);
+      closeMenuTimeout = null;
+    }
+
+    menu.hidden = true;
+  }
 
   function closeMenu() {
-    menu.hidden = true;
+    if (closeMenuTimeout) {
+      clearTimeout(closeMenuTimeout);
+      closeMenuTimeout = null;
+    }
+
+    menu.classList.remove("is-open");
     trigger.setAttribute("aria-expanded", "false");
+    closeMenuTimeout = window.setTimeout(finalizeClose, 180);
   }
 
   function openMenu() {
+    if (closeMenuTimeout) {
+      clearTimeout(closeMenuTimeout);
+      closeMenuTimeout = null;
+    }
+
     menu.hidden = false;
     trigger.setAttribute("aria-expanded", "true");
+    window.requestAnimationFrame(() => {
+      menu.classList.add("is-open");
+    });
   }
 
   trigger.addEventListener("click", () => {
-    if (menu.hidden) {
+    if (menu.hidden || !menu.classList.contains("is-open")) {
       openMenu();
     } else {
       closeMenu();
@@ -367,7 +448,83 @@ function renderProductsPage() {
     return;
   }
 
-  mount.innerHTML = PRODUCTS.map((product) => createProductCard(product)).join("");
+  const searchInput = document.querySelector("[data-product-search]");
+  const filterSelect = document.querySelector("[data-product-filter]");
+  const sortSelect = document.querySelector("[data-product-sort]");
+  const searchTerm = String(searchInput?.value || "").trim().toLowerCase();
+  const filterValue = String(filterSelect?.value || "all");
+  const sortValue = String(sortSelect?.value || "name-asc");
+
+  let visibleProducts = PRODUCTS.filter((product) => {
+    if (!searchTerm) {
+      return true;
+    }
+
+    const searchTarget = [
+      product.name,
+      product.slug,
+      getProductDescription(product),
+      ...(Array.isArray(product.specifications) ? product.specifications : [])
+    ]
+      .join(" ")
+      .toLowerCase();
+
+    return searchTarget.includes(searchTerm);
+  });
+
+  if (filterValue === "under-1500") {
+    visibleProducts = visibleProducts.filter((product) => Number(product.price) < 1500);
+  } else if (filterValue === "1500-2500") {
+    visibleProducts = visibleProducts.filter((product) => Number(product.price) >= 1500 && Number(product.price) <= 2500);
+  } else if (filterValue === "over-2500") {
+    visibleProducts = visibleProducts.filter((product) => Number(product.price) > 2500);
+  }
+
+  if (sortValue === "price-low-high") {
+    visibleProducts = visibleProducts.sort((a, b) => Number(a.price) - Number(b.price));
+  } else if (sortValue === "price-high-low") {
+    visibleProducts = visibleProducts.sort((a, b) => Number(b.price) - Number(a.price));
+  } else if (sortValue === "name-desc") {
+    visibleProducts = visibleProducts.sort((a, b) => b.name.localeCompare(a.name));
+  } else {
+    visibleProducts = visibleProducts.sort((a, b) => a.name.localeCompare(b.name));
+  }
+
+  if (visibleProducts.length === 0) {
+    mount.innerHTML = `
+      <article class="panel products-empty">
+        <h2>No products found</h2>
+        <p>Try a different search phrase, filter, or sort option.</p>
+      </article>
+    `;
+    return;
+  }
+
+  mount.innerHTML = visibleProducts.map((product) => createProductCard(product)).join("");
+}
+
+function initProductsControls() {
+  const controls = document.querySelector("[data-product-controls]");
+  if (!controls) {
+    return;
+  }
+
+  const rerender = () => {
+    renderProductsPage();
+  };
+
+  controls.addEventListener("input", rerender);
+  controls.addEventListener("change", rerender);
+
+  const resetButton = controls.querySelector("[data-product-reset]");
+  if (!resetButton) {
+    return;
+  }
+
+  resetButton.addEventListener("click", () => {
+    controls.reset();
+    rerender();
+  });
 }
 
 function renderProductPage() {
@@ -404,6 +561,7 @@ document.addEventListener("DOMContentLoaded", () => {
   setActiveNavigation();
   initMobileNavigation();
   initAccessibilityMenu();
+  initProductsControls();
   renderFeaturedProducts();
   renderProductsPage();
   renderProductPage();
