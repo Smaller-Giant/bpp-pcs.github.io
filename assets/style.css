@@ -498,6 +498,38 @@ a:focus-visible {
   gap: 1.1rem;
 }
 
+.product-gallery {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.product-gallery-track {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 100%;
+  gap: 0.65rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: thin;
+}
+
+.product-gallery-slide {
+  margin: 0;
+  scroll-snap-align: start;
+}
+
+.product-gallery-controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.product-gallery-controls .button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
 .product-image-frame {
   border: 1px solid var(--line);
   border-radius: var(--radius-md);

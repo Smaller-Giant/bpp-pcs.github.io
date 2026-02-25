@@ -186,7 +186,28 @@ function getProductImage(product) {
     return product.image.trim();
   }
 
+  if (Array.isArray(product.images)) {
+    const firstGalleryImage = product.images.find((item) => typeof item === "string" && item.trim());
+    if (typeof firstGalleryImage === "string") {
+      return firstGalleryImage.trim();
+    }
+  }
+
   return "assets/images/aurora-5070-ti.svg";
+}
+
+function getProductImages(product) {
+  const galleryImages = Array.isArray(product.images)
+    ? product.images
+      .map((item) => String(item || "").trim())
+      .filter((item) => item.length > 0)
+    : [];
+
+  if (galleryImages.length > 0) {
+    return galleryImages;
+  }
+
+  return [getProductImage(product)];
 }
 
 function getProductDescription(product) {
@@ -336,12 +357,30 @@ function createProductDetail(product) {
   ])
     .map((item) => `<li>${escapeHtml(item)}</li>`)
     .join("");
-  const productImage = getProductImage(product);
+  const productImages = getProductImages(product);
+  const gallerySlides = productImages
+    .map((image, index) => `
+      <figure class="product-image-frame product-gallery-slide">
+        <img src="${escapeHtml(image)}" alt="${escapeHtml(product.name)} desktop PC photo ${index + 1}"${index > 0 ? ' loading="lazy"' : ""}>
+      </figure>
+    `)
+    .join("");
+  const galleryControls = productImages.length > 1
+    ? `
+      <div class="product-gallery-controls">
+        <button class="button button-secondary" type="button" data-gallery-action="prev" aria-label="Show previous product photo">Previous photo</button>
+        <button class="button button-secondary" type="button" data-gallery-action="next" aria-label="Show next product photo">Next photo</button>
+      </div>
+    `
+    : "";
 
   return `
-    <figure class="product-image-frame">
-      <img src="${escapeHtml(productImage)}" alt="${escapeHtml(product.name)} desktop PC">
-    </figure>
+    <section class="product-gallery" data-product-gallery>
+      <div class="product-gallery-track" data-product-gallery-track aria-label="${escapeHtml(product.name)} photo gallery">
+        ${gallerySlides}
+      </div>
+      ${galleryControls}
+    </section>
     <div class="product-detail-copy">
       <p class="kicker">Prebuilt Desktop PC</p>
       <h1>${escapeHtml(product.name)}</h1>
@@ -635,6 +674,44 @@ function initProductsControls() {
   });
 }
 
+function initProductGalleries() {
+  document.querySelectorAll("[data-product-gallery]").forEach((gallery) => {
+    const track = gallery.querySelector("[data-product-gallery-track]");
+    const prevButton = gallery.querySelector('[data-gallery-action="prev"]');
+    const nextButton = gallery.querySelector('[data-gallery-action="next"]');
+    if (!track || !prevButton || !nextButton) {
+      return;
+    }
+
+    const shouldReduceMotion = () => document.body.classList.contains("a11y-reduce-motion");
+
+    function updateButtons() {
+      const maxScrollLeft = Math.max(0, track.scrollWidth - track.clientWidth);
+      const currentScrollLeft = Math.round(track.scrollLeft);
+      prevButton.disabled = currentScrollLeft <= 0;
+      nextButton.disabled = currentScrollLeft >= (maxScrollLeft - 1);
+    }
+
+    prevButton.addEventListener("click", () => {
+      track.scrollBy({
+        left: -track.clientWidth,
+        behavior: shouldReduceMotion() ? "auto" : "smooth"
+      });
+    });
+
+    nextButton.addEventListener("click", () => {
+      track.scrollBy({
+        left: track.clientWidth,
+        behavior: shouldReduceMotion() ? "auto" : "smooth"
+      });
+    });
+
+    track.addEventListener("scroll", updateButtons, { passive: true });
+    window.addEventListener("resize", updateButtons);
+    updateButtons();
+  });
+}
+
 function renderProductPage() {
   const mount = document.querySelector("[data-product-detail]");
   if (!mount) {
@@ -662,6 +739,7 @@ function renderProductPage() {
   }
 
   mount.innerHTML = createProductDetail(product);
+  initProductGalleries();
 }
 
 document.addEventListener("DOMContentLoaded", () => {

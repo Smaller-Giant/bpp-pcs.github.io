@@ -30,7 +30,13 @@ window.PC_PRODUCTS = [
       "1000W 80 Plus Gold PSU",
       "360mm liquid CPU cooler"
     ],
-    image: "assets/images/eclipse-5080.svg",
+    image: "assets/images/bpp-ultimate-pc-main.jpeg",
+    images: [
+      "assets/images/bpp-ultimate-pc-main.jpeg",
+      "assets/images/bpp-ultimate-pc-angle.jpeg",
+      "assets/images/bpp-ultimate-pc-alt.jpeg",
+      "assets/images/bpp-ultimate-pc-top.jpeg"
+    ],
     stripeCheckoutLink: "https://buy.stripe.com/test_8x214m11x5Wob6F74L6kg02"
   },
   {
