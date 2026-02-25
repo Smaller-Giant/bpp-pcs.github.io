@@ -1,4 +1,6 @@
-﻿const PRODUCTS = [
+// Stripe Payment Link redirects must be configured in the Stripe Dashboard.
+// Set each link's successful payment redirect to: /thank-you.html
+const PRODUCTS = [
   {
     id: "aurora-5070-ti",
     name: "BPP Aurora RTX 5070 Ti",
@@ -401,7 +403,8 @@ function createProductDetail(product) {
         <h2>Other information</h2>
         <ul class="specification-list">${otherInfoItems}</ul>
       </section>
-      <p class="checkout-disclaimer">You will be redirected to Stripe to securely complete your purchase. Stripe is the payment processor, and payment details are handled by Stripe.</p>
+      <p class="checkout-disclaimer">You will be redirected to Stripe to securely complete your purchase.</p>
+      <p class="collection-notice">Collection Only — After purchase, we will contact you within 24 hours to arrange collection.</p>
       <a class="button button-primary button-large" href="${escapeHtml(product.stripeCheckoutLink)}">Buy Now</a>
     </div>
   `;

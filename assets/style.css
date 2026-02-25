@@ -578,6 +578,14 @@ a:focus-visible {
   background: rgba(255, 255, 255, 0.04);
 }
 
+.collection-notice {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 0.55rem 0.75rem;
+  background: rgba(255, 255, 255, 0.03);
+  font-size: 0.9rem;
+}
+
 .content-shell {
   padding: clamp(0.95rem, 2vw, 1.4rem);
 }

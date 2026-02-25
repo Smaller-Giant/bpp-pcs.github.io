@@ -1,3 +1,5 @@
+// Stripe Payment Link redirects must be configured in the Stripe Dashboard.
+// Set each link's successful payment redirect to: /thank-you.html
 window.PC_PRODUCTS = [
   {
     id: "office-ready-pc",
