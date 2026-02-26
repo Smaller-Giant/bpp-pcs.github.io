@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -28,6 +28,7 @@
       <nav id="primary-nav" class="site-nav" aria-label="Primary navigation">
         <a href="index.html" data-nav="index.html">Home</a>
         <a href="products.html" data-nav="products.html">Products</a>
+        <a href="about.html" data-nav="about.html">About</a>
         <div class="accessibility-wrap" data-a11y-root>
           <button class="accessibility-trigger" type="button" data-a11y-toggle aria-label="Accessibility options" aria-haspopup="true" aria-expanded="false" aria-controls="a11y-menu">
             Accessibility
@@ -44,17 +45,19 @@
   </header>
   <main id="main-content" class="page-main">
     <section class="container hero panel">
-      <div>
-        <p class="kicker">Prebuilt Desktop PCs</p>
-        <h1>Powerful desktops ready for gaming, creation, and everyday work.</h1>
-        <p>Choose your system and head straight to Stripe Checkout. No account is required and every product has its own direct Buy Now link.</p>
+      <div class="hero-video-layer" aria-hidden="true">
+        <video class="hero-video" autoplay muted loop playsinline preload="auto" poster="assets/images/bpp-ultimate-pc-main.jpeg">
+          <source src="https://www.w3schools.com/howto/rain.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="hero-video-effect" aria-hidden="true"></div>
+      <div class="hero-brand-copy">
+        <h1>BPP PCs</h1>
+        <p class="hero-tagline">Buy It, Plug It, Play It.</p>
         <div class="hero-actions">
           <a class="button button-primary" href="products.html">Browse products</a>
-          <a class="button button-secondary" href="shipping.html">Shipping details</a>
+          <a class="button button-secondary" href="about.html">About BPP PCs</a>
         </div>
-      </div>
-      <div class="hero-media">
-        <img src="assets/images/aurora-5070-ti.svg" alt="Desktop PC tower with performance components">
       </div>
     </section>
 
@@ -71,8 +74,9 @@
   </main>
     <footer class="site-footer">
     <div class="container footer-grid">
-      <p class="footer-copy">Business Name: BPP PCs<br>Trading as: [Full Legal Name Placeholder]<br>City, United Kingdom<br>Contact Email: <a href="mailto:[Contact Email Placeholder]">[Contact Email Placeholder]</a></p>
+      <p class="footer-copy">Business Name: BPP PCs<br>Trading as: Myles George Smallbone<br>Stoke On Trent, United Kingdom<br>Contact Email: <a href="mailto:[Contact Email Placeholder]">[Contact Email Placeholder]</a></p>
       <nav class="footer-links" aria-label="Footer links">
+        <a href="about.html">About</a>
         <a href="shipping.html">Shipping</a>
         <a href="warranty.html">Warranty</a>
         <a href="returns.html">Returns</a>
