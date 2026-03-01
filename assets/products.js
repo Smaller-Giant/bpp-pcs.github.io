@@ -4,18 +4,59 @@ window.PC_PRODUCTS = [
   {
     id: "office-ready-pc",
     name: "Work Ready PC",
-    slug: "Work Ready PC",
-    price: 349.99,
-    description: "A middle range PC that handles anything work related that you throw at it.",
+    slug: "work-ready-pc",
+    price: 379.99,
+    description: "A practical office desktop tuned for emails, browser tabs, spreadsheets, and video meetings without slowing down your workflow.",
+    longDescription: "Built inside the compact ASUS Prime AP201 mesh chassis, the Work Ready PC is designed for day-to-day business workloads with stable performance, strong airflow, and straightforward reliability.",
     specifications: [
-      "AMD Ryzen 5 5000X",
-      "(GPU here)",
-      "16GB DDR4 3200MHz",
-      "1TB NVMe Gen4 SSD",
-      "850W 80 Plus Gold PSU",
-      "240mm liquid CPU cooler"
+      "Case: ASUS Prime AP201 MicroATX mesh chassis with USB-C and USB-A front I/O",
+      "CPU: Intel Core i3-10105 (4 cores, up to 4.4GHz boost)",
+      "Graphics: Intel UHD Graphics 630 (integrated)",
+      "Motherboard: ASRock H470M-HVS (LGA1200, DDR4)",
+      "Memory: 8GB DDR4-3200 (2x4GB, dual-channel)",
+      "Storage: Patriot P300 128GB M.2 NVMe SSD",
+      "Power Supply: MSI MAG A550BN 550W 80+ Bronze"
     ],
-    image: "assets/images/aurora-5070-ti.svg",
+    image: "assets/images/work-ready-pc-main.svg",
+    images: [
+      "assets/images/work-ready-pc-main.svg",
+      "assets/images/work-ready-pc-cpu-workflow.svg",
+      "assets/images/work-ready-pc-memory-storage.svg",
+      "assets/images/work-ready-pc-reliability.svg"
+    ],
+    gallerySlides: [
+      {
+        image: "assets/images/work-ready-pc-main.svg",
+        title: "Clean black AP201 build",
+        description: "Compact mesh tower with a professional look, tempered side panel, and front USB-C for modern office setups."
+      },
+      {
+        image: "assets/images/work-ready-pc-cpu-workflow.svg",
+        title: "CPU tuned for office workflow",
+        description: "The Intel Core i3-10105 boosts up to 4.4GHz, keeping browsing, spreadsheets, and communication tools responsive."
+      },
+      {
+        image: "assets/images/work-ready-pc-memory-storage.svg",
+        title: "Fast startup and smooth multitasking",
+        description: "Dual-channel DDR4 memory and NVMe storage reduce load times and keep daily applications moving without delays."
+      },
+      {
+        image: "assets/images/work-ready-pc-reliability.svg",
+        title: "Reliable cooling and power delivery",
+        description: "High-airflow mesh panels and a 550W 80+ Bronze PSU support stable temperatures and dependable all-day operation."
+      }
+    ],
+    whyBuy: [
+      "Intel Core i3-10105 boost speeds up to 4.4GHz help keep daily workflow apps feeling quick.",
+      "Dual-channel 8GB DDR4 memory improves responsiveness when switching between browser tabs, docs, and calls.",
+      "NVMe storage helps the system boot fast and open files or software with less waiting.",
+      "Airflow-focused AP201 case and quality 550W PSU support stable business use over long sessions."
+    ],
+    otherInfo: [
+      "Prebuilt and tested before dispatch by BPP PCs.",
+      "Best suited to office software, admin workloads, web platforms, and remote meeting tools.",
+      "This system uses integrated graphics and is not aimed at high-end gaming workloads."
+    ],
     stripeCheckoutLink: "https://buy.stripe.com/test_fZucN49y30C4gqZ9cT6kg03"
   },
   {

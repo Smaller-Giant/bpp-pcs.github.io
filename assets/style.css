@@ -611,13 +611,23 @@ a:focus-visible {
   grid-auto-columns: 100%;
   gap: 0.65rem;
   overflow-x: auto;
+  overflow-y: hidden;
   scroll-snap-type: x mandatory;
-  scrollbar-width: thin;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 .product-gallery-slide {
   margin: 0;
   scroll-snap-align: start;
+  display: grid;
+  gap: 0;
+}
+
+.product-gallery-track::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
 }
 
 .product-gallery-controls {
@@ -642,7 +652,64 @@ a:focus-visible {
 .product-image-frame img {
   width: 100%;
   aspect-ratio: 4 / 3;
+  object-fit: contain;
+  padding: clamp(0.7rem, 1.8vw, 1.15rem);
+  background: #0d1522;
+}
+
+.product-gallery-caption {
+  padding: 0.95rem 1.05rem 1.05rem;
+  border-top: 1px solid var(--line);
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+  display: grid;
+  gap: 0.26rem;
+}
+
+.product-gallery-caption h3 {
+  font-size: 1rem;
+}
+
+.product-gallery-caption p {
+  font-size: 0.9rem;
+}
+
+.product-gallery-thumbnails {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+  gap: 0.45rem;
+}
+
+.product-gallery-thumb {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--panel);
+  color: var(--muted);
+  padding: 0.38rem;
+  text-align: left;
+  cursor: pointer;
+  display: grid;
+  gap: 0.3rem;
+  transition: border-color 0.16s ease, background 0.16s ease;
+}
+
+.product-gallery-thumb img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
   object-fit: cover;
+  border-radius: calc(var(--radius-sm) - 0.2rem);
+}
+
+.product-gallery-thumb span {
+  font-size: 0.78rem;
+  line-height: 1.35;
+  color: inherit;
+}
+
+.product-gallery-thumb:hover,
+.product-gallery-thumb.is-active {
+  border-color: var(--accent);
+  color: var(--text);
+  background: rgba(85, 210, 255, 0.09);
 }
 
 .product-detail-copy {
@@ -990,6 +1057,14 @@ body.a11y-dyslexia-font {
 
   .card-actions {
     grid-template-columns: 1fr;
+  }
+
+  .product-gallery-thumbnails {
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(165px, 1fr);
+    grid-template-columns: none;
+    overflow-x: auto;
+    scrollbar-width: thin;
   }
 
   .catalog-controls {

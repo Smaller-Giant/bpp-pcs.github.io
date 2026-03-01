@@ -138,11 +138,14 @@ function escapeHtml(value) {
 }
 
 function formatPrice(value) {
+  const numericValue = Number(value || 0);
+  const hasPence = Math.abs(numericValue % 1) > 0.000001;
   return new Intl.NumberFormat("en-GB", {
     style: "currency",
     currency: "GBP",
-    maximumFractionDigits: 0
-  }).format(Number(value || 0));
+    minimumFractionDigits: hasPence ? 2 : 0,
+    maximumFractionDigits: 2
+  }).format(numericValue);
 }
 
 function getCurrentFileName() {
@@ -210,6 +213,39 @@ function getProductImages(product) {
   }
 
   return [getProductImage(product)];
+}
+
+function getProductGallerySlides(product) {
+  const providedSlides = Array.isArray(product.gallerySlides)
+    ? product.gallerySlides
+      .map((item) => {
+        if (!item || typeof item !== "object") {
+          return null;
+        }
+
+        const image = String(item.image || "").trim();
+        if (!image) {
+          return null;
+        }
+
+        return {
+          image,
+          title: String(item.title || "").trim(),
+          description: String(item.description || "").trim()
+        };
+      })
+      .filter(Boolean)
+    : [];
+
+  if (providedSlides.length > 0) {
+    return providedSlides;
+  }
+
+  return getProductImages(product).map((image, index) => ({
+    image,
+    title: `${product.name} photo ${index + 1}`,
+    description: ""
+  }));
 }
 
 function getProductDescription(product) {
@@ -359,15 +395,26 @@ function createProductDetail(product) {
   ])
     .map((item) => `<li>${escapeHtml(item)}</li>`)
     .join("");
-  const productImages = getProductImages(product);
-  const gallerySlides = productImages
-    .map((image, index) => `
-      <figure class="product-image-frame product-gallery-slide">
-        <img src="${escapeHtml(image)}" alt="${escapeHtml(product.name)} desktop PC photo ${index + 1}"${index > 0 ? ' loading="lazy"' : ""}>
+  const gallerySlideData = getProductGallerySlides(product);
+  const gallerySlides = gallerySlideData
+    .map((slide, index) => {
+      const title = slide.title || `${product.name} photo ${index + 1}`;
+      const descriptionHtml = slide.description
+        ? `<p>${escapeHtml(slide.description)}</p>`
+        : "";
+
+      return `
+      <figure class="product-image-frame product-gallery-slide" data-gallery-slide-index="${index}">
+        <img src="${escapeHtml(slide.image)}" alt="${escapeHtml(title)}"${index > 0 ? ' loading="lazy"' : ""}>
+        <figcaption class="product-gallery-caption">
+          <h3>${escapeHtml(title)}</h3>
+          ${descriptionHtml}
+        </figcaption>
       </figure>
-    `)
+    `;
+    })
     .join("");
-  const galleryControls = productImages.length > 1
+  const galleryControls = gallerySlideData.length > 1
     ? `
       <div class="product-gallery-controls">
         <button class="button button-secondary" type="button" data-gallery-action="prev" aria-label="Show previous product photo">Previous photo</button>
@@ -375,7 +422,6 @@ function createProductDetail(product) {
       </div>
     `
     : "";
-
   return `
     <section class="product-gallery" data-product-gallery>
       <div class="product-gallery-track" data-product-gallery-track aria-label="${escapeHtml(product.name)} photo gallery">
@@ -404,7 +450,7 @@ function createProductDetail(product) {
         <ul class="specification-list">${otherInfoItems}</ul>
       </section>
       <p class="checkout-disclaimer">You will be redirected to Stripe to securely complete your purchase.</p>
-      <p class="collection-notice">Collection Only — After purchase, we will contact you within 24 hours to arrange collection.</p>
+      <p class="collection-notice">Collection only - after purchase, we will contact you within 24 hours to arrange collection.</p>
       <a class="button button-primary button-large" href="${escapeHtml(product.stripeCheckoutLink)}">Buy Now</a>
     </div>
   `;
@@ -682,32 +728,65 @@ function initProductGalleries() {
     const track = gallery.querySelector("[data-product-gallery-track]");
     const prevButton = gallery.querySelector('[data-gallery-action="prev"]');
     const nextButton = gallery.querySelector('[data-gallery-action="next"]');
-    if (!track || !prevButton || !nextButton) {
+    const slides = Array.from(track?.querySelectorAll("[data-gallery-slide-index]") || []);
+    if (!track || slides.length === 0) {
       return;
     }
 
     const shouldReduceMotion = () => document.body.classList.contains("a11y-reduce-motion");
+    const maxIndex = slides.length - 1;
 
-    function updateButtons() {
-      const maxScrollLeft = Math.max(0, track.scrollWidth - track.clientWidth);
-      const currentScrollLeft = Math.round(track.scrollLeft);
-      prevButton.disabled = currentScrollLeft <= 0;
-      nextButton.disabled = currentScrollLeft >= (maxScrollLeft - 1);
+    function getActiveIndex() {
+      let activeIndex = 0;
+      let closestOffset = Number.POSITIVE_INFINITY;
+
+      slides.forEach((slide, index) => {
+        const offset = Math.abs(slide.offsetLeft - track.scrollLeft);
+        if (offset < closestOffset) {
+          closestOffset = offset;
+          activeIndex = index;
+        }
+      });
+
+      return activeIndex;
     }
 
-    prevButton.addEventListener("click", () => {
-      track.scrollBy({
-        left: -track.clientWidth,
-        behavior: shouldReduceMotion() ? "auto" : "smooth"
-      });
-    });
+    function goToIndex(index) {
+      const clampedIndex = Math.max(0, Math.min(maxIndex, index));
+      const targetSlide = slides[clampedIndex];
+      if (!targetSlide) {
+        return;
+      }
 
-    nextButton.addEventListener("click", () => {
-      track.scrollBy({
-        left: track.clientWidth,
+      track.scrollTo({
+        left: targetSlide.offsetLeft,
         behavior: shouldReduceMotion() ? "auto" : "smooth"
       });
-    });
+    }
+
+    function updateButtons() {
+      const activeIndex = getActiveIndex();
+      if (prevButton) {
+        prevButton.disabled = activeIndex <= 0;
+      }
+      if (nextButton) {
+        nextButton.disabled = activeIndex >= maxIndex;
+      }
+    }
+
+    if (prevButton) {
+      prevButton.addEventListener("click", () => {
+        const activeIndex = getActiveIndex();
+        goToIndex(activeIndex - 1);
+      });
+    }
+
+    if (nextButton) {
+      nextButton.addEventListener("click", () => {
+        const activeIndex = getActiveIndex();
+        goToIndex(activeIndex + 1);
+      });
+    }
 
     track.addEventListener("scroll", updateButtons, { passive: true });
     window.addEventListener("resize", updateButtons);
