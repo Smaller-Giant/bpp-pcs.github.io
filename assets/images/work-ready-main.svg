@@ -1,0 +1,46 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Work Ready PC main overview</title>
+  <desc id="desc">Overview graphic showing key Work Ready PC parts and usage highlights.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#101a2b"/>
+      <stop offset="100%" stop-color="#2f4f6c"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0b1222" stop-opacity="0.86"/>
+      <stop offset="100%" stop-color="#13233f" stop-opacity="0.70"/>
+    </linearGradient>
+    <clipPath id="textClip">
+      <rect x="140" y="380" width="835" height="320" rx="14"/>
+    </clipPath>
+  </defs>
+
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <circle cx="1330" cy="160" r="260" fill="#8acfff" fill-opacity="0.16"/>
+  <circle cx="1250" cy="760" r="190" fill="#8acfff" fill-opacity="0.12"/>
+
+  <rect x="48" y="42" width="1504" height="816" rx="34" fill="url(#panel)" stroke="#dce9ff" stroke-opacity="0.22"/>
+
+  <text x="120" y="186" fill="#f6f9ff" font-family="Segoe UI, Arial, sans-serif" font-size="94" font-weight="700" letter-spacing="7">WORK READY PC</text>
+  <text x="120" y="254" fill="#d4e3ff" font-family="Segoe UI, Arial, sans-serif" font-size="40" letter-spacing="4">OFFICE SYSTEM OVERVIEW</text>
+
+  <rect x="112" y="296" width="852" height="498" rx="24" fill="#0e1a31" stroke="#dce9ff" stroke-opacity="0.20"/>
+  <text x="150" y="356" fill="#bfe1ff" font-family="Segoe UI, Arial, sans-serif" font-size="34" font-weight="600" letter-spacing="2">CORE PARTS</text>
+
+  <g clip-path="url(#textClip)">
+    <text x="150" y="422" fill="#eef5ff" font-family="Segoe UI, Arial, sans-serif" font-size="30" letter-spacing="0.35">Case: ASUS Prime AP201 mesh chassis with strong airflow</text>
+    <text x="150" y="478" fill="#eef5ff" font-family="Segoe UI, Arial, sans-serif" font-size="30" letter-spacing="0.35">CPU: Intel Core i3-10105, 4 cores up to 4.4GHz</text>
+    <text x="150" y="534" fill="#eef5ff" font-family="Segoe UI, Arial, sans-serif" font-size="30" letter-spacing="0.35">Memory: 8GB DDR4 dual-channel for smoother multitasking</text>
+    <text x="150" y="590" fill="#eef5ff" font-family="Segoe UI, Arial, sans-serif" font-size="30" letter-spacing="0.35">Storage: 128GB NVMe SSD for fast boot and file access</text>
+    <text x="150" y="646" fill="#eef5ff" font-family="Segoe UI, Arial, sans-serif" font-size="30" letter-spacing="0.35">Power: 550W Bronze PSU for stable all-day operation</text>
+  </g>
+
+  <g transform="translate(1004 154)">
+    <rect x="0" y="0" width="470" height="590" rx="30" fill="#090f1b" stroke="#e3edff" stroke-opacity="0.24"/>
+    <rect x="52" y="64" width="366" height="332" rx="22" fill="#132541" stroke="#e3edff" stroke-opacity="0.20"/>
+    <rect x="102" y="440" width="266" height="86" rx="18" fill="#111b31" stroke="#e3edff" stroke-opacity="0.18"/>
+    <circle cx="160" cy="483" r="12" fill="#91d4ff"/>
+    <circle cx="208" cy="483" r="12" fill="#91d4ff" fill-opacity="0.72"/>
+    <circle cx="256" cy="483" r="12" fill="#91d4ff" fill-opacity="0.46"/>
+  </g>
+</svg>

@@ -1,103 +1,75 @@
 // Stripe Payment Link redirects must be configured in the Stripe Dashboard.
 // Set each link's successful payment redirect to: /thank-you.html
+const PRODUCT_IMAGES = {
+  workReady: {
+    main: "assets/images/work-ready-main.svg",
+    cpu: "assets/images/work-ready-cpu.svg",
+    motherboard: "assets/images/work-ready-motherboard.svg",
+    storage: "assets/images/work-ready-storage.svg"
+  },
+  ultimate: {
+    main: "assets/images/ultimate-main.svg",
+    cpu: "assets/images/ultimate-cpu.svg",
+    gpu: "assets/images/ultimate-gpu.svg",
+    power: "assets/images/ultimate-power.svg"
+  },
+  productivity: {
+    main: "assets/images/productivity-main.svg",
+    cpu: "assets/images/productivity-cpu.svg",
+    memory: "assets/images/productivity-memory.svg",
+    cooling: "assets/images/productivity-cooling.svg"
+  },
+  fortnite: {
+    main: "assets/images/fortnite-main.svg",
+    cpu: "assets/images/fortnite-cpu.svg",
+    gpu: "assets/images/fortnite-gpu.svg",
+    power: "assets/images/fortnite-power.svg"
+  }
+};
+
 window.PC_PRODUCTS = [
   {
-    id: "full-test",
-    name: "FULL TEST",
-    slug: "full-test",
-    price: 1,
-    description: "FULL TEST product for checkout and display testing.",
-    longDescription: "FULL TEST is a test-only product used to verify product pages, gallery rendering, and Stripe checkout behavior in this site.",
-    specifications: [
-      "TEST SPEC: FULL TEST case",
-      "TEST SPEC: FULL TEST processor",
-      "TEST SPEC: FULL TEST memory",
-      "TEST SPEC: FULL TEST storage",
-      "TEST SPEC: FULL TEST power supply"
-    ],
-    image: "assets/images/full-test.svg",
-    images: [
-      "assets/images/full-test.svg",
-      "assets/images/full-test.svg",
-      "assets/images/full-test.svg",
-      "assets/images/full-test.svg"
-    ],
-    gallerySlides: [
-      {
-        image: "assets/images/full-test.svg",
-        title: "FULL TEST image slide 1",
-        description: "FULL TEST gallery content for product testing."
-      },
-      {
-        image: "assets/images/full-test.svg",
-        title: "FULL TEST image slide 2",
-        description: "FULL TEST gallery content for navigation testing."
-      },
-      {
-        image: "assets/images/full-test.svg",
-        title: "FULL TEST image slide 3",
-        description: "FULL TEST gallery content for responsive testing."
-      },
-      {
-        image: "assets/images/full-test.svg",
-        title: "FULL TEST image slide 4",
-        description: "FULL TEST gallery content for loading testing."
-      }
-    ],
-    whyBuy: [
-      "FULL TEST reason: verify checkout flow end to end.",
-      "FULL TEST reason: confirm product detail content rendering.",
-      "FULL TEST reason: validate card and gallery behavior.",
-      "FULL TEST reason: exercise site-wide product search and filters."
-    ],
-    otherInfo: [
-      "FULL TEST notice: this is a test product entry.",
-      "FULL TEST notice: content is intentionally test-focused.",
-      "FULL TEST notice: use this item for QA and checkout checks."
-    ],
-    stripeCheckoutLink: "https://buy.stripe.com/fZucN49y30C4gqZ9cT6kg03"
-  },
-  {
     id: "office-ready-pc",
+    popular: "yes",
     name: "Work Ready PC",
     slug: "work-ready-pc",
     price: 379.99,
     description: "A practical office desktop tuned for emails, browser tabs, spreadsheets, and video meetings without slowing down your workflow.",
     longDescription: "Built inside the compact ASUS Prime AP201 mesh chassis, the Work Ready PC is designed for day-to-day business workloads with stable performance, strong airflow, and straightforward reliability.",
     specifications: [
-      "Case: ASUS Prime AP201 MicroATX mesh chassis with USB-C and USB-A front I/O",
-      "CPU: Intel Core i3-10105 (4 cores, up to 4.4GHz boost)",
-      "Graphics: Intel UHD Graphics 630 (integrated)",
-      "Motherboard: ASRock H470M-HVS (LGA1200, DDR4)",
-      "Memory: 8GB DDR4-3200 (2x4GB, dual-channel)",
-      "Storage: Patriot P300 128GB M.2 NVMe SSD",
-      "Power Supply: MSI MAG A550BN 550W 80+ Bronze"
+      "Case: Asus Prime AP201 Micro ATX Mini Tower Black with Mesh Side Panel and USB 3.2 Gen 2 Type-C and USB 3.2 Gen 1 Type-A",
+      "CPU: Intel Core i3 10105 3.7 GHz 4-Core LGA1200",
+      "Graphics: Intel UHD Graphics 630",
+      "Motherboard: ASRock H470 M-HVS LGA1200 DDR4 Micro ATX",
+      "Memory: G.Skill Ripjaws V Black DDR4-3200 CL16 8GB (2x4GB)",
+      "Storage: Patriot P300 128GB M.2 SSD PCIe 3.0 NVMe",
+      "Power Supply: MSI MAG A550BN Black 550W Non-Modular 80+ Bronze Certified"
     ],
-    image: "assets/images/work-ready-pc-main.svg",
+    image: PRODUCT_IMAGES.workReady.main,
     images: [
-      "assets/images/work-ready-pc-main.svg",
-      "assets/images/work-ready-pc-cpu-workflow.svg",
-      "assets/images/work-ready-pc-memory-storage.svg",
-      "assets/images/work-ready-pc-reliability.svg"
+      PRODUCT_IMAGES.workReady.main,
+      PRODUCT_IMAGES.workReady.cpu,
+      PRODUCT_IMAGES.workReady.motherboard,
+      PRODUCT_IMAGES.workReady.storage
     ],
     gallerySlides: [
       {
-        image: "assets/images/work-ready-pc-main.svg",
+        image: PRODUCT_IMAGES.workReady.main,
         title: "Clean black AP201 build",
         description: "Compact mesh tower with a professional look, tempered side panel, and front USB-C for modern office setups."
       },
       {
-        image: "assets/images/work-ready-pc-cpu-workflow.svg",
+        image: PRODUCT_IMAGES.workReady.cpu,
         title: "CPU tuned for office workflow",
         description: "The Intel Core i3-10105 boosts up to 4.4GHz, keeping browsing, spreadsheets, and communication tools responsive."
       },
       {
-        image: "assets/images/work-ready-pc-memory-storage.svg",
+        image: PRODUCT_IMAGES.workReady.motherboard,
         title: "Fast startup and smooth multitasking",
         description: "Dual-channel DDR4 memory and NVMe storage reduce load times and keep daily applications moving without delays."
       },
       {
-        image: "assets/images/work-ready-pc-reliability.svg",
+        image: PRODUCT_IMAGES.workReady.storage,
         title: "Reliable cooling and power delivery",
         description: "High-airflow mesh panels and a 550W 80+ Bronze PSU support stable temperatures and dependable all-day operation."
       }
@@ -117,6 +89,7 @@ window.PC_PRODUCTS = [
   },
   {
     id: "bpp-ultimate-pc",
+    popular: "yes",
     name: "The BPP Ultimate PC",
     slug: "The BPP Ultimate PC",
     price: 2699,
@@ -129,17 +102,18 @@ window.PC_PRODUCTS = [
       "1000W 80 Plus Gold PSU",
       "360mm liquid CPU cooler"
     ],
-    image: "assets/images/bpp-ultimate-pc-main.jpeg",
+    image: PRODUCT_IMAGES.ultimate.main,
     images: [
-      "assets/images/bpp-ultimate-pc-main.jpeg",
-      "assets/images/bpp-ultimate-pc-angle.jpeg",
-      "assets/images/bpp-ultimate-pc-alt.jpeg",
-      "assets/images/bpp-ultimate-pc-top.jpeg"
+      PRODUCT_IMAGES.ultimate.main,
+      PRODUCT_IMAGES.ultimate.cpu,
+      PRODUCT_IMAGES.ultimate.gpu,
+      PRODUCT_IMAGES.ultimate.power
     ],
     stripeCheckoutLink: "https://buy.stripe.com/test_8x214m11x5Wob6F74L6kg02"
   },
   {
     id: "productivity-editing-pc",
+    popular: "no",
     name: "Productivity Editing PC",
     slug: "productivity-editing-pc",
     price: 649.99,
@@ -155,31 +129,31 @@ window.PC_PRODUCTS = [
       "Power Supply: MSI MAG A550BN 550W 80+ Bronze",
       "Cooling: 2 x ARCTIC P14 Pro 140mm PWM ARGB case fans"
     ],
-    image: "assets/images/productivity-editing-pc-main.svg",
+    image: PRODUCT_IMAGES.productivity.main,
     images: [
-      "assets/images/productivity-editing-pc-main.svg",
-      "assets/images/productivity-editing-pc-cpu-workflow.svg",
-      "assets/images/productivity-editing-pc-memory-storage.svg",
-      "assets/images/productivity-editing-pc-airflow-reliability.svg"
+      PRODUCT_IMAGES.productivity.main,
+      PRODUCT_IMAGES.productivity.cpu,
+      PRODUCT_IMAGES.productivity.memory,
+      PRODUCT_IMAGES.productivity.cooling
     ],
     gallerySlides: [
       {
-        image: "assets/images/productivity-editing-pc-main.svg",
+        image: PRODUCT_IMAGES.productivity.main,
         title: "Modern NZXT H3 Flow build",
         description: "Clean black case styling with a tinted glass side panel and front airflow for a professional workstation look."
       },
       {
-        image: "assets/images/productivity-editing-pc-cpu-workflow.svg",
+        image: PRODUCT_IMAGES.productivity.cpu,
         title: "Strong CPU for productivity and editing",
         description: "The Intel Core i5-12400 delivers 6 cores of solid processing power for timelines, exports, and heavy multitasking."
       },
       {
-        image: "assets/images/productivity-editing-pc-memory-storage.svg",
+        image: PRODUCT_IMAGES.productivity.memory,
         title: "Fast memory and NVMe performance",
         description: "16GB dual-channel DDR4 plus PCIe 4.0 NVMe storage helps keep projects, app launches, and file access responsive."
       },
       {
-        image: "assets/images/productivity-editing-pc-airflow-reliability.svg",
+        image: PRODUCT_IMAGES.productivity.cooling,
         title: "Airflow and reliability",
         description: "Dual 140mm fans, a flow-focused chassis, and a dependable 550W PSU support consistent long-session performance."
       }
@@ -199,6 +173,7 @@ window.PC_PRODUCTS = [
   },
   {
     id: "fortnite-ready",
+    popular: "no",
     name: "240FPS Fortnite Ready PC",
     slug: "240FPS Fortnite Ready PC",
     price: 1199,
@@ -211,7 +186,13 @@ window.PC_PRODUCTS = [
       "850W 80 Plus Gold PSU",
       "Quiet airflow tower chassis"
     ],
-    image: "assets/images/studio-x-pro.svg",
+    image: PRODUCT_IMAGES.fortnite.main,
+    images: [
+      PRODUCT_IMAGES.fortnite.main,
+      PRODUCT_IMAGES.fortnite.cpu,
+      PRODUCT_IMAGES.fortnite.gpu,
+      PRODUCT_IMAGES.fortnite.power
+    ],
     stripeCheckoutLink: "https://buy.stripe.com/test_studioxpro"
   },
 

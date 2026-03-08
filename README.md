@@ -19,14 +19,11 @@ No backend is required for deployment on GitHub Pages.
 |- terms-and-conditions.html
 |- privacy-policy.html
 |- returns-and-refund-policy.html
-|- css/
-|  |- styles.css
-|- js/
-   |- config.js
-   |- store.js
-   |- app.js
-   |- home.js
-   |- products-page.js
+|- assets/
+   |- style.css
+   |- products.js
+   |- main.js
+   |- images/
 ```
 
 ## Checkout
@@ -37,8 +34,7 @@ Each product opens a Stripe Checkout Payment Link directly.
 
 Products are defined as static catalog data in:
 
-- `js/store.js` (homepage featured products)
-- `js/products-page.js` (full products page)
+- `assets/products.js`
 
 ## Local Preview
 
