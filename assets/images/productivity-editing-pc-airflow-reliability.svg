@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1200" role="img" aria-labelledby="title desc">
+  <title id="title">Airflow and reliability slide for Productivity Editing PC</title>
+  <desc id="desc">Feature slide showing NZXT H3 Flow airflow, dual fans, and stable power delivery for longer workloads.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#05101f"/>
+      <stop offset="100%" stop-color="#0b182d"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1a2c48"/>
+      <stop offset="100%" stop-color="#101d31"/>
+    </linearGradient>
+    <linearGradient id="flow" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#65d4ff"/>
+      <stop offset="100%" stop-color="#e6feff"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1600" height="1200" fill="url(#bg)"/>
+  <circle cx="1400" cy="180" r="220" fill="#63d4ff" opacity="0.12"/>
+  <circle cx="190" cy="1020" r="240" fill="#63d4ff" opacity="0.1"/>
+
+  <text x="100" y="130" font-family="Segoe UI, Arial, sans-serif" font-size="66" fill="#ffffff" font-weight="800">Cooler, Stable, More Consistent</text>
+  <text x="100" y="186" font-family="Segoe UI, Arial, sans-serif" font-size="30" fill="#a5ddf0">Built for long productivity and editing sessions.</text>
+
+  <g transform="translate(110 250)">
+    <rect width="700" height="760" rx="26" fill="url(#panel)" stroke="#355a84"/>
+    <text x="40" y="72" font-family="Segoe UI, Arial, sans-serif" font-size="39" fill="#ecfaff" font-weight="700">NZXT H3 Flow + 2x 140mm Fans</text>
+    <text x="40" y="116" font-family="Segoe UI, Arial, sans-serif" font-size="28" fill="#a7d8eb">Airflow path helps maintain steady temperatures.</text>
+
+    <rect x="72" y="170" width="300" height="520" rx="16" fill="#111b2d" stroke="#6a7e97"/>
+    <rect x="94" y="192" width="255" height="476" rx="12" fill="#151f34" stroke="#7f96b4"/>
+    <circle cx="220" cy="350" r="62" fill="#1f59ff" opacity="0.9"/>
+    <circle cx="220" cy="530" r="62" fill="#1f59ff" opacity="0.9"/>
+    <circle cx="220" cy="350" r="20" fill="#04112c"/>
+    <circle cx="220" cy="530" r="20" fill="#04112c"/>
+    <rect x="116" y="604" width="188" height="64" rx="10" fill="#0f192c" stroke="#5a6f8d"/>
+
+    <g stroke="url(#flow)" stroke-width="12" stroke-linecap="round">
+      <line x1="410" y1="300" x2="610" y2="300"/>
+      <line x1="410" y1="430" x2="610" y2="430"/>
+      <line x1="410" y1="560" x2="610" y2="560"/>
+    </g>
+    <g fill="#b6f4ff">
+      <polygon points="630,300 600,282 600,318"/>
+      <polygon points="630,430 600,412 600,448"/>
+      <polygon points="630,560 600,542 600,578"/>
+    </g>
+
+    <text x="410" y="660" font-family="Segoe UI, Arial, sans-serif" font-size="30" fill="#ddf8ff">Lower sustained heat</text>
+    <text x="410" y="702" font-family="Segoe UI, Arial, sans-serif" font-size="30" fill="#ddf8ff">Steadier CPU behavior</text>
+    <text x="410" y="744" font-family="Segoe UI, Arial, sans-serif" font-size="30" fill="#ddf8ff">Better long-session consistency</text>
+  </g>
+
+  <g transform="translate(850 250)">
+    <rect width="640" height="356" rx="24" fill="url(#panel)" stroke="#355a84"/>
+    <text x="38" y="70" font-family="Segoe UI, Arial, sans-serif" font-size="40" fill="#edfbff" font-weight="700">MSI MAG A550BN PSU</text>
+    <text x="38" y="114" font-family="Segoe UI, Arial, sans-serif" font-size="28" fill="#a7d8eb">550W 80+ Bronze power delivery for stable daily workloads.</text>
+    <rect x="40" y="164" width="560" height="148" rx="16" fill="#101a2d" stroke="#53769f"/>
+    <text x="70" y="225" font-family="Segoe UI, Arial, sans-serif" font-size="34" fill="#dcf4ff">Consistent power for long sessions</text>
+    <text x="70" y="274" font-family="Segoe UI, Arial, sans-serif" font-size="30" fill="#b9deef">Reliable base for future upgrades</text>
+  </g>
+
+  <g transform="translate(850 654)">
+    <rect width="640" height="356" rx="24" fill="url(#panel)" stroke="#355a84"/>
+    <text x="38" y="70" font-family="Segoe UI, Arial, sans-serif" font-size="40" fill="#edfbff" font-weight="700">Good Fit for Creator Productivity</text>
+    <text x="38" y="124" font-family="Segoe UI, Arial, sans-serif" font-size="31" fill="#bedff0">1. Strong CPU-first performance profile.</text>
+    <text x="38" y="178" font-family="Segoe UI, Arial, sans-serif" font-size="31" fill="#bedff0">2. Airflow-focused case and fan setup.</text>
+    <text x="38" y="232" font-family="Segoe UI, Arial, sans-serif" font-size="31" fill="#bedff0">3. Balanced hardware for editing and office use.</text>
+    <text x="38" y="290" font-family="Segoe UI, Arial, sans-serif" font-size="30" fill="#f0fcff" font-weight="700">Designed and built by BPP PCs.</text>
+  </g>
+</svg>

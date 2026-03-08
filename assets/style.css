@@ -459,6 +459,13 @@ a:focus-visible {
   transform: translateY(-1px);
 }
 
+.button:disabled,
+.button[aria-disabled="true"] {
+  opacity: 0.58;
+  cursor: not-allowed;
+  transform: none;
+}
+
 .button-primary {
   color: #041017;
   background: linear-gradient(135deg, var(--accent), #8be4ff);
@@ -527,6 +534,15 @@ a:focus-visible {
 .product-price {
   color: var(--text);
   font-weight: 800;
+}
+
+.product-card-description {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .product-specs {

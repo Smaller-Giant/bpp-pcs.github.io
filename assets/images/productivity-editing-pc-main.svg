@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1200" role="img" aria-labelledby="title desc">
+  <title id="title">Productivity Editing PC main image</title>
+  <desc id="desc">A black productivity desktop in an NZXT-style airflow case with two bright blue front fans.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#05080f"/>
+      <stop offset="55%" stop-color="#091225"/>
+      <stop offset="100%" stop-color="#04070c"/>
+    </linearGradient>
+    <linearGradient id="metal" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#565f6a"/>
+      <stop offset="100%" stop-color="#2c333d"/>
+    </linearGradient>
+    <linearGradient id="glass" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#a0c7ff" stop-opacity="0.14"/>
+      <stop offset="100%" stop-color="#3f6e9d" stop-opacity="0.07"/>
+    </linearGradient>
+    <pattern id="mesh" width="14" height="14" patternUnits="userSpaceOnUse">
+      <rect width="14" height="14" fill="#141b27"/>
+      <circle cx="3.5" cy="3.5" r="1.1" fill="#4f5e72" fill-opacity="0.68"/>
+      <circle cx="10.5" cy="3.5" r="1.1" fill="#4f5e72" fill-opacity="0.68"/>
+      <circle cx="3.5" cy="10.5" r="1.1" fill="#4f5e72" fill-opacity="0.68"/>
+      <circle cx="10.5" cy="10.5" r="1.1" fill="#4f5e72" fill-opacity="0.68"/>
+    </pattern>
+    <radialGradient id="fanBlue" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#0f36ff"/>
+      <stop offset="58%" stop-color="#2350ff"/>
+      <stop offset="100%" stop-color="#0a1f8f"/>
+    </radialGradient>
+    <filter id="fanGlow" x="-35%" y="-35%" width="170%" height="170%">
+      <feGaussianBlur stdDeviation="18"/>
+    </filter>
+  </defs>
+
+  <rect width="1600" height="1200" fill="url(#bg)"/>
+  <g stroke="#1c2940" stroke-width="2" opacity="0.7">
+    <line x1="0" y1="990" x2="1600" y2="990"/>
+    <line x1="0" y1="860" x2="1600" y2="860"/>
+    <line x1="0" y1="730" x2="1600" y2="730"/>
+    <line x1="180" y1="1200" x2="470" y2="700"/>
+    <line x1="480" y1="1200" x2="660" y2="660"/>
+    <line x1="820" y1="1200" x2="860" y2="650"/>
+    <line x1="1150" y1="1200" x2="1040" y2="670"/>
+    <line x1="1450" y1="1200" x2="1210" y2="730"/>
+  </g>
+
+  <ellipse cx="780" cy="900" rx="430" ry="98" fill="#01050a" opacity="0.85"/>
+
+  <g>
+    <polygon points="460,390 885,325 1135,455 700,545" fill="url(#metal)" stroke="#707c89" stroke-width="2"/>
+    <polygon points="380,430 725,570 725,960 380,815" fill="url(#metal)" stroke="#5f6a79" stroke-width="2"/>
+    <polygon points="725,570 1135,455 1135,875 725,960" fill="#151d28" stroke="#5c6775" stroke-width="2"/>
+
+    <polygon points="405,444 710,570 710,930 405,805" fill="url(#glass)" stroke="#728195" stroke-width="2"/>
+    <polygon points="742,582 1112,474 1112,857 742,945" fill="url(#mesh)" stroke="#4f5c6d" stroke-width="2"/>
+
+    <circle cx="950" cy="645" r="92" fill="url(#fanBlue)" opacity="0.9"/>
+    <circle cx="950" cy="645" r="68" fill="#040815"/>
+    <circle cx="950" cy="645" r="24" fill="#1f47ff"/>
+    <circle cx="952" cy="790" r="92" fill="url(#fanBlue)" opacity="0.9"/>
+    <circle cx="952" cy="790" r="68" fill="#040815"/>
+    <circle cx="952" cy="790" r="24" fill="#1f47ff"/>
+    <g filter="url(#fanGlow)" opacity="0.45">
+      <circle cx="950" cy="645" r="90" fill="#2753ff"/>
+      <circle cx="952" cy="790" r="90" fill="#2753ff"/>
+    </g>
+
+    <circle cx="520" cy="665" r="73" fill="#121a26" stroke="#46556a" stroke-width="3"/>
+    <circle cx="520" cy="665" r="28" fill="#263245"/>
+    <rect x="495" y="835" width="170" height="84" rx="8" fill="#111927" stroke="#4e5f74"/>
+  </g>
+
+  <g font-family="Segoe UI, Arial, sans-serif" fill="#eef8ff">
+    <text x="110" y="110" font-size="42" font-weight="700" letter-spacing="2">BPP PCs</text>
+    <text x="110" y="165" font-size="66" font-weight="800">Productivity Editing PC</text>
+    <text x="110" y="215" font-size="31" fill="#90c8ff">Strong CPU workflow build for editing and productivity</text>
+  </g>
+</svg>

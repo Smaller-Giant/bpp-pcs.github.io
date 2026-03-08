@@ -256,6 +256,11 @@ function getProductDescription(product) {
   return product.description;
 }
 
+function getCheckoutLink(product) {
+  const value = String(product?.stripeCheckoutLink || "").trim();
+  return value || "";
+}
+
 function getProductArrayField(product, key, fallbackItems) {
   const value = product[key];
   if (Array.isArray(value)) {
@@ -295,6 +300,10 @@ function createProductCard(product) {
   const productImage = getProductImage(product);
   const productKey = getProductKey(product);
   const productUrl = `${PRODUCT_DETAIL_PAGE}?slug=${encodeURIComponent(productKey)}`;
+  const checkoutLink = getCheckoutLink(product);
+  const buyAction = checkoutLink
+    ? `<a class="button button-primary" href="${escapeHtml(checkoutLink)}">Buy Now</a>`
+    : `<button class="button button-primary" type="button" disabled aria-disabled="true">Checkout link coming soon</button>`;
 
   return `
     <article class="product-card" data-product-url="${escapeHtml(productUrl)}" role="link" tabindex="0" aria-label="Open ${escapeHtml(product.name)} details">
@@ -302,11 +311,11 @@ function createProductCard(product) {
       <div class="product-card-body">
         <h3 class="product-card-title">${escapeHtml(product.name)}</h3>
         <p class="product-price">${formatPrice(product.price)}</p>
-        <p>${escapeHtml(getProductDescription(product))}</p>
+        <p class="product-card-description">${escapeHtml(getProductDescription(product))}</p>
         <ul class="product-specs">${specificationItems}</ul>
         <div class="card-actions">
           <a class="button button-secondary" href="${escapeHtml(productUrl)}">View details</a>
-          <a class="button button-primary" href="${escapeHtml(product.stripeCheckoutLink)}">Buy Now</a>
+          ${buyAction}
         </div>
       </div>
     </article>
@@ -422,6 +431,10 @@ function createProductDetail(product) {
       </div>
     `
     : "";
+  const checkoutLink = getCheckoutLink(product);
+  const buyNowAction = checkoutLink
+    ? `<a class="button button-primary button-large" href="${escapeHtml(checkoutLink)}">Buy Now</a>`
+    : `<button class="button button-primary button-large" type="button" disabled aria-disabled="true">Checkout link coming soon</button>`;
   return `
     <section class="product-gallery" data-product-gallery>
       <div class="product-gallery-track" data-product-gallery-track aria-label="${escapeHtml(product.name)} photo gallery">
@@ -451,7 +464,7 @@ function createProductDetail(product) {
       </section>
       <p class="checkout-disclaimer">You will be redirected to Stripe to securely complete your purchase.</p>
       <p class="collection-notice">Collection only - after purchase, we will contact you within 24 hours to arrange collection.</p>
-      <a class="button button-primary button-large" href="${escapeHtml(product.stripeCheckoutLink)}">Buy Now</a>
+      ${buyNowAction}
     </div>
   `;
 }

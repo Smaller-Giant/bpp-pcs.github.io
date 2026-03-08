@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1200" role="img" aria-labelledby="title desc">
+  <title id="title">CPU workflow slide for Productivity Editing PC</title>
+  <desc id="desc">An explainer slide showing Intel Core i5-12400 advantages for productivity and video editing workflows.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#06101f"/>
+      <stop offset="100%" stop-color="#0c1c35"/>
+    </linearGradient>
+    <linearGradient id="chip" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#63c8ff"/>
+      <stop offset="100%" stop-color="#2b73bf"/>
+    </linearGradient>
+    <linearGradient id="card" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1a2b44"/>
+      <stop offset="100%" stop-color="#111d30"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1600" height="1200" fill="url(#bg)"/>
+  <circle cx="1320" cy="190" r="230" fill="#4eb8ff" opacity="0.13"/>
+  <circle cx="230" cy="980" r="210" fill="#4eb8ff" opacity="0.1"/>
+
+  <g transform="translate(120 220)">
+    <rect x="0" y="0" width="560" height="560" rx="28" fill="#0d1728" stroke="#69cfff" stroke-width="6"/>
+    <rect x="90" y="90" width="380" height="380" rx="20" fill="url(#chip)"/>
+    <rect x="150" y="150" width="260" height="260" rx="18" fill="#0b192d"/>
+    <text x="280" y="246" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="48" fill="#dbf5ff" font-weight="700">Intel Core i5</text>
+    <text x="280" y="316" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="62" fill="#ffffff" font-weight="800">12400</text>
+    <text x="280" y="370" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="33" fill="#9de0ff">6 Cores | Up to 4.4 GHz</text>
+    <g stroke="#6ed8ff" stroke-width="6">
+      <line x1="40" y1="85" x2="0" y2="85"/>
+      <line x1="40" y1="145" x2="0" y2="145"/>
+      <line x1="40" y1="205" x2="0" y2="205"/>
+      <line x1="40" y1="265" x2="0" y2="265"/>
+      <line x1="40" y1="325" x2="0" y2="325"/>
+      <line x1="40" y1="385" x2="0" y2="385"/>
+      <line x1="40" y1="445" x2="0" y2="445"/>
+      <line x1="40" y1="505" x2="0" y2="505"/>
+      <line x1="560" y1="85" x2="600" y2="85"/>
+      <line x1="560" y1="145" x2="600" y2="145"/>
+      <line x1="560" y1="205" x2="600" y2="205"/>
+      <line x1="560" y1="265" x2="600" y2="265"/>
+      <line x1="560" y1="325" x2="600" y2="325"/>
+      <line x1="560" y1="385" x2="600" y2="385"/>
+      <line x1="560" y1="445" x2="600" y2="445"/>
+      <line x1="560" y1="505" x2="600" y2="505"/>
+    </g>
+  </g>
+
+  <g transform="translate(760 200)">
+    <text x="0" y="0" font-family="Segoe UI, Arial, sans-serif" font-size="70" fill="#ffffff" font-weight="800">CPU Power for Creator Workflow</text>
+    <text x="0" y="58" font-family="Segoe UI, Arial, sans-serif" font-size="30" fill="#9fdfff">Designed for productivity software, timeline edits, and smooth multitasking.</text>
+
+    <g transform="translate(0 120)">
+      <rect width="730" height="145" rx="20" fill="url(#card)" stroke="#2f547f"/>
+      <text x="38" y="62" font-family="Segoe UI, Arial, sans-serif" font-size="36" fill="#ecf9ff" font-weight="700">Faster timeline response</text>
+      <text x="38" y="104" font-family="Segoe UI, Arial, sans-serif" font-size="29" fill="#a6d7ea">Handles cutting, trimming, and project navigation with less lag.</text>
+    </g>
+
+    <g transform="translate(0 295)">
+      <rect width="730" height="145" rx="20" fill="url(#card)" stroke="#2f547f"/>
+      <text x="38" y="62" font-family="Segoe UI, Arial, sans-serif" font-size="36" fill="#ecf9ff" font-weight="700">Better export consistency</text>
+      <text x="38" y="104" font-family="Segoe UI, Arial, sans-serif" font-size="29" fill="#a6d7ea">6-core CPU helps sustain encoding and rendering tasks reliably.</text>
+    </g>
+
+    <g transform="translate(0 470)">
+      <rect width="730" height="145" rx="20" fill="url(#card)" stroke="#2f547f"/>
+      <text x="38" y="62" font-family="Segoe UI, Arial, sans-serif" font-size="36" fill="#ecf9ff" font-weight="700">Strong daily multitasking</text>
+      <text x="38" y="104" font-family="Segoe UI, Arial, sans-serif" font-size="29" fill="#a6d7ea">Keep browser tabs, docs, calls, and editing apps open together.</text>
+    </g>
+  </g>
+</svg>

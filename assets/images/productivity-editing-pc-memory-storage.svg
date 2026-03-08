@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1200" role="img" aria-labelledby="title desc">
+  <title id="title">Memory and storage slide for Productivity Editing PC</title>
+  <desc id="desc">Feature slide highlighting 16GB DDR4 and WD Blue SN5000 PCIe 4.0 NVMe storage for responsive workflows.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#061021"/>
+      <stop offset="100%" stop-color="#12213b"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#203150"/>
+      <stop offset="100%" stop-color="#111f34"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#63d1ff"/>
+      <stop offset="100%" stop-color="#d8fbff"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1600" height="1200" fill="url(#bg)"/>
+  <g opacity="0.2" stroke="#4c6c93" stroke-width="2">
+    <line x1="0" y1="300" x2="1600" y2="300"/>
+    <line x1="0" y1="600" x2="1600" y2="600"/>
+    <line x1="0" y1="900" x2="1600" y2="900"/>
+    <line x1="400" y1="0" x2="400" y2="1200"/>
+    <line x1="800" y1="0" x2="800" y2="1200"/>
+    <line x1="1200" y1="0" x2="1200" y2="1200"/>
+  </g>
+
+  <text x="100" y="138" font-family="Segoe UI, Arial, sans-serif" font-size="66" fill="#ffffff" font-weight="800">Fast Memory + Fast Storage</text>
+  <text x="100" y="194" font-family="Segoe UI, Arial, sans-serif" font-size="30" fill="#a5dfff">Built to keep editing projects and productivity tools responsive.</text>
+
+  <g transform="translate(100 280)">
+    <rect width="680" height="360" rx="24" fill="url(#panel)" stroke="#35567e"/>
+    <text x="40" y="68" font-family="Segoe UI, Arial, sans-serif" font-size="42" fill="#ecf9ff" font-weight="700">16GB DDR4-4000 (2x8GB)</text>
+    <text x="40" y="116" font-family="Segoe UI, Arial, sans-serif" font-size="30" fill="#a8d4ea">Dual-channel memory for smoother app switching.</text>
+    <rect x="40" y="168" width="600" height="70" rx="12" fill="#0f1a2d" stroke="#4b709a"/>
+    <rect x="40" y="254" width="600" height="70" rx="12" fill="#0f1a2d" stroke="#4b709a"/>
+    <text x="66" y="214" font-family="Segoe UI, Arial, sans-serif" font-size="30" fill="#d3efff">Improves workflow stability with multiple apps open.</text>
+    <text x="66" y="300" font-family="Segoe UI, Arial, sans-serif" font-size="30" fill="#d3efff">Helps timeline scrubbing and editing responsiveness.</text>
+  </g>
+
+  <g transform="translate(820 280)">
+    <rect width="680" height="360" rx="24" fill="url(#panel)" stroke="#35567e"/>
+    <text x="40" y="68" font-family="Segoe UI, Arial, sans-serif" font-size="42" fill="#ecf9ff" font-weight="700">WD Blue SN5000 NVMe PCIe 4.0</text>
+    <text x="40" y="116" font-family="Segoe UI, Arial, sans-serif" font-size="30" fill="#a8d4ea">Quick project load times and responsive system startup.</text>
+    <rect x="40" y="168" width="600" height="70" rx="12" fill="#0f1a2d" stroke="#4b709a"/>
+    <rect x="40" y="254" width="600" height="70" rx="12" fill="#0f1a2d" stroke="#4b709a"/>
+    <text x="66" y="214" font-family="Segoe UI, Arial, sans-serif" font-size="30" fill="#d3efff">Faster access to media files and project folders.</text>
+    <text x="66" y="300" font-family="Segoe UI, Arial, sans-serif" font-size="30" fill="#d3efff">Less waiting on boots, app launches, and saves.</text>
+  </g>
+
+  <g transform="translate(100 710)">
+    <rect width="1400" height="290" rx="22" fill="#0d182d" stroke="#375a84"/>
+    <text x="50" y="80" font-family="Segoe UI, Arial, sans-serif" font-size="40" fill="#f1fbff" font-weight="700">Why this helps productivity and editing</text>
+    <line x1="50" y1="114" x2="1350" y2="114" stroke="url(#accent)" stroke-width="4"/>
+    <text x="50" y="174" font-family="Segoe UI, Arial, sans-serif" font-size="32" fill="#bedff0">1. Opens projects and software faster.</text>
+    <text x="50" y="224" font-family="Segoe UI, Arial, sans-serif" font-size="32" fill="#bedff0">2. Keeps daily workflow smoother during multitasking.</text>
+    <text x="50" y="274" font-family="Segoe UI, Arial, sans-serif" font-size="32" fill="#bedff0">3. Improves consistency in content creation sessions.</text>
+  </g>
+</svg>
