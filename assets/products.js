@@ -29,6 +29,7 @@ const PRODUCT_IMAGES = {
     ram: "assets/images/productivity-ram.png",
     ssd: "assets/images/productivity-ssd.png"
   },
+  
   fortnite: {
     main: "assets/images/fortnite-main.svg",
     cpu: "assets/images/fortnite-cpu.svg",
