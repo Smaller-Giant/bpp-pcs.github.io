@@ -19,10 +19,15 @@ const PRODUCT_IMAGES = {
     power: "assets/images/ultimate-power.svg"
   },
   productivity: {
-    main: "assets/images/productivity-main.svg",
-    cpu: "assets/images/productivity-cpu.svg",
-    memory: "assets/images/productivity-memory.svg",
-    cooling: "assets/images/productivity-cooling.svg"
+    main: "assets/images/productivity-overview.png",
+    case: "assets/images/productivity-case.png",
+    cpu: "assets/images/productivity-cpu.png",
+    motherboard: "assets/images/productivity-motherboard.png",
+    motherboardSpec: "assets/images/productivity-motherboard-spec.png",
+    fan: "assets/images/productivity-fan.png",
+    power: "assets/images/productivity-power.png",
+    ram: "assets/images/productivity-ram.png",
+    ssd: "assets/images/productivity-ssd.png"
   },
   fortnite: {
     main: "assets/images/fortnite-main.svg",
@@ -122,14 +127,16 @@ window.PC_PRODUCTS = [
     name: "The BPP Ultimate PC",
     slug: "The BPP Ultimate PC",
     price: 2699,
-    description: "The highest performance PC that BPP offers. Its a 4K ready gaming tower built for ultra settings and high refresh displays.",
+    description: "The highest performance PC that BPP offers. A 4K-ready gaming tower with a Ryzen 7 9800X3D, RTX 5080, DDR5 memory, and PCIe 5.0 storage.",
     specifications: [
-      "Intel Core Ultra 7 265K",
-      "NVIDIA GeForce RTX 5080 16GB",
-      "32GB DDR5 6400MHz",
-      "2TB NVMe Gen4 SSD",
-      "1000W 80 Plus Gold PSU",
-      "360mm liquid CPU cooler"
+      "Case: NZXT H9 Flow RGB+ (2025) ATX Mid Tower White Tempered Glass",
+      "CPU: AMD Ryzen 7 9800X3D 4.7 GHz 8-Core AM5",
+      "Motherboard: Gigabyte B850 AORUS ELITE WIFI7 ICE DDR5 ATX",
+      "Graphics: MSI GeForce RTX 5080 16G GAMING TRIO OC WHITE",
+      "Memory: Corsair Vengeance RGB White/Silver DDR5-6000 CL36 32GB (2x16GB)",
+      "CPU Cooler: NZXT Kraken Elite RGB (2025) 420mm Water Cooler White",
+      "Storage: Samsung 9100 PRO 4TB M.2-2280 PCIe 5.0 NVMe",
+      "Power Supply: Lian Li SX Platinum 1000W SFX, ATX 3.1 / PCIe 5.1, fully modular"
     ],
     image: PRODUCT_IMAGES.ultimate.main,
     images: [
@@ -149,42 +156,72 @@ window.PC_PRODUCTS = [
     description: "A productivity-focused desktop with a strong Intel CPU for content workflows, fast editing timelines, and responsive multitasking.",
     longDescription: "Built in the NZXT H3 Flow chassis, this system is tuned for office productivity and entry-to-mid video editing with good CPU performance, fast DDR4 memory, and PCIe 4.0 NVMe storage.",
     specifications: [
-      "Case: NZXT H3 Flow MicroATX mid-tower (black, tinted tempered glass, front USB-C + USB-A)",
-      "CPU: Intel Core i5-12400 (6 cores, up to 4.4GHz boost)",
+      "Case: NZXT H3 Flow Micro ATX Mid Tower Black with Tinted Tempered Glass, USB 3.2 Gen 2x2 Type-C + USB 3.2 Gen 1 Type-A",
+      "CPU: Intel Core i5-12400 2.5 GHz 6-Core LGA1700",
       "Graphics: Intel UHD 730 integrated graphics",
-      "Motherboard: MSI PRO H610M-G WIFI (LGA1700, DDR4, MicroATX)",
-      "Memory: 16GB DDR4-4000 CL18 (2x8GB, dual-channel)",
-      "Storage: WD Blue SN5000 500GB M.2 NVMe PCIe 4.0 x4 SSD",
-      "Power Supply: MSI MAG A550BN 550W 80+ Bronze",
-      "Cooling: 2 x ARCTIC P14 Pro 140mm PWM ARGB case fans"
+      "Motherboard: MSI H610 PRO H610M-G WIFI LGA1700 DDR4 Micro ATX",
+      "Memory: G.Skill Trident Z RGB Black DDR4-4000 CL18 16GB (2x8GB)",
+      "Storage: Western Digital WD Blue SN5000 500GB M.2-2280 PCIe 4.0 x4 NVMe",
+      "Power Supply: MSI MAG A550BN Black 550W Non-Modular 80+ Bronze Certified",
+      "Cooling: 2 x ARCTIC P14 Pro 140mm Black PWM Addressable RGB 110 CFM"
     ],
     image: PRODUCT_IMAGES.productivity.main,
     images: [
       PRODUCT_IMAGES.productivity.main,
+      PRODUCT_IMAGES.productivity.case,
       PRODUCT_IMAGES.productivity.cpu,
-      PRODUCT_IMAGES.productivity.memory,
-      PRODUCT_IMAGES.productivity.cooling
+      PRODUCT_IMAGES.productivity.motherboard,
+      PRODUCT_IMAGES.productivity.motherboardSpec,
+      PRODUCT_IMAGES.productivity.ram,
+      PRODUCT_IMAGES.productivity.ssd,
+      PRODUCT_IMAGES.productivity.power,
+      PRODUCT_IMAGES.productivity.fan
     ],
     gallerySlides: [
       {
         image: PRODUCT_IMAGES.productivity.main,
-        title: "Modern NZXT H3 Flow build",
-        description: "Clean black case styling with a tinted glass side panel and front airflow for a professional workstation look."
+        title: "Productivity Editing PC overview",
+        description: "A clean, professional look with strong front airflow."
+      },
+      {
+        image: PRODUCT_IMAGES.productivity.case,
+        title: "H3 Flow chassis",
+        description: "Tinted tempered glass and mesh front panel keep the system tidy and well ventilated."
       },
       {
         image: PRODUCT_IMAGES.productivity.cpu,
-        title: "Strong CPU for productivity and editing",
-        description: "The Intel Core i5-12400 delivers 6 cores of solid processing power for timelines, exports, and heavy multitasking."
+        title: "Intel Core i5-12400",
+        description: "6-core CPU for responsive productivity and entry-level editing workflows."
       },
       {
-        image: PRODUCT_IMAGES.productivity.memory,
-        title: "Fast memory and NVMe performance",
-        description: "16GB dual-channel DDR4 plus PCIe 4.0 NVMe storage helps keep projects, app launches, and file access responsive."
+        image: PRODUCT_IMAGES.productivity.motherboard,
+        title: "MSI H610M-G WIFI",
+        description: "LGA1700 DDR4 Micro ATX platform with onboard WiFi."
       },
       {
-        image: PRODUCT_IMAGES.productivity.cooling,
-        title: "Airflow and reliability",
-        description: "Dual 140mm fans, a flow-focused chassis, and a dependable 550W PSU support consistent long-session performance."
+        image: PRODUCT_IMAGES.productivity.motherboardSpec,
+        title: "Board feature highlights",
+        description: "Clear overview of the H610M-G layout and expansion support."
+      },
+      {
+        image: PRODUCT_IMAGES.productivity.ram,
+        title: "G.Skill Trident Z RGB 16GB",
+        description: "DDR4-4000 CL18 memory for smooth multitasking."
+      },
+      {
+        image: PRODUCT_IMAGES.productivity.ssd,
+        title: "WD Blue SN5000 500GB",
+        description: "PCIe 4.0 NVMe storage for faster boot and project load times."
+      },
+      {
+        image: PRODUCT_IMAGES.productivity.power,
+        title: "MSI MAG A550BN 550W",
+        description: "80+ Bronze power supply for stable daily operation."
+      },
+      {
+        image: PRODUCT_IMAGES.productivity.fan,
+        title: "ARCTIC P14 Pro ARGB",
+        description: "140mm fans to keep airflow steady during longer sessions."
       }
     ],
     whyBuy: [

@@ -209,8 +209,11 @@ function createProductCard(product) {
     ? `<a class="button button-primary" href="${escapeHtml(checkoutLink)}">Buy Now</a>`
     : `<button class="button button-primary" type="button" disabled aria-disabled="true">Checkout link coming soon</button>`;
 
+  const safeKey = productKey ? productKey.replace(/[^a-z0-9]+/gi, "-") : "";
+  const cardClass = `product-card${safeKey ? ` product-card--${safeKey}` : ""}`;
+
   return `
-    <article class="product-card" data-product-url="${escapeHtml(productUrl)}" role="link" tabindex="0" aria-label="Open ${escapeHtml(product.name)} details">
+    <article class="${cardClass}" data-product-url="${escapeHtml(productUrl)}" role="link" tabindex="0" aria-label="Open ${escapeHtml(product.name)} details">
       <img class="product-card-image" src="${escapeHtml(productImage)}" alt="${escapeHtml(product.name)} desktop PC">
       <div class="product-card-body">
         <h3 class="product-card-title">${escapeHtml(product.name)}</h3>
@@ -735,6 +738,37 @@ function renderProductPage() {
   initProductGalleries();
 }
 
+function initHeroVideo() {
+  const video = document.querySelector(".hero-video");
+  if (!video) {
+    return;
+  }
+
+  const playVideo = () => {
+    const playPromise = video.play();
+    if (playPromise && typeof playPromise.then === "function") {
+      playPromise.catch(() => {
+        video.controls = true;
+      });
+    }
+  };
+
+  const updateForViewport = () => {
+    const isMobile = window.innerWidth <= 860;
+    video.controls = isMobile;
+    video.setAttribute("playsinline", "");
+    video.setAttribute("webkit-playsinline", "");
+    if (isMobile) {
+      video.setAttribute("preload", "metadata");
+    }
+  };
+
+  updateForViewport();
+  window.addEventListener("resize", updateForViewport);
+  video.addEventListener("canplay", playVideo, { once: true });
+  document.addEventListener("touchstart", playVideo, { once: true, passive: true });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   setCopyrightYear();
   setActiveNavigation();
@@ -746,4 +780,5 @@ document.addEventListener("DOMContentLoaded", () => {
   renderFeaturedProducts();
   renderProductsPage();
   renderProductPage();
+  initHeroVideo();
 });
