@@ -114,7 +114,7 @@ window.PC_PRODUCTS = [
       "Best suited to office software, admin workloads, web platforms, and remote meeting tools.",
       "Integrated graphics only; not designed for high-end gaming or GPU-heavy tasks."
     ],
-    stripeCheckoutLink: "https://buy.stripe.com/test_fZucN49y30C4gqZ9cT6kg03"
+    stripeCheckoutLink: "https://buy.stripe.com/9B6aEW11x5Wo3Ed3Sz6kg00"
   },
   {
     id: "bpp-ultimate-pc",
@@ -138,7 +138,7 @@ window.PC_PRODUCTS = [
       PRODUCT_IMAGES.ultimate.gpu,
       PRODUCT_IMAGES.ultimate.power
     ],
-    stripeCheckoutLink: "https://buy.stripe.com/test_8x214m11x5Wob6F74L6kg02"
+    stripeCheckoutLink: "https://buy.stripe.com/28EaEW6lR98AgqZ88P6kg01"
   },
   {
     id: "productivity-editing-pc",
@@ -198,7 +198,7 @@ window.PC_PRODUCTS = [
       "Best for productivity and editing workflows; heavier GPU-accelerated effects may benefit from a dedicated graphics card upgrade later.",
       "Stripe checkout link is intentionally left blank for now and can be added when ready."
     ],
-    stripeCheckoutLink: ""
+    stripeCheckoutLink: "https://buy.stripe.com/5kQ6oGeSndoQ5Mldt96kg05"
   },
   {
     id: "fortnite-ready",
@@ -206,7 +206,7 @@ window.PC_PRODUCTS = [
     name: "240FPS Fortnite Ready PC",
     slug: "240FPS Fortnite Ready PC",
     price: 1199,
-    description: "A PC designed to get 240FPS on Fornite to give the smoothest gameplay",
+    description: "A PC designed to get 240FPS on Fortnite to give the smoothest gameplay",
     specifications: [
       "AMD Ryzen 9 7900X",
       "NVIDIA GeForce RTX 5080",
@@ -222,7 +222,7 @@ window.PC_PRODUCTS = [
       PRODUCT_IMAGES.fortnite.gpu,
       PRODUCT_IMAGES.fortnite.power
     ],
-    stripeCheckoutLink: "https://buy.stripe.com/test_studioxpro"
+    stripeCheckoutLink: "https://buy.stripe.com/aFa00i39FacE7UtgFl6kg04"
   },
 
 ];
