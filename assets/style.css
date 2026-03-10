@@ -680,8 +680,13 @@ a:focus-visible {
   background: #0d1522;
 }
 
+body.is-work-ready-product .product-image-frame {
+  background: transparent;
+}
+
 body.is-work-ready-product .product-image-frame img {
   padding: clamp(0.3rem, 1vw, 0.65rem);
+  background: transparent;
 }
 
 .product-gallery-caption {

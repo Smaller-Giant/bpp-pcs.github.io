@@ -294,13 +294,6 @@ function createProductDetail(product) {
   const specificationItems = product.specifications
     .map((item) => `<li>${escapeHtml(item)}</li>`)
     .join("");
-  const whyBuyItems = getProductArrayField(product, "whyBuy", [
-    "Balanced hardware for reliable day-to-day performance.",
-    "Built for straightforward setup and immediate use.",
-    "Direct Stripe Checkout buying flow with no account required."
-  ])
-    .map((item) => `<li>${escapeHtml(item)}</li>`)
-    .join("");
   const otherInfoItems = getProductArrayField(product, "otherInfo", [
     "UK delivery only. See the shipping page for delivery timing and rates.",
     "Returns are available under our returns policy and UK consumer law.",
@@ -353,10 +346,6 @@ function createProductDetail(product) {
       <section class="product-detail-section">
         <h2>Description</h2>
         <p>${escapeHtml(getProductDescription(product))}</p>
-      </section>
-      <section class="product-detail-section">
-        <h2>Why you should buy it</h2>
-        <ul class="specification-list">${whyBuyItems}</ul>
       </section>
       <section class="product-detail-section">
         <h2>Specifications</h2>

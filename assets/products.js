@@ -2,10 +2,15 @@
 // Set each link's successful payment redirect to: /thank-you.html
 const PRODUCT_IMAGES = {
   workReady: {
-    main: "assets/images/work-ready-main.svg",
-    cpu: "assets/images/work-ready-cpu.svg",
-    motherboard: "assets/images/work-ready-motherboard.svg",
-    storage: "assets/images/work-ready-storage.svg"
+    main: "assets/images/work-ready-overview.png",
+    case: "assets/images/work-ready-case.png",
+    cpu: "assets/images/work-ready-cpu.png",
+    motherboard: "assets/images/work-ready-motherboard.png",
+    overview: "assets/images/work-ready-overview.png",
+    motherboardKit: "assets/images/work-ready-motherboard-kit.png",
+    power: "assets/images/work-ready-power.png",
+    ram: "assets/images/work-ready-ram.png",
+    ssd: "assets/images/work-ready-ssd.png"
   },
   ultimate: {
     main: "assets/images/ultimate-main.svg",
@@ -34,8 +39,8 @@ window.PC_PRODUCTS = [
     name: "Work Ready PC",
     slug: "work-ready-pc",
     price: 379.99,
-    description: "A practical office desktop tuned for emails, browser tabs, spreadsheets, and video meetings without slowing down your workflow.",
-    longDescription: "Built inside the compact ASUS Prime AP201 mesh chassis, the Work Ready PC is designed for day-to-day business workloads with stable performance, strong airflow, and straightforward reliability.",
+    description: "A tidy office desktop built for email, browser tabs, spreadsheets, and video calls, powered by an Intel Core i3 and fast NVMe storage.",
+    longDescription: "The Work Ready PC pairs the Intel Core i3-10105 with the ASRock H470M-HVS motherboard, 8GB dual-channel DDR4, and a Patriot P300 NVMe SSD, all housed in the compact ASUS Prime AP201 mesh case. Integrated Intel UHD 630 graphics handle day-to-day business workloads, while the MSI MAG A550BN 550W PSU keeps power delivery stable.",
     specifications: [
       "Case: Asus Prime AP201 Micro ATX Mini Tower Black with Mesh Side Panel and USB 3.2 Gen 2 Type-C and USB 3.2 Gen 1 Type-A",
       "CPU: Intel Core i3 10105 3.7 GHz 4-Core LGA1200",
@@ -47,43 +52,67 @@ window.PC_PRODUCTS = [
     ],
     image: PRODUCT_IMAGES.workReady.main,
     images: [
-      PRODUCT_IMAGES.workReady.main,
+      PRODUCT_IMAGES.workReady.overview,
+      PRODUCT_IMAGES.workReady.case,
       PRODUCT_IMAGES.workReady.cpu,
       PRODUCT_IMAGES.workReady.motherboard,
-      PRODUCT_IMAGES.workReady.storage
+      PRODUCT_IMAGES.workReady.motherboardKit,
+      PRODUCT_IMAGES.workReady.power,
+      PRODUCT_IMAGES.workReady.ram,
+      PRODUCT_IMAGES.workReady.ssd
     ],
     gallerySlides: [
       {
-        image: PRODUCT_IMAGES.workReady.main,
-        title: "Clean black AP201 build",
-        description: "Compact mesh tower with a professional look, tempered side panel, and front USB-C for modern office setups."
+        image: PRODUCT_IMAGES.workReady.overview,
+        title: "Compact case footprint",
+        description: "The AP201 keeps the build compact on or under the desk while staying professional."
+      },
+      {
+        image: PRODUCT_IMAGES.workReady.case,
+        title: "ASUS Prime AP201 airflow interior",
+        description: "Mesh panels and a clean internal layout keep airflow moving and maintenance straightforward."
       },
       {
         image: PRODUCT_IMAGES.workReady.cpu,
-        title: "CPU tuned for office workflow",
-        description: "The Intel Core i3-10105 boosts up to 4.4GHz, keeping browsing, spreadsheets, and communication tools responsive."
+        title: "Intel Core i3-10105 processor",
+        description: "10th Gen quad-core CPU that keeps everyday office apps responsive."
       },
       {
         image: PRODUCT_IMAGES.workReady.motherboard,
-        title: "Fast startup and smooth multitasking",
-        description: "Dual-channel DDR4 memory and NVMe storage reduce load times and keep daily applications moving without delays."
+        title: "ASRock H470M-HVS platform",
+        description: "Stable LGA1200 micro-ATX motherboard with the ports you need for office peripherals."
       },
       {
-        image: PRODUCT_IMAGES.workReady.storage,
-        title: "Reliable cooling and power delivery",
-        description: "High-airflow mesh panels and a 550W 80+ Bronze PSU support stable temperatures and dependable all-day operation."
+        image: PRODUCT_IMAGES.workReady.motherboardKit,
+        title: "Platform overview",
+        description: "Reliable ASRock board pairing that keeps the system stable for daily work."
+      },
+      {
+        image: PRODUCT_IMAGES.workReady.power,
+        title: "MSI MAG A550BN 550W PSU",
+        description: "80+ Bronze certified power supply for dependable all-day use."
+      },
+      {
+        image: PRODUCT_IMAGES.workReady.ram,
+        title: "G.Skill Ripjaws V DDR4 memory",
+        description: "8GB dual-channel DDR4 memory helps multitasking stay smooth."
+      },
+      {
+        image: PRODUCT_IMAGES.workReady.ssd,
+        title: "Patriot P300 NVMe SSD",
+        description: "NVMe storage shortens boot times and speeds up file access."
       }
     ],
     whyBuy: [
-      "Intel Core i3-10105 boost speeds up to 4.4GHz help keep daily workflow apps feeling quick.",
-      "Dual-channel 8GB DDR4 memory improves responsiveness when switching between browser tabs, docs, and calls.",
-      "NVMe storage helps the system boot fast and open files or software with less waiting.",
-      "Airflow-focused AP201 case and quality 550W PSU support stable business use over long sessions."
+      "Intel Core i3-10105 with integrated UHD 630 graphics is ideal for office workloads.",
+      "ASUS Prime AP201 mesh case keeps the system cool in a compact footprint.",
+      "8GB dual-channel DDR4 plus Patriot P300 NVMe storage helps apps open quickly.",
+      "MSI MAG A550BN 550W 80+ Bronze PSU provides stable, efficient power."
     ],
     otherInfo: [
       "Prebuilt and tested before dispatch by BPP PCs.",
       "Best suited to office software, admin workloads, web platforms, and remote meeting tools.",
-      "This system uses integrated graphics and is not aimed at high-end gaming workloads."
+      "Integrated graphics only; not designed for high-end gaming or GPU-heavy tasks."
     ],
     stripeCheckoutLink: "https://buy.stripe.com/test_fZucN49y30C4gqZ9cT6kg03"
   },
