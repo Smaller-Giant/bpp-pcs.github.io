@@ -285,6 +285,10 @@ ul {
   inset: 0;
   border-radius: inherit;
   overflow: hidden;
+  background:
+    radial-gradient(circle at 18% 20%, rgba(85, 210, 255, 0.18), transparent 45%),
+    radial-gradient(circle at 82% 70%, rgba(26, 184, 238, 0.16), transparent 52%),
+    linear-gradient(160deg, rgba(8, 15, 24, 0.92), rgba(7, 11, 18, 0.88));
 }
 
 .hero-video {
@@ -324,28 +328,6 @@ ul {
   animation: heroHaloMotion 16s linear infinite;
 }
 
-.hero-video-effect::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    repeating-linear-gradient(
-      0deg,
-      rgba(255, 255, 255, 0.03) 0 1px,
-      transparent 1px 3px
-    ),
-    linear-gradient(
-      115deg,
-      transparent 36%,
-      rgba(255, 255, 255, 0.18) 50%,
-      transparent 64%
-    );
-  background-size: auto, 220% 100%;
-  background-position: 0 0, -130% 0;
-  opacity: 0.28;
-  mix-blend-mode: screen;
-  animation: heroShimmer 9s ease-in-out infinite;
-}
 
 .hero-brand-copy {
   position: relative;
@@ -407,18 +389,6 @@ ul {
   }
 }
 
-@keyframes heroShimmer {
-  0%,
-  100% {
-    opacity: 0.2;
-    background-position: 0 0, -130% 0;
-  }
-
-  50% {
-    opacity: 0.34;
-    background-position: 0 0, 120% 0;
-  }
-}
 
 .section {
   margin-top: 1.5rem;
@@ -527,10 +497,10 @@ a:focus-visible {
   transform: scale(1.04);
 }
 
-.product-card--work-ready-pc .product-card-image,
-.product-card--office-ready-pc .product-card-image {
-  transform: scale(1.12);
+.product-card--work-ready-pc .product-card-image {
+  padding: clamp(0.05rem, 0.5vw, 0.35rem);
 }
+
 
 .product-card-body {
   padding: 0.9rem;

@@ -649,11 +649,13 @@ function initProductGalleries() {
     const maxIndex = slides.length - 1;
 
     function getActiveIndex() {
+      const trackRect = track.getBoundingClientRect();
       let activeIndex = 0;
       let closestOffset = Number.POSITIVE_INFINITY;
 
       slides.forEach((slide, index) => {
-        const offset = Math.abs(slide.offsetLeft - track.scrollLeft);
+        const slideRect = slide.getBoundingClientRect();
+        const offset = Math.abs(slideRect.left - trackRect.left);
         if (offset < closestOffset) {
           closestOffset = offset;
           activeIndex = index;
@@ -670,9 +672,10 @@ function initProductGalleries() {
         return;
       }
 
-      track.scrollTo({
-        left: targetSlide.offsetLeft,
-        behavior: shouldReduceMotion() ? "auto" : "smooth"
+      targetSlide.scrollIntoView({
+        behavior: shouldReduceMotion() ? "auto" : "smooth",
+        block: "nearest",
+        inline: "start"
       });
     }
 
@@ -744,23 +747,43 @@ function initHeroVideo() {
     return;
   }
 
+  const isMobileViewport = () => window.innerWidth <= 860;
+  const source = video.querySelector("[data-video-source]") || video.querySelector("source");
+  const desktopSrc = video.getAttribute("data-video-desktop") || (source ? source.getAttribute("src") : "");
+  const mobileSrc = video.getAttribute("data-video-mobile") || desktopSrc;
+  let activeSrc = "";
+
   const playVideo = () => {
     const playPromise = video.play();
     if (playPromise && typeof playPromise.then === "function") {
       playPromise.catch(() => {
-        video.controls = true;
+        video.pause();
       });
     }
   };
 
+  const setVideoSource = (src) => {
+    if (!source || !src || src === activeSrc) {
+      return;
+    }
+
+    source.setAttribute("src", src);
+    activeSrc = src;
+    video.load();
+  };
+
   const updateForViewport = () => {
-    const isMobile = window.innerWidth <= 860;
-    video.controls = isMobile;
+    const isMobile = isMobileViewport();
+    video.muted = true;
+    video.defaultMuted = true;
+    video.controls = false;
     video.setAttribute("playsinline", "");
     video.setAttribute("webkit-playsinline", "");
-    if (isMobile) {
-      video.setAttribute("preload", "metadata");
-    }
+    const nextSrc = isMobile ? mobileSrc : desktopSrc;
+    setVideoSource(nextSrc);
+    video.autoplay = true;
+    video.setAttribute("preload", "metadata");
+    playVideo();
   };
 
   updateForViewport();
