@@ -16,6 +16,7 @@ const A11Y_CLASS_MAP = {
 
 const A11Y_STORAGE_KEY = "pc_site_accessibility";
 const PRODUCT_DETAIL_PAGE = "product.html";
+const INTRO_STORAGE_KEY = "bpp_intro_seen";
 
 function escapeHtml(value) {
   return String(value)
@@ -537,6 +538,75 @@ function initAccessibilityMenu() {
   });
 }
 
+function initIntroSequence() {
+  const overlay = document.querySelector("[data-intro-overlay]");
+  if (!overlay) {
+    return;
+  }
+
+  const prefersReducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const reduceMotion = document.body.classList.contains("a11y-reduce-motion") || prefersReducedMotion;
+  const alreadySeen = sessionStorage.getItem(INTRO_STORAGE_KEY) === "1";
+
+  if (alreadySeen) {
+    overlay.remove();
+    return;
+  }
+
+  document.body.classList.add("intro-active");
+  overlay.setAttribute("aria-hidden", "false");
+  if (reduceMotion) {
+    overlay.classList.add("is-reduced-motion");
+  }
+
+  const video = overlay.querySelector("video");
+  if (video && !reduceMotion) {
+    const playPromise = video.play();
+    if (playPromise && typeof playPromise.then === "function") {
+      playPromise.catch(() => {
+        video.pause();
+      });
+    }
+  }
+
+  let hasEnded = false;
+
+  const endIntro = (skipAnimation) => {
+    if (hasEnded) {
+      return;
+    }
+
+    hasEnded = true;
+    sessionStorage.setItem(INTRO_STORAGE_KEY, "1");
+    document.body.classList.add("intro-reveal");
+    overlay.classList.add("is-exiting");
+
+    const exitDelay = skipAnimation || reduceMotion ? 220 : 1200;
+    window.setTimeout(() => {
+      overlay.remove();
+      document.body.classList.remove("intro-active", "intro-reveal");
+      document.dispatchEvent(new CustomEvent("intro:complete"));
+    }, exitDelay);
+  };
+
+  const skipButton = overlay.querySelector("[data-intro-skip]");
+  if (skipButton) {
+    skipButton.addEventListener("click", (event) => {
+      event.preventDefault();
+      endIntro(true);
+    });
+  }
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      endIntro(true);
+    }
+  }, { once: true });
+
+  const introDuration = reduceMotion ? 320 : 3600;
+  window.setTimeout(() => endIntro(false), introDuration);
+}
+
 function renderFeaturedProducts() {
   const mount = document.querySelector("[data-featured-products]");
   if (!mount) {
@@ -797,6 +867,7 @@ document.addEventListener("DOMContentLoaded", () => {
   setActiveNavigation();
   initMobileNavigation();
   initAccessibilityMenu();
+  initIntroSequence();
   initProductCardNavigation();
   initBackButtons();
   initProductsControls();

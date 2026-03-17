@@ -42,7 +42,7 @@ window.PC_PRODUCTS = [
   {
     id: "office-ready-pc",
     popular: "yes",
-    name: "Work Ready PC",
+    name: "Office Ready",
     slug: "work-ready-pc",
     price: 379.99,
     description: "A tidy office desktop built for email, browser tabs, spreadsheets, and video calls, powered by an Intel Core i3 and fast NVMe storage.",
@@ -151,7 +151,7 @@ window.PC_PRODUCTS = [
   {
     id: "productivity-editing-pc",
     popular: "no",
-    name: "Productivity Editing PC",
+    name: "Content Creation PC",
     slug: "productivity-editing-pc",
     price: 649.99,
     description: "A productivity-focused desktop with a strong Intel CPU for content workflows, fast editing timelines, and responsive multitasking.",
