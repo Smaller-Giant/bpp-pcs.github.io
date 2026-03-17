@@ -939,6 +939,143 @@ body.is-work-ready-product .product-image-frame img {
   opacity: 0.8;
 }
 
+.intro-scene {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  z-index: 1;
+  pointer-events: none;
+  filter: drop-shadow(0 18px 30px rgba(0, 0, 0, 0.55));
+}
+
+.intro-house {
+  position: relative;
+  width: clamp(14rem, 26vw, 22rem);
+  height: clamp(11rem, 22vw, 18rem);
+  display: grid;
+  place-items: center;
+}
+
+.intro-roof {
+  position: absolute;
+  top: -14%;
+  left: 50%;
+  width: 120%;
+  height: 55%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #1c2f45, #0b1421);
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  border: 1px solid rgba(85, 210, 255, 0.3);
+}
+
+.intro-house-body {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 70%;
+  border-radius: 0.65rem;
+  border: 1px solid rgba(85, 210, 255, 0.3);
+  background: linear-gradient(160deg, #0c1b2c, #111d2b);
+}
+
+.intro-window {
+  position: absolute;
+  width: 28%;
+  height: 30%;
+  border-radius: 0.35rem;
+  border: 1px solid rgba(85, 210, 255, 0.7);
+  background: radial-gradient(circle at 40% 40%, rgba(85, 210, 255, 0.5), rgba(10, 22, 34, 0.9));
+  box-shadow: 0 0 20px rgba(85, 210, 255, 0.5);
+}
+
+.intro-room {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  opacity: 0;
+  transform: scale(1.2);
+}
+
+.intro-wall {
+  position: absolute;
+  inset: 16% 12% 18%;
+  border-radius: 1rem;
+  border: 1px solid rgba(85, 210, 255, 0.2);
+  background: linear-gradient(160deg, rgba(10, 20, 32, 0.95), rgba(13, 26, 42, 0.9));
+}
+
+.intro-desk {
+  position: absolute;
+  bottom: 22%;
+  left: 50%;
+  width: clamp(12rem, 34vw, 26rem);
+  height: clamp(1.6rem, 3vw, 2.4rem);
+  transform: translateX(-50%);
+  border-radius: 0.6rem;
+  border: 1px solid rgba(85, 210, 255, 0.35);
+  background: linear-gradient(120deg, rgba(16, 28, 44, 0.95), rgba(9, 17, 28, 0.9));
+}
+
+.intro-monitor {
+  position: absolute;
+  bottom: 28%;
+  left: 50%;
+  width: clamp(8.5rem, 22vw, 15rem);
+  height: clamp(5.2rem, 12vw, 9rem);
+  transform: translateX(-50%);
+  border-radius: 0.5rem;
+  border: 1px solid rgba(85, 210, 255, 0.6);
+  background: #0a1522;
+  box-shadow: 0 0 24px rgba(85, 210, 255, 0.25);
+  overflow: hidden;
+}
+
+.intro-screen {
+  position: absolute;
+  inset: 8% 10%;
+  border-radius: 0.35rem;
+  background: linear-gradient(135deg, rgba(85, 210, 255, 0.25), rgba(15, 30, 48, 0.9));
+  border: 1px solid rgba(85, 210, 255, 0.45);
+}
+
+.intro-screen-glow {
+  position: absolute;
+  inset: -40%;
+  background: radial-gradient(circle, rgba(85, 210, 255, 0.25), transparent 65%);
+  opacity: 0.8;
+}
+
+.intro-overlay.is-story .intro-video {
+  animation: introVideoDrift 12s ease-in-out forwards;
+  opacity: 0.2;
+}
+
+.intro-overlay.is-story .intro-video-glow {
+  animation: introGlowPulse 4.5s ease-in-out infinite;
+}
+
+.intro-overlay.is-story::before {
+  animation: introGridPulse 6s ease-in-out infinite;
+}
+
+.intro-overlay.is-story .intro-house {
+  animation: introHouseZoom 12s ease-in-out forwards;
+}
+
+.intro-overlay.is-story .intro-window {
+  animation: introWindowFocus 12s ease-in-out forwards;
+}
+
+.intro-overlay.is-story .intro-room {
+  animation: introRoomReveal 12s ease-in-out forwards;
+}
+
+.intro-overlay.is-story .intro-monitor {
+  animation: introMonitorFocus 12s ease-in-out forwards;
+}
+
 .intro-grid {
   position: relative;
   z-index: 2;
@@ -1006,6 +1143,13 @@ body.is-work-ready-product .product-image-frame img {
   font-size: 0.82rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+}
+
+.intro-grid.is-transition .intro-kicker,
+.intro-grid.is-transition .intro-title,
+.intro-grid.is-transition .intro-tagline,
+.intro-grid.is-transition .intro-status {
+  animation: introTextSwap 0.6s ease;
 }
 
 .intro-skip {
@@ -1110,6 +1254,135 @@ body.intro-active.intro-reveal .site-footer {
   }
 }
 
+@keyframes introTextSwap {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes introVideoDrift {
+  0% {
+    transform: scale(1.04) translate3d(0, 0, 0);
+  }
+
+  50% {
+    transform: scale(1.12) translate3d(-2%, -3%, 0);
+  }
+
+  100% {
+    transform: scale(1.08) translate3d(2%, -6%, 0);
+  }
+}
+
+@keyframes introGlowPulse {
+  0%,
+  100% {
+    opacity: 0.65;
+  }
+
+  50% {
+    opacity: 0.95;
+  }
+}
+
+@keyframes introGridPulse {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+
+  50% {
+    opacity: 0.6;
+  }
+}
+
+@keyframes introHouseZoom {
+  0% {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+
+  12% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  45% {
+    opacity: 1;
+    transform: scale(1.25);
+  }
+
+  70% {
+    opacity: 0.35;
+    transform: scale(2.6);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(3.1);
+  }
+}
+
+@keyframes introWindowFocus {
+  0%,
+  30% {
+    transform: scale(1);
+    box-shadow: 0 0 18px rgba(85, 210, 255, 0.4);
+  }
+
+  55% {
+    transform: scale(1.6);
+    box-shadow: 0 0 28px rgba(85, 210, 255, 0.7);
+  }
+
+  100% {
+    transform: scale(2.2);
+    box-shadow: 0 0 46px rgba(85, 210, 255, 0.8);
+  }
+}
+
+@keyframes introRoomReveal {
+  0%,
+  45% {
+    opacity: 0;
+    transform: scale(1.2);
+  }
+
+  65% {
+    opacity: 0.85;
+    transform: scale(1.05);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes introMonitorFocus {
+  0%,
+  60% {
+    transform: translateX(-50%) scale(0.95);
+    box-shadow: 0 0 18px rgba(85, 210, 255, 0.2);
+  }
+
+  80% {
+    transform: translateX(-50%) scale(1.05);
+    box-shadow: 0 0 32px rgba(85, 210, 255, 0.4);
+  }
+
+  100% {
+    transform: translateX(-50%) scale(1.12);
+    box-shadow: 0 0 40px rgba(85, 210, 255, 0.6);
+  }
+}
+
 body.a11y-reduce-motion .intro-overlay,
 body.a11y-reduce-motion .intro-overlay * {
   animation: none !important;
@@ -1128,6 +1401,19 @@ body.a11y-reduce-motion .intro-video {
 
 .intro-overlay.is-reduced-motion .intro-video {
   display: none;
+}
+
+.intro-overlay.is-reduced-motion .intro-house {
+  opacity: 0;
+}
+
+.intro-overlay.is-reduced-motion .intro-room {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.intro-overlay.is-reduced-motion .intro-monitor {
+  transform: translateX(-50%) scale(1.05);
 }
 
 @media (prefers-reduced-motion: reduce) {
