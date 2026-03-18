@@ -1,5 +1,3 @@
-// Stripe Payment Link redirects must be configured in the Stripe Dashboard.
-// Set each link's successful payment redirect to: /thank-you.html
 const PRODUCT_IMAGES = {
   workReady: {
     main: "assets/images/work-ready-overview.png",
@@ -119,8 +117,7 @@ window.PC_PRODUCTS = [
       "Prebuilt and tested before dispatch by BPP PCs.",
       "Best suited to office software, admin workloads, web platforms, and remote meeting tools.",
       "Integrated graphics only; not designed for high-end gaming or GPU-heavy tasks."
-    ],
-    stripeCheckoutLink: "https://buy.stripe.com/9B6aEW11x5Wo3Ed3Sz6kg00"
+    ]
   },
   {
     id: "bpp-ultimate-pc",
@@ -145,8 +142,7 @@ window.PC_PRODUCTS = [
       PRODUCT_IMAGES.ultimate.cpu,
       PRODUCT_IMAGES.ultimate.gpu,
       PRODUCT_IMAGES.ultimate.power
-    ],
-    stripeCheckoutLink: "https://buy.stripe.com/28EaEW6lR98AgqZ88P6kg01"
+    ]
   },
   {
     id: "productivity-editing-pc",
@@ -233,10 +229,8 @@ window.PC_PRODUCTS = [
     ],
     otherInfo: [
       "Built and tested by BPP PCs before release.",
-      "Best for productivity and editing workflows; heavier GPU-accelerated effects may benefit from a dedicated graphics card upgrade later.",
-      "Stripe checkout link is intentionally left blank for now and can be added when ready."
-    ],
-    stripeCheckoutLink: "https://buy.stripe.com/5kQ6oGeSndoQ5Mldt96kg05"
+      "Best for productivity and editing workflows; heavier GPU-accelerated effects may benefit from a dedicated graphics card upgrade later."
+    ]
   },
   {
     id: "fortnite-ready",
@@ -259,8 +253,7 @@ window.PC_PRODUCTS = [
       PRODUCT_IMAGES.fortnite.cpu,
       PRODUCT_IMAGES.fortnite.gpu,
       PRODUCT_IMAGES.fortnite.power
-    ],
-    stripeCheckoutLink: "https://buy.stripe.com/aFa00i39FacE7UtgFl6kg04"
+    ]
   },
 
 ];

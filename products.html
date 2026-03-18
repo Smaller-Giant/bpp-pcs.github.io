@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Products | BPP PCs</title>
-  <meta name="description" content="Browse all BPP desktop PCs with individual product pages and direct Stripe Checkout payment links.">
+  <meta name="description" content="Browse all BPP desktop PCs with individual product pages and secure Stripe Checkout.">
   <link rel="stylesheet" href="assets/style.css?v=20260308b">
 </head>
 <body>
@@ -19,11 +19,14 @@
         </span>
       </a>
 
-      <button class="nav-toggle" type="button" data-nav-toggle aria-label="Toggle navigation" aria-expanded="false" aria-controls="primary-nav">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
+      <div class="header-actions">
+        <a class="basket-link" href="basket.html" data-nav="basket.html">Basket</a>
+        <button class="nav-toggle" type="button" data-nav-toggle aria-label="Toggle navigation" aria-expanded="false" aria-controls="primary-nav">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
 
       <nav id="primary-nav" class="site-nav" aria-label="Primary navigation">
         <a href="./" data-nav="index.html">Home</a>
@@ -51,7 +54,7 @@
       <header class="page-header">
         <p class="kicker">Desktop Product Range</p>
         <h1>Choose your prebuilt PC</h1>
-        <p>Every desktop has a dedicated product page and direct Buy Now link to Stripe Checkout.</p>
+        <p>Every desktop has a dedicated product page. Add items to your basket and checkout securely with Stripe.</p>
         <p>All systems are built and tested before shipping. Estimated build time is 2 to 4 business days (delivery time additional).</p>
       </header>
       <form class="panel catalog-controls" data-product-controls>

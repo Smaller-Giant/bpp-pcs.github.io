@@ -1,5 +1,3 @@
-// Stripe Payment Link redirects must be configured in the Stripe Dashboard.
-// Set each link's successful payment redirect to: /thank-you.html
 const PRODUCTS = Array.isArray(window.PC_PRODUCTS) ? [...window.PC_PRODUCTS] : [];
 
 const DEFAULT_A11Y_STATE = {
@@ -16,7 +14,8 @@ const A11Y_CLASS_MAP = {
 
 const A11Y_STORAGE_KEY = "pc_site_accessibility";
 const PRODUCT_DETAIL_PAGE = "product.html";
-const INTRO_STORAGE_KEY = "bpp_intro_seen";
+const CART_STORAGE_KEY = "bpppcs_cart";
+const CHECKOUT_ENDPOINT = "https://stripe-backend-pi-ten.vercel.app/api/create-checkout-session";
 
 function escapeHtml(value) {
   return String(value)
@@ -161,11 +160,6 @@ function getProductDescription(product) {
   return product.description;
 }
 
-function getCheckoutLink(product) {
-  const value = String(product?.stripeCheckoutLink || "").trim();
-  return value || "";
-}
-
 function getProductArrayField(product, key, fallbackItems) {
   const value = product[key];
   if (Array.isArray(value)) {
@@ -179,6 +173,195 @@ function getProductArrayField(product, key, fallbackItems) {
   }
 
   return fallbackItems;
+}
+
+function normalizeCartItem(item) {
+  if (!item || typeof item !== "object") {
+    return null;
+  }
+
+  const name = String(item.name || "").trim();
+  const price = Number(item.price);
+  const quantity = Number(item.quantity);
+
+  if (!name || !Number.isFinite(price) || !Number.isFinite(quantity) || quantity <= 0) {
+    return null;
+  }
+
+  return {
+    name,
+    price,
+    quantity: Math.max(1, Math.floor(quantity))
+  };
+}
+
+function loadCart() {
+  try {
+    const raw = JSON.parse(localStorage.getItem(CART_STORAGE_KEY) || "[]");
+    if (!Array.isArray(raw)) {
+      return [];
+    }
+
+    return raw.map(normalizeCartItem).filter(Boolean);
+  } catch (error) {
+    return [];
+  }
+}
+
+function saveCart(cart) {
+  const cleaned = Array.isArray(cart) ? cart.map(normalizeCartItem).filter(Boolean) : [];
+  localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cleaned));
+  return cleaned;
+}
+
+function addToCart(product, quantity = 1) {
+  const name = String(product?.name || "").trim();
+  const price = Number(product?.price);
+  const qty = Number(quantity);
+
+  if (!name || !Number.isFinite(price) || !Number.isFinite(qty) || qty <= 0) {
+    return;
+  }
+
+  const cart = loadCart();
+  const existing = cart.find((item) => item.name === name && Number(item.price) === price);
+
+  if (existing) {
+    existing.quantity = Math.max(1, Math.floor(existing.quantity + qty));
+  } else {
+    cart.push({ name, price, quantity: Math.max(1, Math.floor(qty)) });
+  }
+
+  saveCart(cart);
+}
+
+function updateCartItemQuantity(name, price, quantity) {
+  const cart = loadCart();
+  const targetName = String(name || "").trim();
+  const targetPrice = Number(price);
+  if (!targetName || !Number.isFinite(targetPrice)) {
+    return cart;
+  }
+
+  const itemIndex = cart.findIndex((item) => item.name === targetName && Number(item.price) === targetPrice);
+  if (itemIndex === -1) {
+    return cart;
+  }
+
+  if (!Number.isFinite(quantity)) {
+    return cart;
+  }
+
+  const normalizedQuantity = Math.max(1, Math.floor(quantity));
+  cart[itemIndex].quantity = normalizedQuantity;
+
+  return saveCart(cart);
+}
+
+function removeCartItem(name, price) {
+  const cart = loadCart();
+  const targetName = String(name || "").trim();
+  const targetPrice = Number(price);
+  if (!targetName || !Number.isFinite(targetPrice)) {
+    return cart;
+  }
+
+  const filtered = cart.filter((item) => !(item.name === targetName && Number(item.price) === targetPrice));
+  return saveCart(filtered);
+}
+
+function handleAddToCart(event) {
+  const button = event.target.closest("[data-add-to-basket]");
+  if (!button) {
+    return;
+  }
+
+  event.preventDefault();
+  const key = button.getAttribute("data-product-key");
+  const product = getProductByKey(key);
+  if (!product) {
+    return;
+  }
+
+  addToCart(product, 1);
+}
+
+function handleBasketQuantityChange(event) {
+  const input = event.target.closest("[data-basket-quantity]");
+  if (!input) {
+    return;
+  }
+
+  const name = input.getAttribute("data-item-name");
+  const price = Number(input.getAttribute("data-item-price"));
+  const quantity = Number(input.value);
+  if (!Number.isFinite(quantity)) {
+    return;
+  }
+
+  updateCartItemQuantity(name, price, Math.floor(quantity));
+  renderBasket();
+}
+
+function handleBasketRemove(event) {
+  const button = event.target.closest("[data-basket-remove]");
+  if (!button) {
+    return;
+  }
+
+  event.preventDefault();
+  const name = button.getAttribute("data-item-name");
+  const price = Number(button.getAttribute("data-item-price"));
+  removeCartItem(name, price);
+  renderBasket();
+}
+
+async function handleCheckout(event) {
+  const trigger = event.target.closest("[data-checkout-button]");
+  if (!trigger) {
+    return;
+  }
+
+  event.preventDefault();
+  const cart = loadCart();
+  if (cart.length === 0) {
+    alert("Your basket is empty");
+    return;
+  }
+
+  try {
+    const response = await fetch(CHECKOUT_ENDPOINT, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ items: cart })
+    });
+
+    if (!response.ok) {
+      throw new Error(`Checkout failed (${response.status})`);
+    }
+
+    const data = await response.json();
+    if (!data || !data.url) {
+      throw new Error("Checkout response missing URL.");
+    }
+
+    window.location.href = data.url;
+  } catch (error) {
+    console.error("Checkout error:", error);
+    alert("We couldn't start checkout right now. Please try again.");
+  }
+}
+
+function initCartActions() {
+  document.addEventListener("click", handleAddToCart);
+  document.addEventListener("click", handleCheckout);
+}
+
+function initBasketActions() {
+  document.addEventListener("change", handleBasketQuantityChange);
+  document.addEventListener("click", handleBasketRemove);
 }
 
 function getSlugFromUrl() {
@@ -205,10 +388,7 @@ function createProductCard(product) {
   const productImage = getProductImage(product);
   const productKey = getProductKey(product);
   const productUrl = `${PRODUCT_DETAIL_PAGE}?slug=${encodeURIComponent(productKey)}`;
-  const checkoutLink = getCheckoutLink(product);
-  const buyAction = checkoutLink
-    ? `<a class="button button-primary" href="${escapeHtml(checkoutLink)}">Buy Now</a>`
-    : `<button class="button button-primary" type="button" disabled aria-disabled="true">Checkout link coming soon</button>`;
+  const addAction = `<button class="button button-primary" type="button" data-add-to-basket data-product-key="${escapeHtml(productKey)}">Add to Basket</button>`;
 
   const safeKey = productKey ? productKey.replace(/[^a-z0-9]+/gi, "-") : "";
   const cardClass = `product-card${safeKey ? ` product-card--${safeKey}` : ""}`;
@@ -223,7 +403,7 @@ function createProductCard(product) {
         <ul class="product-specs">${specificationItems}</ul>
         <div class="card-actions">
           <a class="button button-secondary" href="${escapeHtml(productUrl)}">View details</a>
-          ${buyAction}
+          ${addAction}
         </div>
       </div>
     </article>
@@ -298,6 +478,7 @@ function createProductDetail(product) {
   const specificationItems = product.specifications
     .map((item) => `<li>${escapeHtml(item)}</li>`)
     .join("");
+  const productKey = getProductKey(product);
   const otherInfoItems = getProductArrayField(product, "otherInfo", [
     "UK delivery only. See the shipping page for delivery timing and rates.",
     "Returns are available under our returns policy and UK consumer law.",
@@ -332,10 +513,7 @@ function createProductDetail(product) {
       </div>
     `
     : "";
-  const checkoutLink = getCheckoutLink(product);
-  const buyNowAction = checkoutLink
-    ? `<a class="button button-primary button-large" href="${escapeHtml(checkoutLink)}">Buy Now</a>`
-    : `<button class="button button-primary button-large" type="button" disabled aria-disabled="true">Checkout link coming soon</button>`;
+  const addToBasketAction = `<button class="button button-primary button-large" type="button" data-add-to-basket data-product-key="${escapeHtml(productKey)}">Add to Basket</button>`;
   return `
     <section class="product-gallery" data-product-gallery>
       <div class="product-gallery-track" data-product-gallery-track aria-label="${escapeHtml(product.name)} photo gallery">
@@ -359,8 +537,8 @@ function createProductDetail(product) {
         <h2>Other information</h2>
         <ul class="specification-list">${otherInfoItems}</ul>
       </section>
-      <p class="checkout-disclaimer">You will be redirected to Stripe to securely complete your purchase.</p>
-      ${buyNowAction}
+      <p class="checkout-disclaimer">Add items to your basket, then checkout securely with Stripe.</p>
+      ${addToBasketAction}
     </div>
   `;
 }
@@ -536,80 +714,6 @@ function initAccessibilityMenu() {
       closeMenu();
     }
   });
-}
-
-function initIntroSequence() {
-  const overlay = document.querySelector("[data-intro-overlay]");
-  if (!overlay) {
-    return;
-  }
-
-  const prefersReducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const reduceMotion = document.body.classList.contains("a11y-reduce-motion") || prefersReducedMotion;
-  const alreadySeen = localStorage.getItem(INTRO_STORAGE_KEY) === "1";
-
-  if (alreadySeen) {
-    overlay.remove();
-    return;
-  }
-
-  document.body.classList.add("intro-active");
-  overlay.setAttribute("aria-hidden", "false");
-  if (reduceMotion) {
-    overlay.classList.add("is-reduced-motion");
-  }
-
-  const video = overlay.querySelector("video");
-  if (video && !reduceMotion) {
-    const playPromise = video.play();
-    if (playPromise && typeof playPromise.then === "function") {
-      playPromise.catch(() => {
-        video.pause();
-      });
-    }
-  }
-
-  let hasEnded = false;
-  let introTimeout = null;
-
-  const endIntro = (skipAnimation) => {
-    if (hasEnded) {
-      return;
-    }
-
-    hasEnded = true;
-    if (introTimeout) {
-      clearTimeout(introTimeout);
-      introTimeout = null;
-    }
-    localStorage.setItem(INTRO_STORAGE_KEY, "1");
-    document.body.classList.add("intro-reveal");
-    overlay.classList.add("is-exiting");
-
-    const exitDelay = skipAnimation || reduceMotion ? 220 : 1200;
-    window.setTimeout(() => {
-      overlay.remove();
-      document.body.classList.remove("intro-active", "intro-reveal");
-      document.dispatchEvent(new CustomEvent("intro:complete"));
-    }, exitDelay);
-  };
-
-  const skipButton = overlay.querySelector("[data-intro-skip]");
-  if (skipButton) {
-    skipButton.addEventListener("click", (event) => {
-      event.preventDefault();
-      endIntro(true);
-    });
-  }
-
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") {
-      endIntro(true);
-    }
-  }, { once: true });
-
-  const introDuration = reduceMotion ? 320 : 12500;
-  introTimeout = window.setTimeout(() => endIntro(false), introDuration);
 }
 
 function renderFeaturedProducts() {
@@ -808,7 +912,7 @@ function renderProductPage() {
   document.title = `${product.name} | BPP PCs`;
   const metaDescription = document.querySelector('meta[name="description"]');
   if (metaDescription) {
-    metaDescription.setAttribute("content", `${product.name} specifications and direct Stripe Checkout payment link.`);
+    metaDescription.setAttribute("content", `${product.name} specifications and secure checkout from BPP PCs.`);
   }
 
   document.body.classList.toggle("is-work-ready-product", isWorkReadyProduct(product));
@@ -816,55 +920,60 @@ function renderProductPage() {
   initProductGalleries();
 }
 
-function initHeroVideo() {
-  const video = document.querySelector(".hero-video");
-  if (!video) {
+function renderBasket() {
+  const mount = document.querySelector("[data-basket-content]");
+  if (!mount) {
     return;
   }
 
-  const isMobileViewport = () => window.innerWidth <= 860;
-  const source = video.querySelector("[data-video-source]") || video.querySelector("source");
-  const desktopSrc = video.getAttribute("data-video-desktop") || (source ? source.getAttribute("src") : "");
-  const mobileSrc = video.getAttribute("data-video-mobile") || desktopSrc;
-  let activeSrc = "";
+  const cart = loadCart();
+  if (cart.length === 0) {
+    mount.innerHTML = `
+      <div class="basket-empty">
+        <h2>Your basket is empty</h2>
+        <p>Browse the product range to add a custom PC to your basket.</p>
+        <a class="button button-secondary" href="products.html">Browse products</a>
+      </div>
+    `;
+    return;
+  }
 
-  const playVideo = () => {
-    const playPromise = video.play();
-    if (playPromise && typeof playPromise.then === "function") {
-      playPromise.catch(() => {
-        video.pause();
-      });
-    }
-  };
+  const itemsHtml = cart
+    .map((item, index) => {
+      const inputId = `basket-qty-${index + 1}`;
+      const subtotal = Number(item.price) * Number(item.quantity);
+      return `
+        <article class="basket-item">
+          <div>
+            <h2>${escapeHtml(item.name)}</h2>
+            <p class="basket-item-price">${formatPrice(item.price)}</p>
+          </div>
+          <div class="basket-quantity">
+            <label for="${escapeHtml(inputId)}">Quantity</label>
+            <input id="${escapeHtml(inputId)}" type="number" min="1" step="1" value="${escapeHtml(item.quantity)}" data-basket-quantity data-item-name="${escapeHtml(item.name)}" data-item-price="${escapeHtml(item.price)}">
+          </div>
+          <div class="basket-item-subtotal">${formatPrice(subtotal)}</div>
+          <button class="button button-secondary" type="button" data-basket-remove data-item-name="${escapeHtml(item.name)}" data-item-price="${escapeHtml(item.price)}">Remove</button>
+        </article>
+      `;
+    })
+    .join("");
 
-  const setVideoSource = (src) => {
-    if (!source || !src || src === activeSrc) {
-      return;
-    }
+  const total = cart.reduce((sum, item) => sum + Number(item.price) * Number(item.quantity), 0);
 
-    source.setAttribute("src", src);
-    activeSrc = src;
-    video.load();
-  };
-
-  const updateForViewport = () => {
-    const isMobile = isMobileViewport();
-    video.muted = true;
-    video.defaultMuted = true;
-    video.controls = false;
-    video.setAttribute("playsinline", "");
-    video.setAttribute("webkit-playsinline", "");
-    const nextSrc = isMobile ? mobileSrc : desktopSrc;
-    setVideoSource(nextSrc);
-    video.autoplay = true;
-    video.setAttribute("preload", "metadata");
-    playVideo();
-  };
-
-  updateForViewport();
-  window.addEventListener("resize", updateForViewport);
-  video.addEventListener("canplay", playVideo, { once: true });
-  document.addEventListener("touchstart", playVideo, { once: true, passive: true });
+  mount.innerHTML = `
+    <div class="basket-list">${itemsHtml}</div>
+    <div class="basket-summary">
+      <div class="basket-total">
+        <span>Total</span>
+        <strong>${formatPrice(total)}</strong>
+      </div>
+      <div class="basket-actions">
+        <a class="button button-secondary" href="products.html">Continue shopping</a>
+        <button class="button button-primary" type="button" data-checkout-button>Checkout</button>
+      </div>
+    </div>
+  `;
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -872,12 +981,13 @@ document.addEventListener("DOMContentLoaded", () => {
   setActiveNavigation();
   initMobileNavigation();
   initAccessibilityMenu();
-  initIntroSequence();
+  initCartActions();
+  initBasketActions();
   initProductCardNavigation();
   initBackButtons();
   initProductsControls();
   renderFeaturedProducts();
   renderProductsPage();
   renderProductPage();
-  initHeroVideo();
+  renderBasket();
 });
