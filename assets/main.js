@@ -17,7 +17,6 @@ const A11Y_CLASS_MAP = {
 const A11Y_STORAGE_KEY = "pc_site_accessibility";
 const PRODUCT_DETAIL_PAGE = "product.html";
 const INTRO_STORAGE_KEY = "bpp_intro_seen";
-const IS_EMBED_VIEW = new URLSearchParams(window.location.search).get("embed") === "1";
 
 function escapeHtml(value) {
   return String(value)
@@ -545,12 +544,6 @@ function initIntroSequence() {
     return;
   }
 
-  if (IS_EMBED_VIEW) {
-    document.body.classList.add("intro-embed");
-    overlay.remove();
-    return;
-  }
-
   const prefersReducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const reduceMotion = document.body.classList.contains("a11y-reduce-motion") || prefersReducedMotion;
   const alreadySeen = localStorage.getItem(INTRO_STORAGE_KEY) === "1";
@@ -562,81 +555,8 @@ function initIntroSequence() {
 
   document.body.classList.add("intro-active");
   overlay.setAttribute("aria-hidden", "false");
-  overlay.classList.add("is-story");
   if (reduceMotion) {
     overlay.classList.add("is-reduced-motion");
-    overlay.classList.add("is-screen");
-  }
-
-  const introGrid = overlay.querySelector("[data-intro-grid]");
-  const kickerEl = overlay.querySelector("[data-intro-kicker]");
-  const titleEl = overlay.querySelector("[data-intro-title]");
-  const taglineEl = overlay.querySelector("[data-intro-tagline]");
-  const statusEl = overlay.querySelector("[data-intro-status]");
-  const stepTimers = [];
-
-  const steps = [
-    {
-      time: 0,
-      kicker: "Street View",
-      title: "A Home Setup",
-      tagline: "A quiet room. A fresh build. The glow of a new rig.",
-      status: "Exterior scan - Window target locked - Approach started"
-    },
-    {
-      time: 3500,
-      kicker: "Through The Window",
-      title: "Dialing In",
-      tagline: "Flying past the glass and into the workspace.",
-      status: "Entering room - Lighting desk - System in view"
-    },
-    {
-      time: 7000,
-      kicker: "On The Screen",
-      title: "BPP PCs Online",
-      tagline: "The build is ready. The storefront is live.",
-      status: "Boot sequence complete - Connecting store - Ready",
-      showScreen: true
-    },
-    {
-      time: 10500,
-      kicker: "Welcome",
-      title: "Start Your Build",
-      tagline: "Choose your system and make it yours.",
-      status: "Opening homepage - Loading products - Let's go"
-    }
-  ];
-
-  const applyStep = (step) => {
-    if (kickerEl) {
-      kickerEl.textContent = step.kicker;
-    }
-    if (titleEl) {
-      titleEl.textContent = step.title;
-    }
-    if (taglineEl) {
-      taglineEl.textContent = step.tagline;
-    }
-    if (statusEl) {
-      statusEl.textContent = step.status;
-    }
-
-    if (step.showScreen) {
-      overlay.classList.add("is-screen");
-    }
-
-    if (introGrid) {
-      introGrid.classList.remove("is-transition");
-      void introGrid.offsetWidth;
-      introGrid.classList.add("is-transition");
-      stepTimers.push(window.setTimeout(() => introGrid.classList.remove("is-transition"), 650));
-    }
-  };
-
-  if (!reduceMotion) {
-    steps.forEach((step) => {
-      stepTimers.push(window.setTimeout(() => applyStep(step), step.time));
-    });
   }
 
   const video = overlay.querySelector("video");
@@ -650,6 +570,7 @@ function initIntroSequence() {
   }
 
   let hasEnded = false;
+  let introTimeout = null;
 
   const endIntro = (skipAnimation) => {
     if (hasEnded) {
@@ -657,7 +578,10 @@ function initIntroSequence() {
     }
 
     hasEnded = true;
-    stepTimers.forEach((timer) => window.clearTimeout(timer));
+    if (introTimeout) {
+      clearTimeout(introTimeout);
+      introTimeout = null;
+    }
     localStorage.setItem(INTRO_STORAGE_KEY, "1");
     document.body.classList.add("intro-reveal");
     overlay.classList.add("is-exiting");
@@ -684,8 +608,8 @@ function initIntroSequence() {
     }
   }, { once: true });
 
-  const introDuration = reduceMotion ? 320 : 13500;
-  window.setTimeout(() => endIntro(false), introDuration);
+  const introDuration = reduceMotion ? 320 : 12500;
+  introTimeout = window.setTimeout(() => endIntro(false), introDuration);
 }
 
 function renderFeaturedProducts() {
@@ -893,10 +817,6 @@ function renderProductPage() {
 }
 
 function initHeroVideo() {
-  if (IS_EMBED_VIEW) {
-    return;
-  }
-
   const video = document.querySelector(".hero-video");
   if (!video) {
     return;
