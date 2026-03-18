@@ -17,6 +17,7 @@ const A11Y_CLASS_MAP = {
 const A11Y_STORAGE_KEY = "pc_site_accessibility";
 const PRODUCT_DETAIL_PAGE = "product.html";
 const INTRO_STORAGE_KEY = "bpp_intro_seen";
+const IS_EMBED_VIEW = new URLSearchParams(window.location.search).get("embed") === "1";
 
 function escapeHtml(value) {
   return String(value)
@@ -544,6 +545,12 @@ function initIntroSequence() {
     return;
   }
 
+  if (IS_EMBED_VIEW) {
+    document.body.classList.add("intro-embed");
+    overlay.remove();
+    return;
+  }
+
   const prefersReducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const reduceMotion = document.body.classList.contains("a11y-reduce-motion") || prefersReducedMotion;
   const alreadySeen = localStorage.getItem(INTRO_STORAGE_KEY) === "1";
@@ -558,6 +565,7 @@ function initIntroSequence() {
   overlay.classList.add("is-story");
   if (reduceMotion) {
     overlay.classList.add("is-reduced-motion");
+    overlay.classList.add("is-screen");
   }
 
   const introGrid = overlay.querySelector("[data-intro-grid]");
@@ -587,7 +595,8 @@ function initIntroSequence() {
       kicker: "On The Screen",
       title: "BPP PCs Online",
       tagline: "The build is ready. The storefront is live.",
-      status: "Boot sequence complete - Connecting store - Ready"
+      status: "Boot sequence complete - Connecting store - Ready",
+      showScreen: true
     },
     {
       time: 10500,
@@ -610,6 +619,10 @@ function initIntroSequence() {
     }
     if (statusEl) {
       statusEl.textContent = step.status;
+    }
+
+    if (step.showScreen) {
+      overlay.classList.add("is-screen");
     }
 
     if (introGrid) {
@@ -880,6 +893,10 @@ function renderProductPage() {
 }
 
 function initHeroVideo() {
+  if (IS_EMBED_VIEW) {
+    return;
+  }
+
   const video = document.querySelector(".hero-video");
   if (!video) {
     return;
