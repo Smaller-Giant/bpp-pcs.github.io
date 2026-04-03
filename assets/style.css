@@ -122,6 +122,7 @@ ul {
   border: 1px solid transparent;
   background: transparent;
   white-space: nowrap;
+  position: relative;
 }
 
 .basket-link:hover,
@@ -129,6 +130,25 @@ ul {
   color: var(--text);
   border-color: var(--line);
   background: rgba(255, 255, 255, 0.06);
+}
+
+.basket-count {
+  min-width: 1.2rem;
+  height: 1.2rem;
+  padding: 0 0.22rem;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #041017;
+  font-size: 0.72rem;
+  font-weight: 800;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0.12rem;
+  right: -0.34rem;
+  box-shadow: 0 0 0 2px rgba(13, 17, 24, 0.95);
 }
 
 .brand {
@@ -305,6 +325,27 @@ ul {
   isolation: isolate;
   display: grid;
   place-items: center;
+}
+
+.hero-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  opacity: 0.72;
+  pointer-events: none;
+}
+
+.hero-video-scrim {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(7, 12, 20, 0.2), rgba(7, 12, 20, 0.72)),
+    radial-gradient(circle at 50% 18%, rgba(85, 210, 255, 0.2), transparent 48%);
+  z-index: 0;
+  pointer-events: none;
 }
 
 .hero-brand-copy {
@@ -646,45 +687,6 @@ body.is-work-ready-product .product-image-frame img {
   font-size: 0.9rem;
 }
 
-.product-gallery-thumbnails {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
-  gap: 0.45rem;
-}
-
-.product-gallery-thumb {
-  border: 1px solid var(--line);
-  border-radius: var(--radius-sm);
-  background: var(--panel);
-  color: var(--muted);
-  padding: 0.38rem;
-  text-align: left;
-  cursor: pointer;
-  display: grid;
-  gap: 0.3rem;
-  transition: border-color 0.16s ease, background 0.16s ease;
-}
-
-.product-gallery-thumb img {
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
-  border-radius: calc(var(--radius-sm) - 0.2rem);
-}
-
-.product-gallery-thumb span {
-  font-size: 0.78rem;
-  line-height: 1.35;
-  color: inherit;
-}
-
-.product-gallery-thumb:hover,
-.product-gallery-thumb.is-active {
-  border-color: var(--accent);
-  color: var(--text);
-  background: rgba(85, 210, 255, 0.09);
-}
-
 .product-detail-copy {
   display: grid;
   gap: 0.8rem;
@@ -737,13 +739,53 @@ body.is-work-ready-product .product-image-frame img {
   background: var(--panel);
   padding: 0.75rem;
   display: grid;
-  grid-template-columns: minmax(0, 1.4fr) minmax(0, 0.7fr) minmax(0, 0.7fr) auto;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 0.7fr) minmax(0, 0.7fr) auto;
   gap: 0.6rem;
   align-items: center;
 }
 
+.basket-item-main {
+  display: grid;
+  grid-template-columns: 5.5rem minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.basket-item-copy {
+  display: grid;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
 .basket-item h2 {
   font-size: 1rem;
+  min-width: 0;
+}
+
+.basket-item-title {
+  color: var(--text);
+}
+
+.basket-item-title:hover {
+  color: var(--accent);
+}
+
+.basket-item-image-link {
+  display: block;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 14%, rgba(85, 210, 255, 0.14), transparent 56%),
+    #0d1522;
+}
+
+.basket-item-image {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: contain;
+  object-position: center;
+  padding: 0.45rem;
 }
 
 .basket-item-price {
@@ -801,14 +843,6 @@ body.is-work-ready-product .product-image-frame img {
   display: grid;
   gap: 0.5rem;
   padding: 0.6rem 0.2rem;
-}
-
-.collection-notice {
-  border: 1px solid var(--line);
-  border-radius: var(--radius-sm);
-  padding: 0.55rem 0.75rem;
-  background: rgba(255, 255, 255, 0.03);
-  font-size: 0.9rem;
 }
 
 .content-shell {
@@ -1016,6 +1050,11 @@ body.a11y-dyslexia-font {
     font-size: 0.85rem;
   }
 
+  .basket-count {
+    top: 0.06rem;
+    right: -0.28rem;
+  }
+
   .brand {
     min-width: 0;
     overflow: hidden;
@@ -1117,14 +1156,6 @@ body.a11y-dyslexia-font {
     grid-template-columns: 1fr;
   }
 
-  .product-gallery-thumbnails {
-    grid-auto-flow: column;
-    grid-auto-columns: minmax(165px, 1fr);
-    grid-template-columns: none;
-    overflow-x: auto;
-    scrollbar-width: thin;
-  }
-
   .catalog-controls {
     grid-template-columns: 1fr;
   }
@@ -1136,6 +1167,10 @@ body.a11y-dyslexia-font {
   .basket-item {
     grid-template-columns: 1fr;
     align-items: start;
+  }
+
+  .basket-item-main {
+    grid-template-columns: 4.9rem minmax(0, 1fr);
   }
 
   .basket-item-subtotal {

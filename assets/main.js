@@ -75,6 +75,15 @@ function getProductBySlug(slug) {
   return getProductByKey(slug);
 }
 
+function getProductUrl(key) {
+  const normalizedKey = normalizeProductKey(key);
+  if (!normalizedKey) {
+    return "";
+  }
+
+  return `${PRODUCT_DETAIL_PAGE}?slug=${encodeURIComponent(normalizedKey)}`;
+}
+
 function isWorkReadyProduct(product) {
   const key = getProductKey(product);
   const id = normalizeProductKey(product?.id);
@@ -183,6 +192,8 @@ function normalizeCartItem(item) {
   const name = String(item.name || "").trim();
   const price = Number(item.price);
   const quantity = Number(item.quantity);
+  const key = normalizeProductKey(item.key || item.slug);
+  const image = typeof item.image === "string" ? item.image.trim() : "";
 
   if (!name || !Number.isFinite(price) || !Number.isFinite(quantity) || quantity <= 0) {
     return null;
@@ -191,7 +202,9 @@ function normalizeCartItem(item) {
   return {
     name,
     price,
-    quantity: Math.max(1, Math.floor(quantity))
+    quantity: Math.max(1, Math.floor(quantity)),
+    key,
+    image
   };
 }
 
@@ -211,28 +224,85 @@ function loadCart() {
 function saveCart(cart) {
   const cleaned = Array.isArray(cart) ? cart.map(normalizeCartItem).filter(Boolean) : [];
   localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cleaned));
+  updateBasketIndicators(cleaned);
   return cleaned;
+}
+
+function getBasketItemCount(cart = loadCart()) {
+  return cart.reduce((total, item) => total + Math.max(0, Number(item.quantity) || 0), 0);
+}
+
+function updateBasketIndicators(cart = loadCart()) {
+  const itemCount = getBasketItemCount(cart);
+  const itemLabel = itemCount === 1 ? "1 item" : `${itemCount} items`;
+
+  document.querySelectorAll(".basket-link").forEach((link) => {
+    let badge = link.querySelector(".basket-count");
+    if (!badge) {
+      badge = document.createElement("span");
+      badge.className = "basket-count";
+      badge.setAttribute("aria-hidden", "true");
+      link.appendChild(badge);
+    }
+
+    badge.textContent = String(itemCount);
+    link.setAttribute("aria-label", `Basket, ${itemLabel}`);
+    link.setAttribute("title", `Basket, ${itemLabel}`);
+  });
 }
 
 function addToCart(product, quantity = 1) {
   const name = String(product?.name || "").trim();
   const price = Number(product?.price);
   const qty = Number(quantity);
+  const key = getProductKey(product);
+  const image = getProductImage(product);
 
   if (!name || !Number.isFinite(price) || !Number.isFinite(qty) || qty <= 0) {
     return;
   }
 
   const cart = loadCart();
-  const existing = cart.find((item) => item.name === name && Number(item.price) === price);
+  const existing = cart.find((item) => {
+    if (key && item.key) {
+      return item.key === key;
+    }
+
+    return item.name === name && Number(item.price) === price;
+  });
 
   if (existing) {
     existing.quantity = Math.max(1, Math.floor(existing.quantity + qty));
+    existing.key = existing.key || key;
+    existing.image = existing.image || image;
   } else {
-    cart.push({ name, price, quantity: Math.max(1, Math.floor(qty)) });
+    cart.push({
+      name,
+      price,
+      quantity: Math.max(1, Math.floor(qty)),
+      key,
+      image
+    });
   }
 
   saveCart(cart);
+}
+
+function getCartProduct(item) {
+  const cartKey = normalizeProductKey(item?.key);
+  if (cartKey) {
+    const keyedProduct = getProductByKey(cartKey);
+    if (keyedProduct) {
+      return keyedProduct;
+    }
+  }
+
+  const cartName = String(item?.name || "").trim().toLowerCase();
+  if (!cartName) {
+    return null;
+  }
+
+  return PRODUCTS.find((product) => String(product?.name || "").trim().toLowerCase() === cartName) || null;
 }
 
 function updateCartItemQuantity(name, price, quantity) {
@@ -330,12 +400,18 @@ async function handleCheckout(event) {
   }
 
   try {
+    const successUrl = new URL("success.html", window.location.href).toString();
+    const cancelUrl = new URL("cancel.html", window.location.href).toString();
     const response = await fetch(CHECKOUT_ENDPOINT, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ items: cart })
+      body: JSON.stringify({
+        items: cart,
+        successUrl,
+        cancelUrl
+      })
     });
 
     if (!response.ok) {
@@ -362,6 +438,25 @@ function initCartActions() {
 function initBasketActions() {
   document.addEventListener("change", handleBasketQuantityChange);
   document.addEventListener("click", handleBasketRemove);
+}
+
+function syncAmbientVideos() {
+  const shouldReduceMotion = document.body.classList.contains(A11Y_CLASS_MAP.reduceMotion);
+  document.querySelectorAll("[data-ambient-video]").forEach((video) => {
+    if (!(video instanceof HTMLVideoElement)) {
+      return;
+    }
+
+    if (shouldReduceMotion) {
+      video.pause();
+      return;
+    }
+
+    const playPromise = video.play();
+    if (playPromise && typeof playPromise.catch === "function") {
+      playPromise.catch(() => {});
+    }
+  });
 }
 
 function getSlugFromUrl() {
@@ -612,6 +707,8 @@ function applyAccessibilityState(state) {
   Object.keys(A11Y_CLASS_MAP).forEach((key) => {
     document.body.classList.toggle(A11Y_CLASS_MAP[key], Boolean(state[key]));
   });
+
+  syncAmbientVideos();
 }
 
 function updateAccessibilityButtons(state) {
@@ -942,11 +1039,24 @@ function renderBasket() {
     .map((item, index) => {
       const inputId = `basket-qty-${index + 1}`;
       const subtotal = Number(item.price) * Number(item.quantity);
+      const product = getCartProduct(item);
+      const productKey = product ? getProductKey(product) : item.key;
+      const productUrl = getProductUrl(productKey);
+      const productImage = item.image || (product ? getProductImage(product) : "assets/images/work-ready-main.svg");
+      const titleHtml = productUrl
+        ? `<a class="basket-item-title" href="${escapeHtml(productUrl)}">${escapeHtml(item.name)}</a>`
+        : `<span class="basket-item-title">${escapeHtml(item.name)}</span>`;
+      const imageHtml = productUrl
+        ? `<a class="basket-item-image-link" href="${escapeHtml(productUrl)}"><img class="basket-item-image" src="${escapeHtml(productImage)}" alt="${escapeHtml(item.name)}"></a>`
+        : `<div class="basket-item-image-link"><img class="basket-item-image" src="${escapeHtml(productImage)}" alt="${escapeHtml(item.name)}"></div>`;
       return `
         <article class="basket-item">
-          <div>
-            <h2>${escapeHtml(item.name)}</h2>
-            <p class="basket-item-price">${formatPrice(item.price)}</p>
+          <div class="basket-item-main">
+            ${imageHtml}
+            <div class="basket-item-copy">
+              <h2>${titleHtml}</h2>
+              <p class="basket-item-price">${formatPrice(item.price)}</p>
+            </div>
           </div>
           <div class="basket-quantity">
             <label for="${escapeHtml(inputId)}">Quantity</label>
@@ -976,6 +1086,23 @@ function renderBasket() {
   `;
 }
 
+function initCheckoutOutcomePages() {
+  const fileName = getCurrentFileName();
+  if (fileName === "success.html" || fileName === "thank-you.html") {
+    saveCart([]);
+  }
+}
+
+function initBasketIndicatorSync() {
+  updateBasketIndicators();
+
+  window.addEventListener("storage", (event) => {
+    if (event.key === CART_STORAGE_KEY) {
+      updateBasketIndicators();
+    }
+  });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   setCopyrightYear();
   setActiveNavigation();
@@ -990,4 +1117,7 @@ document.addEventListener("DOMContentLoaded", () => {
   renderProductsPage();
   renderProductPage();
   renderBasket();
+  initCheckoutOutcomePages();
+  initBasketIndicatorSync();
+  syncAmbientVideos();
 });
