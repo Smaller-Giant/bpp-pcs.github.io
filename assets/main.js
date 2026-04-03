@@ -440,6 +440,93 @@ function initBasketActions() {
   document.addEventListener("click", handleBasketRemove);
 }
 
+function setupAmbientVideo(video) {
+  if (!(video instanceof HTMLVideoElement) || video.dataset.ambientReady === "true") {
+    return;
+  }
+
+  const hero = video.closest(".hero");
+  let retryTimeoutId = 0;
+
+  function clearRetry() {
+    if (retryTimeoutId) {
+      window.clearTimeout(retryTimeoutId);
+      retryTimeoutId = 0;
+    }
+  }
+
+  function markReady() {
+    if (hero) {
+      hero.classList.add("has-video-ready");
+    }
+  }
+
+  function markFallback() {
+    if (hero) {
+      hero.classList.remove("has-video-ready");
+    }
+  }
+
+  function requestPlayback(forceReload = false) {
+    const shouldReduceMotion = document.body.classList.contains(A11Y_CLASS_MAP.reduceMotion);
+    if (shouldReduceMotion) {
+      clearRetry();
+      markFallback();
+      video.pause();
+      return;
+    }
+
+    if (forceReload) {
+      try {
+        video.load();
+      } catch (error) {
+        console.error("Ambient video reload failed:", error);
+      }
+    }
+
+    const playPromise = video.play();
+    if (playPromise && typeof playPromise.catch === "function") {
+      playPromise.catch(() => {});
+    }
+  }
+
+  function queueRetry() {
+    const shouldReduceMotion = document.body.classList.contains(A11Y_CLASS_MAP.reduceMotion);
+    if (shouldReduceMotion) {
+      return;
+    }
+
+    clearRetry();
+    retryTimeoutId = window.setTimeout(() => {
+      requestPlayback(true);
+    }, 900);
+  }
+
+  video.addEventListener("loadeddata", markReady);
+  video.addEventListener("canplay", markReady);
+  video.addEventListener("playing", () => {
+    clearRetry();
+    markReady();
+  });
+  video.addEventListener("stalled", queueRetry);
+  video.addEventListener("error", () => {
+    markFallback();
+    queueRetry();
+  });
+
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden) {
+      requestPlayback(false);
+    }
+  });
+
+  if (video.readyState >= 2) {
+    markReady();
+  }
+
+  video.dataset.ambientReady = "true";
+}
+
 function syncAmbientVideos() {
   const shouldReduceMotion = document.body.classList.contains(A11Y_CLASS_MAP.reduceMotion);
   document.querySelectorAll("[data-ambient-video]").forEach((video) => {
@@ -447,7 +534,13 @@ function syncAmbientVideos() {
       return;
     }
 
+    setupAmbientVideo(video);
+
     if (shouldReduceMotion) {
+      const hero = video.closest(".hero");
+      if (hero) {
+        hero.classList.remove("has-video-ready");
+      }
       video.pause();
       return;
     }

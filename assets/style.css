@@ -325,6 +325,9 @@ ul {
   isolation: isolate;
   display: grid;
   place-items: center;
+  background:
+    linear-gradient(180deg, rgba(7, 12, 20, 0.12), rgba(7, 12, 20, 0.58)),
+    url("images/hero-home.svg") center / cover no-repeat;
 }
 
 .hero-video {
@@ -334,8 +337,13 @@ ul {
   height: 100%;
   object-fit: cover;
   object-position: center;
-  opacity: 0.72;
+  opacity: 0;
   pointer-events: none;
+  transition: opacity 0.28s ease;
+}
+
+.hero.has-video-ready .hero-video {
+  opacity: 0.72;
 }
 
 .hero-video-scrim {
