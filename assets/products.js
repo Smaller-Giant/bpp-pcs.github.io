@@ -233,6 +233,63 @@ window.PC_PRODUCTS = [
     ]
   },
   {
+    id: "checkout-test-pc",
+    popular: "no",
+    name: "Checkout Test PC",
+    slug: "checkout-test-pc",
+    price: 0.5,
+    description: "A full catalogue test product priced at GBP 0.50 for checking the basket and Stripe checkout flow.",
+    longDescription: "The Checkout Test PC is a dedicated low-value listing for verifying product pages, basket behaviour, quantity handling, and Stripe checkout redirects. It is set up like a normal BPP PCs product so the full buying journey can be tested end to end.",
+    specifications: [
+      "Test Product Type: Catalogue and checkout verification item",
+      "Price: GBP 0.50",
+      "Availability: For internal order-flow testing",
+      "Display Mode: Uses full product detail page, basket support, and Stripe checkout integration",
+      "Shipping: Not intended as a physical customer dispatch item",
+      "Support: Contact support@bpppcs.com if a test order needs to be reviewed"
+    ],
+    image: PRODUCT_IMAGES.workReady.main,
+    images: [
+      PRODUCT_IMAGES.workReady.overview,
+      PRODUCT_IMAGES.workReady.case,
+      PRODUCT_IMAGES.workReady.cpu,
+      PRODUCT_IMAGES.workReady.power
+    ],
+    gallerySlides: [
+      {
+        image: PRODUCT_IMAGES.workReady.overview,
+        title: "Checkout flow test overview",
+        description: "Use this listing to confirm the product page, basket, and checkout flow are working correctly."
+      },
+      {
+        image: PRODUCT_IMAGES.workReady.case,
+        title: "Basket and quantity testing",
+        description: "Helpful for checking multiple quantities, basket edits, and item totals before payment."
+      },
+      {
+        image: PRODUCT_IMAGES.workReady.cpu,
+        title: "Low-value Stripe testing",
+        description: "Priced at GBP 0.50 so the live payment flow can be tested with minimal value."
+      },
+      {
+        image: PRODUCT_IMAGES.workReady.power,
+        title: "Post-checkout verification",
+        description: "Useful for checking success and cancel redirects after completing or exiting checkout."
+      }
+    ],
+    whyBuy: [
+      "Lets you test the live basket and Stripe journey without using a normal product price.",
+      "Behaves like a full product page, so the customer flow can be reviewed properly.",
+      "Supports quantity changes, basket edits, and checkout redirects.",
+      "Useful for confirming success and cancel pages are working as expected."
+    ],
+    otherInfo: [
+      "Created for checkout and basket testing on the live website.",
+      "Not intended as a standard retail dispatch product.",
+      "If a test order is placed, support can review it via support@bpppcs.com."
+    ]
+  },
+  {
     id: "fortnite-ready",
     popular: "no",
     name: "240FPS Fortnite Ready PC",

@@ -470,6 +470,33 @@ a:focus-visible {
   background: rgba(85, 210, 255, 0.1);
 }
 
+.toast-root {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 220;
+  pointer-events: none;
+}
+
+.site-toast {
+  max-width: min(24rem, calc(100vw - 2rem));
+  border: 1px solid rgba(85, 210, 255, 0.26);
+  border-radius: var(--radius-md);
+  background: rgba(12, 19, 30, 0.94);
+  box-shadow: 0 18px 34px rgba(0, 0, 0, 0.34);
+  color: var(--text);
+  padding: 0.8rem 0.95rem;
+  font-weight: 700;
+  transform: translateY(0.5rem);
+  opacity: 0;
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+
+.site-toast.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 .button-large {
   width: 100%;
   min-height: 3.2rem;
@@ -1090,6 +1117,11 @@ body.a11y-dyslexia-font {
   .basket-link {
     padding: 0.5rem 0.75rem;
     font-size: 0.85rem;
+  }
+
+  .toast-root {
+    right: 0.75rem;
+    bottom: 0.75rem;
   }
 
   .basket-count {

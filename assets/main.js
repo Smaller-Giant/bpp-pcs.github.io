@@ -17,6 +17,8 @@ const PRODUCT_DETAIL_PAGE = "product.html";
 const CART_STORAGE_KEY = "bpppcs_cart";
 const CHECKOUT_ENDPOINT = "https://stripe-backend-pi-ten.vercel.app/api/create-checkout-session";
 
+let toastHideTimeoutId = 0;
+
 function escapeHtml(value) {
   return String(value)
     .replace(/&/g, "&amp;")
@@ -217,9 +219,24 @@ function getCartIdentity(item) {
   return `name:${String(item?.name || "").trim().toLowerCase()}|price:${Number(item?.price)}`;
 }
 
+function matchesCartItem(item, itemLike) {
+  const itemKey = normalizeProductKey(item?.key);
+  const targetKey = normalizeProductKey(itemLike?.key);
+
+  if (itemKey && targetKey) {
+    return itemKey === targetKey;
+  }
+
+  const itemName = String(item?.name || "").trim();
+  const targetName = String(itemLike?.name || "").trim();
+  const itemPrice = Number(item?.price);
+  const targetPrice = Number(itemLike?.price);
+
+  return itemName === targetName && itemPrice === targetPrice;
+}
+
 function findCartItemIndex(cart, itemLike) {
-  const targetIdentity = getCartIdentity(itemLike);
-  return cart.findIndex((item) => getCartIdentity(item) === targetIdentity);
+  return cart.findIndex((item) => matchesCartItem(item, itemLike));
 }
 
 function buildCheckoutItems(cart = loadCart()) {
@@ -289,6 +306,51 @@ function updateBasketIndicators(cart = loadCart()) {
   });
 }
 
+function getToastRoot() {
+  let toastRoot = document.querySelector("[data-toast-root]");
+  if (toastRoot) {
+    return toastRoot;
+  }
+
+  toastRoot = document.createElement("div");
+  toastRoot.className = "toast-root";
+  toastRoot.setAttribute("data-toast-root", "");
+  toastRoot.setAttribute("aria-live", "polite");
+  toastRoot.setAttribute("aria-atomic", "true");
+
+  const toast = document.createElement("div");
+  toast.className = "site-toast";
+  toast.setAttribute("data-site-toast", "");
+  toast.hidden = true;
+  toastRoot.appendChild(toast);
+
+  document.body.appendChild(toastRoot);
+  return toastRoot;
+}
+
+function showToast(message) {
+  const toastRoot = getToastRoot();
+  const toast = toastRoot.querySelector("[data-site-toast]");
+  if (!toast) {
+    return;
+  }
+
+  window.clearTimeout(toastHideTimeoutId);
+  toast.textContent = message;
+  toast.hidden = false;
+
+  window.requestAnimationFrame(() => {
+    toast.classList.add("is-visible");
+  });
+
+  toastHideTimeoutId = window.setTimeout(() => {
+    toast.classList.remove("is-visible");
+    window.setTimeout(() => {
+      toast.hidden = true;
+    }, 220);
+  }, 2600);
+}
+
 function addToCart(product, quantity = 1) {
   const name = String(product?.name || "").trim();
   const price = Number(product?.price);
@@ -338,15 +400,16 @@ function getCartProduct(item) {
   return PRODUCTS.find((product) => String(product?.name || "").trim().toLowerCase() === cartName) || null;
 }
 
-function updateCartItemQuantity(name, price, quantity) {
+function updateCartItemQuantity(name, price, quantity, key = "") {
   const cart = loadCart();
   const targetName = String(name || "").trim();
   const targetPrice = Number(price);
-  if (!targetName || !Number.isFinite(targetPrice)) {
+  const targetKey = normalizeProductKey(key);
+  if ((!targetName || !Number.isFinite(targetPrice)) && !targetKey) {
     return cart;
   }
 
-  const itemIndex = findCartItemIndex(cart, { name: targetName, price: targetPrice });
+  const itemIndex = findCartItemIndex(cart, { key: targetKey, name: targetName, price: targetPrice });
   if (itemIndex === -1) {
     return cart;
   }
@@ -361,15 +424,16 @@ function updateCartItemQuantity(name, price, quantity) {
   return saveCart(cart);
 }
 
-function removeCartItem(name, price) {
+function removeCartItem(name, price, key = "") {
   const cart = loadCart();
   const targetName = String(name || "").trim();
   const targetPrice = Number(price);
-  if (!targetName || !Number.isFinite(targetPrice)) {
+  const targetKey = normalizeProductKey(key);
+  if ((!targetName || !Number.isFinite(targetPrice)) && !targetKey) {
     return cart;
   }
 
-  const filtered = cart.filter((item) => getCartIdentity(item) !== getCartIdentity({ name: targetName, price: targetPrice }));
+  const filtered = cart.filter((item) => !matchesCartItem(item, { key: targetKey, name: targetName, price: targetPrice }));
   return saveCart(filtered);
 }
 
@@ -392,6 +456,13 @@ function handleAddToCart(event) {
   const quantity = Number(quantityInput?.value || 1);
 
   addToCart(product, quantity);
+
+  if (quantity > 1) {
+    showToast(`${Math.max(1, Math.floor(quantity))} x ${product.name} have been added to your basket`);
+    return;
+  }
+
+  showToast(`${product.name} has been added to your basket`);
 }
 
 function handleBasketQuantityChange(event) {
@@ -402,12 +473,13 @@ function handleBasketQuantityChange(event) {
 
   const name = input.getAttribute("data-item-name");
   const price = Number(input.getAttribute("data-item-price"));
+  const key = input.getAttribute("data-item-key") || "";
   const quantity = Number(input.value);
   if (!Number.isFinite(quantity)) {
     return;
   }
 
-  updateCartItemQuantity(name, price, Math.floor(quantity));
+  updateCartItemQuantity(name, price, Math.floor(quantity), key);
   renderBasket();
 }
 
@@ -420,7 +492,8 @@ function handleBasketRemove(event) {
   event.preventDefault();
   const name = button.getAttribute("data-item-name");
   const price = Number(button.getAttribute("data-item-price"));
-  removeCartItem(name, price);
+  const key = button.getAttribute("data-item-key") || "";
+  removeCartItem(name, price, key);
   renderBasket();
 }
 
@@ -1195,10 +1268,10 @@ function renderBasket() {
           </div>
           <div class="basket-quantity">
             <label for="${escapeHtml(inputId)}">Quantity</label>
-            <input id="${escapeHtml(inputId)}" type="number" min="1" step="1" value="${escapeHtml(item.quantity)}" data-basket-quantity data-item-name="${escapeHtml(item.name)}" data-item-price="${escapeHtml(item.price)}">
+            <input id="${escapeHtml(inputId)}" type="number" min="1" step="1" value="${escapeHtml(item.quantity)}" data-basket-quantity data-item-key="${escapeHtml(productKey || "")}" data-item-name="${escapeHtml(item.name)}" data-item-price="${escapeHtml(item.price)}">
           </div>
           <div class="basket-item-subtotal">${formatPrice(subtotal)}</div>
-          <button class="button button-secondary" type="button" data-basket-remove data-item-name="${escapeHtml(item.name)}" data-item-price="${escapeHtml(item.price)}">Remove</button>
+          <button class="button button-secondary" type="button" data-basket-remove data-item-key="${escapeHtml(productKey || "")}" data-item-name="${escapeHtml(item.name)}" data-item-price="${escapeHtml(item.price)}">Remove</button>
         </article>
       `;
     })
