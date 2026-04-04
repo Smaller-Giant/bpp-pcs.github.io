@@ -208,6 +208,44 @@ function normalizeCartItem(item) {
   };
 }
 
+function getCartIdentity(item) {
+  const key = normalizeProductKey(item?.key);
+  if (key) {
+    return `key:${key}`;
+  }
+
+  return `name:${String(item?.name || "").trim().toLowerCase()}|price:${Number(item?.price)}`;
+}
+
+function findCartItemIndex(cart, itemLike) {
+  const targetIdentity = getCartIdentity(itemLike);
+  return cart.findIndex((item) => getCartIdentity(item) === targetIdentity);
+}
+
+function buildCheckoutItems(cart = loadCart()) {
+  const mergedItems = new Map();
+
+  cart.map(normalizeCartItem).filter(Boolean).forEach((item) => {
+    const identity = getCartIdentity(item);
+    const existing = mergedItems.get(identity);
+
+    if (existing) {
+      existing.quantity += item.quantity;
+      return;
+    }
+
+    mergedItems.set(identity, {
+      name: item.name,
+      price: Number(item.price),
+      quantity: Math.max(1, Math.floor(item.quantity))
+    });
+  });
+
+  return Array.from(mergedItems.values()).filter((item) => {
+    return item.name && Number.isFinite(item.price) && Number.isFinite(item.quantity) && item.quantity > 0;
+  });
+}
+
 function loadCart() {
   try {
     const raw = JSON.parse(localStorage.getItem(CART_STORAGE_KEY) || "[]");
@@ -263,13 +301,8 @@ function addToCart(product, quantity = 1) {
   }
 
   const cart = loadCart();
-  const existing = cart.find((item) => {
-    if (key && item.key) {
-      return item.key === key;
-    }
-
-    return item.name === name && Number(item.price) === price;
-  });
+  const existingIndex = findCartItemIndex(cart, { key, name, price });
+  const existing = existingIndex >= 0 ? cart[existingIndex] : null;
 
   if (existing) {
     existing.quantity = Math.max(1, Math.floor(existing.quantity + qty));
@@ -313,7 +346,7 @@ function updateCartItemQuantity(name, price, quantity) {
     return cart;
   }
 
-  const itemIndex = cart.findIndex((item) => item.name === targetName && Number(item.price) === targetPrice);
+  const itemIndex = findCartItemIndex(cart, { name: targetName, price: targetPrice });
   if (itemIndex === -1) {
     return cart;
   }
@@ -336,7 +369,7 @@ function removeCartItem(name, price) {
     return cart;
   }
 
-  const filtered = cart.filter((item) => !(item.name === targetName && Number(item.price) === targetPrice));
+  const filtered = cart.filter((item) => getCartIdentity(item) !== getCartIdentity({ name: targetName, price: targetPrice }));
   return saveCart(filtered);
 }
 
@@ -353,7 +386,12 @@ function handleAddToCart(event) {
     return;
   }
 
-  addToCart(product, 1);
+  const quantityInput = button
+    .closest("[data-product-purchase]")
+    ?.querySelector("[data-add-quantity]");
+  const quantity = Number(quantityInput?.value || 1);
+
+  addToCart(product, quantity);
 }
 
 function handleBasketQuantityChange(event) {
@@ -393,8 +431,8 @@ async function handleCheckout(event) {
   }
 
   event.preventDefault();
-  const cart = loadCart();
-  if (cart.length === 0) {
+  const checkoutItems = buildCheckoutItems();
+  if (checkoutItems.length === 0) {
     alert("Your basket is empty");
     return;
   }
@@ -408,7 +446,7 @@ async function handleCheckout(event) {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        items: cart,
+        items: checkoutItems,
         successUrl,
         cancelUrl
       })
@@ -725,6 +763,10 @@ function createProductDetail(product) {
         <h2>Other information</h2>
         <ul class="specification-list">${otherInfoItems}</ul>
       </section>
+      <div class="product-purchase" data-product-purchase>
+        <label class="product-quantity-label" for="product-quantity">Quantity</label>
+        <input class="product-quantity-input" id="product-quantity" type="number" min="1" step="1" value="1" data-add-quantity inputmode="numeric">
+      </div>
       <p class="checkout-disclaimer">Add items to your basket, then checkout securely with Stripe.</p>
       ${addToBasketAction}
     </div>

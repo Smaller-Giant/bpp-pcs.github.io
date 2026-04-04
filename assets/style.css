@@ -723,6 +723,26 @@ body.is-work-ready-product .product-image-frame img {
   gap: 0.45rem;
 }
 
+.product-purchase {
+  width: min(10rem, 100%);
+  display: grid;
+  gap: 0.35rem;
+}
+
+.product-quantity-label {
+  font-size: 0.84rem;
+  color: var(--muted);
+}
+
+.product-quantity-input {
+  min-height: 2.75rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line);
+  background: var(--panel-soft);
+  color: var(--text);
+  padding: 0.48rem 0.65rem;
+}
+
 .product-detail-section h2 {
   font-size: clamp(1.15rem, 2.1vw, 1.45rem);
 }
