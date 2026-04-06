@@ -49,6 +49,14 @@ function normalizeProductKey(value) {
   return String(value || "").trim().toLowerCase();
 }
 
+function normalizeProductId(value) {
+  return String(value || "").trim();
+}
+
+function getProductId(product) {
+  return normalizeProductId(product?.id);
+}
+
 function getProductKey(product) {
   const candidates = [product?.slug, product?.id, product?.name];
   for (const candidate of candidates) {
@@ -71,6 +79,15 @@ function getProductByKey(key) {
     const productCandidates = [product.slug, product.id, product.name];
     return productCandidates.some((candidate) => normalizeProductKey(candidate) === target);
   }) || null;
+}
+
+function getProductById(id) {
+  const target = normalizeProductId(id);
+  if (!target) {
+    return null;
+  }
+
+  return PRODUCTS.find((product) => getProductId(product) === target) || null;
 }
 
 function getProductBySlug(slug) {
@@ -194,23 +211,36 @@ function normalizeCartItem(item) {
   const name = String(item.name || "").trim();
   const price = Number(item.price);
   const quantity = Number(item.quantity);
+  const id = normalizeProductId(item.id);
   const key = normalizeProductKey(item.key || item.slug);
   const image = typeof item.image === "string" ? item.image.trim() : "";
+  const matchedProduct = id
+    ? getProductById(id)
+    : getProductByKey(key) || PRODUCTS.find((product) => String(product?.name || "").trim().toLowerCase() === name.toLowerCase());
+  const resolvedId = id || getProductId(matchedProduct);
+  const resolvedKey = key || (matchedProduct ? getProductKey(matchedProduct) : "");
+  const resolvedImage = image || (matchedProduct ? getProductImage(matchedProduct) : "");
 
   if (!name || !Number.isFinite(price) || !Number.isFinite(quantity) || quantity <= 0) {
     return null;
   }
 
   return {
+    id: resolvedId,
     name,
     price,
     quantity: Math.max(1, Math.floor(quantity)),
-    key,
-    image
+    key: resolvedKey,
+    image: resolvedImage
   };
 }
 
 function getCartIdentity(item) {
+  const id = normalizeProductId(item?.id);
+  if (id) {
+    return `id:${id}`;
+  }
+
   const key = normalizeProductKey(item?.key);
   if (key) {
     return `key:${key}`;
@@ -220,6 +250,13 @@ function getCartIdentity(item) {
 }
 
 function matchesCartItem(item, itemLike) {
+  const itemId = normalizeProductId(item?.id);
+  const targetId = normalizeProductId(itemLike?.id);
+
+  if (itemId && targetId) {
+    return itemId === targetId;
+  }
+
   const itemKey = normalizeProductKey(item?.key);
   const targetKey = normalizeProductKey(itemLike?.key);
 
@@ -243,6 +280,11 @@ function buildCheckoutItems(cart = loadCart()) {
   const mergedItems = new Map();
 
   cart.map(normalizeCartItem).filter(Boolean).forEach((item) => {
+    const product = getProductById(item.id);
+    if (!product) {
+      return;
+    }
+
     const identity = getCartIdentity(item);
     const existing = mergedItems.get(identity);
 
@@ -252,14 +294,13 @@ function buildCheckoutItems(cart = loadCart()) {
     }
 
     mergedItems.set(identity, {
-      name: item.name,
-      price: Number(item.price),
+      id: getProductId(product),
       quantity: Math.max(1, Math.floor(item.quantity))
     });
   });
 
   return Array.from(mergedItems.values()).filter((item) => {
-    return item.name && Number.isFinite(item.price) && Number.isFinite(item.quantity) && item.quantity > 0;
+    return normalizeProductId(item.id) && Number.isFinite(item.quantity) && item.quantity > 0;
   });
 }
 
@@ -352,26 +393,29 @@ function showToast(message) {
 }
 
 function addToCart(product, quantity = 1) {
+  const id = getProductId(product);
   const name = String(product?.name || "").trim();
   const price = Number(product?.price);
   const qty = Number(quantity);
   const key = getProductKey(product);
   const image = getProductImage(product);
 
-  if (!name || !Number.isFinite(price) || !Number.isFinite(qty) || qty <= 0) {
+  if (!id || !name || !Number.isFinite(price) || !Number.isFinite(qty) || qty <= 0) {
     return;
   }
 
   const cart = loadCart();
-  const existingIndex = findCartItemIndex(cart, { key, name, price });
+  const existingIndex = findCartItemIndex(cart, { id, key, name, price });
   const existing = existingIndex >= 0 ? cart[existingIndex] : null;
 
   if (existing) {
     existing.quantity = Math.max(1, Math.floor(existing.quantity + qty));
+    existing.id = existing.id || id;
     existing.key = existing.key || key;
     existing.image = existing.image || image;
   } else {
     cart.push({
+      id,
       name,
       price,
       quantity: Math.max(1, Math.floor(qty)),
@@ -384,6 +428,14 @@ function addToCart(product, quantity = 1) {
 }
 
 function getCartProduct(item) {
+  const cartId = normalizeProductId(item?.id);
+  if (cartId) {
+    const idProduct = getProductById(cartId);
+    if (idProduct) {
+      return idProduct;
+    }
+  }
+
   const cartKey = normalizeProductKey(item?.key);
   if (cartKey) {
     const keyedProduct = getProductByKey(cartKey);
@@ -400,16 +452,19 @@ function getCartProduct(item) {
   return PRODUCTS.find((product) => String(product?.name || "").trim().toLowerCase() === cartName) || null;
 }
 
-function updateCartItemQuantity(name, price, quantity, key = "") {
+function updateCartItemQuantity(name, price, quantity, key = "", id = "") {
   const cart = loadCart();
   const targetName = String(name || "").trim();
   const targetPrice = Number(price);
   const targetKey = normalizeProductKey(key);
-  if ((!targetName || !Number.isFinite(targetPrice)) && !targetKey) {
+  const explicitTargetId = normalizeProductId(id);
+  const targetProduct = getProductById(explicitTargetId) || getProductByKey(targetKey) || PRODUCTS.find((product) => String(product?.name || "").trim() === targetName);
+  const resolvedTargetId = explicitTargetId || getProductId(targetProduct);
+  if ((!targetName || !Number.isFinite(targetPrice)) && !targetKey && !resolvedTargetId) {
     return cart;
   }
 
-  const itemIndex = findCartItemIndex(cart, { key: targetKey, name: targetName, price: targetPrice });
+  const itemIndex = findCartItemIndex(cart, { id: resolvedTargetId, key: targetKey, name: targetName, price: targetPrice });
   if (itemIndex === -1) {
     return cart;
   }
@@ -424,16 +479,19 @@ function updateCartItemQuantity(name, price, quantity, key = "") {
   return saveCart(cart);
 }
 
-function removeCartItem(name, price, key = "") {
+function removeCartItem(name, price, key = "", id = "") {
   const cart = loadCart();
   const targetName = String(name || "").trim();
   const targetPrice = Number(price);
   const targetKey = normalizeProductKey(key);
-  if ((!targetName || !Number.isFinite(targetPrice)) && !targetKey) {
+  const explicitTargetId = normalizeProductId(id);
+  const targetProduct = getProductById(explicitTargetId) || getProductByKey(targetKey) || PRODUCTS.find((product) => String(product?.name || "").trim() === targetName);
+  const resolvedTargetId = explicitTargetId || getProductId(targetProduct);
+  if ((!targetName || !Number.isFinite(targetPrice)) && !targetKey && !resolvedTargetId) {
     return cart;
   }
 
-  const filtered = cart.filter((item) => !matchesCartItem(item, { key: targetKey, name: targetName, price: targetPrice }));
+  const filtered = cart.filter((item) => !matchesCartItem(item, { id: resolvedTargetId, key: targetKey, name: targetName, price: targetPrice }));
   return saveCart(filtered);
 }
 
@@ -474,12 +532,13 @@ function handleBasketQuantityChange(event) {
   const name = input.getAttribute("data-item-name");
   const price = Number(input.getAttribute("data-item-price"));
   const key = input.getAttribute("data-item-key") || "";
+  const id = input.getAttribute("data-item-id") || "";
   const quantity = Number(input.value);
   if (!Number.isFinite(quantity)) {
     return;
   }
 
-  updateCartItemQuantity(name, price, Math.floor(quantity), key);
+  updateCartItemQuantity(name, price, Math.floor(quantity), key, id);
   renderBasket();
 }
 
@@ -493,7 +552,8 @@ function handleBasketRemove(event) {
   const name = button.getAttribute("data-item-name");
   const price = Number(button.getAttribute("data-item-price"));
   const key = button.getAttribute("data-item-key") || "";
-  removeCartItem(name, price, key);
+  const id = button.getAttribute("data-item-id") || "";
+  removeCartItem(name, price, key, id);
   renderBasket();
 }
 
@@ -1248,6 +1308,7 @@ function renderBasket() {
       const inputId = `basket-qty-${index + 1}`;
       const subtotal = Number(item.price) * Number(item.quantity);
       const product = getCartProduct(item);
+      const productId = item.id || getProductId(product);
       const productKey = product ? getProductKey(product) : item.key;
       const productUrl = getProductUrl(productKey);
       const productImage = item.image || (product ? getProductImage(product) : "assets/images/work-ready-main.svg");
@@ -1268,10 +1329,10 @@ function renderBasket() {
           </div>
           <div class="basket-quantity">
             <label for="${escapeHtml(inputId)}">Quantity</label>
-            <input id="${escapeHtml(inputId)}" type="number" min="1" step="1" value="${escapeHtml(item.quantity)}" data-basket-quantity data-item-key="${escapeHtml(productKey || "")}" data-item-name="${escapeHtml(item.name)}" data-item-price="${escapeHtml(item.price)}">
+            <input id="${escapeHtml(inputId)}" type="number" min="1" step="1" value="${escapeHtml(item.quantity)}" data-basket-quantity data-item-id="${escapeHtml(productId || "")}" data-item-key="${escapeHtml(productKey || "")}" data-item-name="${escapeHtml(item.name)}" data-item-price="${escapeHtml(item.price)}">
           </div>
           <div class="basket-item-subtotal">${formatPrice(subtotal)}</div>
-          <button class="button button-secondary" type="button" data-basket-remove data-item-key="${escapeHtml(productKey || "")}" data-item-name="${escapeHtml(item.name)}" data-item-price="${escapeHtml(item.price)}">Remove</button>
+          <button class="button button-secondary" type="button" data-basket-remove data-item-id="${escapeHtml(productId || "")}" data-item-key="${escapeHtml(productKey || "")}" data-item-name="${escapeHtml(item.name)}" data-item-price="${escapeHtml(item.price)}">Remove</button>
         </article>
       `;
     })
