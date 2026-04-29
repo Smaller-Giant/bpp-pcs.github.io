@@ -16,8 +16,19 @@ const A11Y_STORAGE_KEY = "pc_site_accessibility";
 const PRODUCT_DETAIL_PAGE = "product.html";
 const CART_STORAGE_KEY = "bpppcs_cart";
 const CHECKOUT_ENDPOINT = "https://stripe-backend-pi-ten.vercel.app/api/create-checkout-session";
+const CHECKOUT_SUCCESS_FLAG = "success";
+const CHECKOUT_CANCEL_FLAG = "cancel";
+const UPSELL_SESSION_KEY = "bpppcs_pc_upsell_seen";
+const BUNDLE_PRODUCT_ID = "bpp-starter-gaming-combo";
+const PRODUCT_MEASUREMENT_FIELDS = [
+  { key: "length", label: "Length" },
+  { key: "width", label: "Width" },
+  { key: "height", label: "Height" },
+  { key: "weight", label: "Weight" }
+];
 
 let toastHideTimeoutId = 0;
+let isCheckoutInProgress = false;
 
 function escapeHtml(value) {
   return String(value)
@@ -118,6 +129,64 @@ function isProductPopular(product) {
   return value === "yes" || value === "true" || value === "1";
 }
 
+function getProductCategory(product) {
+  return String(product?.category || "").trim();
+}
+
+function isPcProduct(product) {
+  return getProductCategory(product).toUpperCase() === "PC";
+}
+
+function isBundleProduct(product) {
+  return getProductId(product) === BUNDLE_PRODUCT_ID || getProductCategory(product).toUpperCase() === "BUNDLE";
+}
+
+function triggersBundleUpsell(product) {
+  return isPcProduct(product) && Boolean(product?.triggersBundleUpsell);
+}
+
+function shouldShowInCatalog(product) {
+  if (!product || typeof product !== "object") {
+    return false;
+  }
+
+  if (product.visibleInCatalog === false) {
+    return false;
+  }
+
+  return !isBundleProduct(product);
+}
+
+function getProductTypeLabel(product) {
+  if (isPcProduct(product)) {
+    return "Prebuilt Desktop PC";
+  }
+
+  if (isBundleProduct(product)) {
+    return "Keyboard + Mouse Bundle";
+  }
+
+  if (getProductCategory(product).toUpperCase() === "ACCESSORY") {
+    return "Gaming Accessory";
+  }
+
+  return "BPP PCs Product";
+}
+
+function getBundleProduct() {
+  return getProductById(BUNDLE_PRODUCT_ID);
+}
+
+function getBundleItems(product) {
+  if (!Array.isArray(product?.bundleItems)) {
+    return [];
+  }
+
+  return product.bundleItems
+    .map((itemId) => getProductById(itemId))
+    .filter(Boolean);
+}
+
 function getProductImage(product) {
   if (typeof product.image === "string" && product.image.trim()) {
     return product.image.trim();
@@ -180,12 +249,24 @@ function getProductGallerySlides(product) {
   }));
 }
 
+function getProductSummary(product) {
+  if (typeof product?.description === "string" && product.description.trim()) {
+    return product.description.trim();
+  }
+
+  if (typeof product?.longDescription === "string" && product.longDescription.trim()) {
+    return product.longDescription.trim();
+  }
+
+  return "";
+}
+
 function getProductDescription(product) {
   if (typeof product.longDescription === "string" && product.longDescription.trim()) {
     return product.longDescription.trim();
   }
 
-  return product.description;
+  return getProductSummary(product);
 }
 
 function getProductArrayField(product, key, fallbackItems) {
@@ -203,25 +284,94 @@ function getProductArrayField(product, key, fallbackItems) {
   return fallbackItems;
 }
 
+function getProductKeyFeatures(product) {
+  return getProductArrayField(product, "keyFeatures", getProductArrayField(product, "whyBuy", []));
+}
+
+function getProductWhatItCanRun(product) {
+  return getProductArrayField(product, "whatItCanRun", []);
+}
+
+function getProductMeasurements(product) {
+  const rawMeasurements = product && typeof product.measurements === "object" && product.measurements
+    ? product.measurements
+    : {};
+
+  return PRODUCT_MEASUREMENT_FIELDS.reduce((result, field) => {
+    result[field.key] = String(rawMeasurements[field.key] || "").trim();
+    return result;
+  }, {});
+}
+
+function formatMeasurementValue(value) {
+  return String(value || "").trim() || "To be confirmed";
+}
+
+function getBundleSavings(product) {
+  const bundleItems = getBundleItems(product);
+  if (bundleItems.length === 0) {
+    return 0;
+  }
+
+  const separateTotal = bundleItems.reduce((total, item) => total + Number(item.price || 0), 0);
+  const bundlePrice = Number(product?.price || 0);
+  const savings = separateTotal - bundlePrice;
+  return savings > 0 ? savings : 0;
+}
+
+function cartContainsProduct(cart, productLike) {
+  return findCartItemIndex(Array.isArray(cart) ? cart : [], productLike) >= 0;
+}
+
+function cartContainsPc(cart = loadCart()) {
+  return cart.some((item) => {
+    const product = getCartProduct(item);
+    return isPcProduct(product);
+  });
+}
+
+function hasSeenUpsellThisSession() {
+  try {
+    return sessionStorage.getItem(UPSELL_SESSION_KEY) === "true";
+  } catch (error) {
+    return false;
+  }
+}
+
+function markUpsellSeenThisSession() {
+  try {
+    sessionStorage.setItem(UPSELL_SESSION_KEY, "true");
+  } catch (error) {
+    // Ignore storage availability issues and avoid blocking add-to-cart.
+  }
+}
+
 function normalizeCartItem(item) {
   if (!item || typeof item !== "object") {
     return null;
   }
 
-  const name = String(item.name || "").trim();
-  const price = Number(item.price);
+  const rawName = String(item.name || "").trim();
+  const rawPrice = Number(item.price);
   const quantity = Number(item.quantity);
   const id = normalizeProductId(item.id);
   const key = normalizeProductKey(item.key || item.slug);
   const image = typeof item.image === "string" ? item.image.trim() : "";
   const matchedProduct = id
     ? getProductById(id)
-    : getProductByKey(key) || PRODUCTS.find((product) => String(product?.name || "").trim().toLowerCase() === name.toLowerCase());
+    : getProductByKey(key) || PRODUCTS.find((product) => String(product?.name || "").trim().toLowerCase() === rawName.toLowerCase());
+
+  if (!matchedProduct) {
+    return null;
+  }
+
+  const name = String(matchedProduct.name || rawName).trim();
+  const price = Number.isFinite(Number(matchedProduct.price)) ? Number(matchedProduct.price) : rawPrice;
   const resolvedId = id || getProductId(matchedProduct);
   const resolvedKey = key || (matchedProduct ? getProductKey(matchedProduct) : "");
   const resolvedImage = image || (matchedProduct ? getProductImage(matchedProduct) : "");
 
-  if (!name || !Number.isFinite(price) || !Number.isFinite(quantity) || quantity <= 0) {
+  if (!resolvedId || !name || !Number.isFinite(price) || !Number.isFinite(quantity) || quantity <= 0) {
     return null;
   }
 
@@ -321,7 +471,12 @@ function saveCart(cart) {
   const cleaned = Array.isArray(cart) ? cart.map(normalizeCartItem).filter(Boolean) : [];
   localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cleaned));
   updateBasketIndicators(cleaned);
+  refreshUpsellButtons();
   return cleaned;
+}
+
+function syncCartWithCatalog() {
+  return saveCart(loadCart());
 }
 
 function getBasketItemCount(cart = loadCart()) {
@@ -390,6 +545,359 @@ function showToast(message) {
       toast.hidden = true;
     }, 220);
   }, 2600);
+}
+
+function isTrustedCheckoutUrl(value) {
+  try {
+    const url = new URL(value, window.location.href);
+    const trustedHosts = new Set(["checkout.stripe.com", "pay.stripe.com"]);
+    return url.protocol === "https:" && trustedHosts.has(url.hostname);
+  } catch (error) {
+    return false;
+  }
+}
+
+function setCheckoutButtonsBusy(isBusy) {
+  document.querySelectorAll("[data-checkout-button]").forEach((button) => {
+    if (!(button instanceof HTMLButtonElement)) {
+      return;
+    }
+
+    if (!button.dataset.defaultText) {
+      button.dataset.defaultText = button.textContent || "Checkout";
+    }
+
+    button.disabled = isBusy;
+    button.textContent = isBusy ? "Redirecting..." : button.dataset.defaultText;
+  });
+}
+
+function createAddToBasketButtonHtml(product, options = {}) {
+  const productKey = getProductKey(product);
+  const cart = Array.isArray(options.cart) ? options.cart : loadCart();
+  const shouldDisableIfInCart = Boolean(options.disableIfInCart);
+  const alreadyInCart = shouldDisableIfInCart && cartContainsProduct(cart, product);
+  const buttonClasses = options.className || "button button-primary";
+  const buttonLabel = alreadyInCart
+    ? (options.disabledLabel || "Added to Basket")
+    : (options.label || "Add to Basket");
+  const trackingAttributes = options.trackUpsellButton
+    ? ` data-upsell-bundle-button data-add-label="${escapeHtml(options.label || "Add to Basket")}" data-added-label="${escapeHtml(options.disabledLabel || "Added to Basket")}"`
+    : "";
+  const extraAttributes = options.extraAttributes ? ` ${options.extraAttributes}` : "";
+  const disabledAttributes = alreadyInCart ? ' disabled aria-disabled="true"' : "";
+
+  return `<button class="${escapeHtml(buttonClasses)}" type="button" data-add-to-basket data-product-key="${escapeHtml(productKey)}"${trackingAttributes}${extraAttributes}${disabledAttributes}>${escapeHtml(buttonLabel)}</button>`;
+}
+
+function createTrustIndicatorsMarkup() {
+  const trustPoints = [
+    "Secure Checkout",
+    "UK Support",
+    "Tested Before Delivery"
+  ];
+
+  return `
+    <div class="trust-strip" aria-label="BPP PCs trust indicators">
+      ${trustPoints.map((item) => `<span class="trust-pill">${escapeHtml(item)}</span>`).join("")}
+    </div>
+  `;
+}
+
+function createMeasurementsMarkup(product) {
+  const measurements = getProductMeasurements(product);
+  const measurementCards = PRODUCT_MEASUREMENT_FIELDS
+    .map((field) => {
+      const value = formatMeasurementValue(measurements[field.key]);
+      return `
+        <div class="measurement-card">
+          <span class="measurement-label">${escapeHtml(field.label)}</span>
+          <strong class="measurement-value">${escapeHtml(value)}</strong>
+        </div>
+      `;
+    })
+    .join("");
+
+  return `
+    <section class="product-detail-section">
+      <h2>Measurements</h2>
+      <div class="measurement-grid">
+        ${measurementCards}
+      </div>
+    </section>
+  `;
+}
+
+function createWhatItCanRunMarkup(product) {
+  if (!isPcProduct(product)) {
+    return "";
+  }
+
+  const items = getProductWhatItCanRun(product);
+  if (items.length === 0) {
+    return "";
+  }
+
+  return `
+    <section class="product-detail-section">
+      <h2>What it can run</h2>
+      <div class="run-list">
+        ${items.map((item) => `<span class="run-chip">${escapeHtml(item)}</span>`).join("")}
+      </div>
+    </section>
+  `;
+}
+
+function createBundleVisualMarkup(product) {
+  const bundleItems = getBundleItems(product).slice(0, 2);
+  if (bundleItems.length === 0) {
+    return `
+      <div class="upsell-bundle-visual upsell-bundle-visual--single">
+        <div class="upsell-bundle-tile">
+          <img src="${escapeHtml(getProductImage(product))}" alt="${escapeHtml(product.name)}">
+        </div>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="upsell-bundle-visual${bundleItems.length === 1 ? " upsell-bundle-visual--single" : ""}">
+      ${bundleItems.map((item) => `
+        <div class="upsell-bundle-tile">
+          <img src="${escapeHtml(getProductImage(item))}" alt="${escapeHtml(item.name)}">
+        </div>
+      `).join("")}
+    </div>
+  `;
+}
+
+function createBundleOfferMarkup(product, options = {}) {
+  const detailUrl = getProductUrl(getProductKey(product));
+  const isMinimal = Boolean(options.minimal);
+  const bundlePoints = getProductKeyFeatures(product)
+    .slice(0, 4)
+    .map((item) => `<li>${escapeHtml(item)}</li>`)
+    .join("");
+  const savings = getBundleSavings(product);
+  const savingsHtml = !isMinimal && savings > 0
+    ? `<p class="bundle-value-note">Better value bundle. Save ${formatPrice(savings)} versus buying separately.</p>`
+    : "";
+  const messageHtml = !isMinimal && options.message
+    ? `<p class="upsell-copy">${escapeHtml(options.message)}</p>`
+    : "";
+  const pointsHtml = !isMinimal && bundlePoints
+    ? `<ul class="product-specs upsell-points">${bundlePoints}</ul>`
+    : "";
+  const addButtonHtml = createAddToBasketButtonHtml(product, {
+    cart: options.cart,
+    className: options.buttonClassName || "button button-primary",
+    label: options.buttonLabel || "Add to Basket",
+    disabledLabel: options.disabledLabel || "Added to Basket",
+    disableIfInCart: options.disableIfInCart,
+    trackUpsellButton: options.trackUpsellButton,
+    extraAttributes: options.extraButtonAttributes || ""
+  });
+  const viewDetailsHtml = options.showViewDetails === false || !detailUrl
+    ? ""
+    : `<a class="button button-secondary" href="${escapeHtml(detailUrl)}">View details</a>`;
+  const actionsHtml = viewDetailsHtml
+    ? `${viewDetailsHtml}${addButtonHtml}`
+    : addButtonHtml;
+
+  return `
+    <article class="upsell-offer${options.compact ? " upsell-offer--compact" : ""}${isMinimal ? " upsell-offer--minimal" : ""}">
+      <div class="upsell-offer-visual">
+        ${createBundleVisualMarkup(product)}
+      </div>
+      <div class="upsell-offer-copy-wrap">
+        <p class="kicker">BPP PCs Bundle</p>
+        <h3>${escapeHtml(product.name)}</h3>
+        <p class="product-price">${formatPrice(product.price)}</p>
+        ${savingsHtml}
+        ${messageHtml}
+        ${pointsHtml}
+        <div class="upsell-offer-actions">
+          ${actionsHtml}
+        </div>
+      </div>
+    </article>
+  `;
+}
+
+function createBundleIncludesMarkup(product) {
+  const bundleItems = getBundleItems(product);
+  if (bundleItems.length === 0) {
+    return "";
+  }
+
+  const bundleLinks = bundleItems
+    .map((item) => {
+      const url = getProductUrl(getProductKey(item));
+      return `<li><a class="bundle-item-link" href="${escapeHtml(url)}">${escapeHtml(item.name)}</a></li>`;
+    })
+    .join("");
+
+  return `
+    <section class="product-detail-section">
+      <h2>Included in this bundle</h2>
+      <ul class="specification-list">${bundleLinks}</ul>
+    </section>
+  `;
+}
+
+function createFrequentlyBoughtTogetherMarkup(product) {
+  if (!isPcProduct(product)) {
+    return "";
+  }
+
+  const bundleProduct = getBundleProduct();
+  if (!bundleProduct) {
+    return "";
+  }
+
+  return `
+    <section class="product-detail-section upsell-section">
+      <h2>Frequently Bought Together</h2>
+      ${createBundleOfferMarkup(bundleProduct, {
+        cart: loadCart(),
+        buttonClassName: "button button-primary",
+        buttonLabel: "Add to Basket",
+        disabledLabel: "Added to Basket",
+        disableIfInCart: true,
+        trackUpsellButton: true,
+        showViewDetails: true,
+        compact: true,
+        minimal: true
+      })}
+    </section>
+  `;
+}
+
+function getUpsellModalRoot() {
+  let root = document.querySelector("[data-upsell-modal-root]");
+  if (root) {
+    return root;
+  }
+
+  root = document.createElement("div");
+  root.className = "upsell-modal-root";
+  root.setAttribute("data-upsell-modal-root", "");
+  root.hidden = true;
+  root.innerHTML = `
+    <div class="upsell-modal-backdrop" data-upsell-close></div>
+    <div class="upsell-modal panel" role="dialog" aria-modal="true" aria-labelledby="upsell-modal-title">
+      <button class="button button-secondary upsell-modal-close" type="button" data-upsell-close aria-label="Close popup">Close</button>
+      <div class="upsell-modal-content" data-upsell-modal-content></div>
+    </div>
+  `;
+
+  document.body.appendChild(root);
+  return root;
+}
+
+function closeUpsellModal() {
+  const root = document.querySelector("[data-upsell-modal-root]");
+  if (!root) {
+    return;
+  }
+
+  root.hidden = true;
+  document.body.classList.remove("has-upsell-modal-open");
+}
+
+function openUpsellModal() {
+  const bundleProduct = getBundleProduct();
+  if (!bundleProduct) {
+    return;
+  }
+
+  const root = getUpsellModalRoot();
+  const content = root.querySelector("[data-upsell-modal-content]");
+  if (!content) {
+    return;
+  }
+
+  content.innerHTML = `
+    <p class="kicker">Complete your setup</p>
+    <h2 id="upsell-modal-title">Add a keyboard & mouse for ${formatPrice(bundleProduct.price)}</h2>
+    <p>One click adds the BPP Starter Gaming Combo to your basket.</p>
+    ${createBundleOfferMarkup(bundleProduct, {
+      cart: loadCart(),
+      buttonClassName: "button button-primary button-large",
+      buttonLabel: "Add to Basket",
+      disabledLabel: "Added to Basket",
+      disableIfInCart: true,
+      trackUpsellButton: true,
+      extraButtonAttributes: 'data-upsell-add="true"',
+      showViewDetails: false,
+      compact: true,
+      minimal: true
+    })}
+    <button class="button button-secondary upsell-modal-dismiss" type="button" data-upsell-close>Close</button>
+  `;
+
+  root.hidden = false;
+  document.body.classList.add("has-upsell-modal-open");
+  root.querySelector("[data-upsell-add]")?.focus();
+}
+
+function maybeOpenPcUpsell(product) {
+  if (!triggersBundleUpsell(product) || hasSeenUpsellThisSession()) {
+    return;
+  }
+
+  markUpsellSeenThisSession();
+
+  const bundleProduct = getBundleProduct();
+  if (!bundleProduct) {
+    return;
+  }
+
+  if (cartContainsProduct(loadCart(), bundleProduct)) {
+    return;
+  }
+
+  openUpsellModal();
+}
+
+function refreshUpsellButtons() {
+  const bundleProduct = getBundleProduct();
+  if (!bundleProduct) {
+    return;
+  }
+
+  const isInCart = cartContainsProduct(loadCart(), bundleProduct);
+  document.querySelectorAll("[data-upsell-bundle-button]").forEach((button) => {
+    if (!(button instanceof HTMLButtonElement)) {
+      return;
+    }
+
+    const addLabel = button.dataset.addLabel || "Add to Basket";
+    const addedLabel = button.dataset.addedLabel || "Added to Basket";
+    button.disabled = isInCart;
+    button.setAttribute("aria-disabled", String(isInCart));
+    button.textContent = isInCart ? addedLabel : addLabel;
+  });
+}
+
+function initUpsellActions() {
+  getUpsellModalRoot();
+
+  document.addEventListener("click", (event) => {
+    const closeTrigger = event.target.closest("[data-upsell-close]");
+    if (!closeTrigger) {
+      return;
+    }
+
+    event.preventDefault();
+    closeUpsellModal();
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      closeUpsellModal();
+    }
+  });
 }
 
 function addToCart(product, quantity = 1) {
@@ -512,8 +1020,18 @@ function handleAddToCart(event) {
     .closest("[data-product-purchase]")
     ?.querySelector("[data-add-quantity]");
   const quantity = Number(quantityInput?.value || 1);
+  const isUpsellAddButton = button.hasAttribute("data-upsell-add");
 
   addToCart(product, quantity);
+  maybeOpenPcUpsell(product);
+
+  if (isUpsellAddButton) {
+    closeUpsellModal();
+  }
+
+  if (document.querySelector("[data-basket-content]")) {
+    renderBasket();
+  }
 
   if (quantity > 1) {
     showToast(`${Math.max(1, Math.floor(quantity))} x ${product.name} have been added to your basket`);
@@ -564,6 +1082,10 @@ async function handleCheckout(event) {
   }
 
   event.preventDefault();
+  if (isCheckoutInProgress) {
+    return;
+  }
+
   const checkoutItems = buildCheckoutItems();
   if (checkoutItems.length === 0) {
     alert("Your basket is empty");
@@ -571,8 +1093,11 @@ async function handleCheckout(event) {
   }
 
   try {
-    const successUrl = new URL("success.html", window.location.href).toString();
-    const cancelUrl = new URL("cancel.html", window.location.href).toString();
+    isCheckoutInProgress = true;
+    setCheckoutButtonsBusy(true);
+
+    const successUrl = new URL(`success.html?checkout=${CHECKOUT_SUCCESS_FLAG}`, window.location.href).toString();
+    const cancelUrl = new URL(`cancel.html?checkout=${CHECKOUT_CANCEL_FLAG}`, window.location.href).toString();
     const response = await fetch(CHECKOUT_ENDPOINT, {
       method: "POST",
       headers: {
@@ -594,10 +1119,16 @@ async function handleCheckout(event) {
       throw new Error("Checkout response missing URL.");
     }
 
+    if (!isTrustedCheckoutUrl(data.url)) {
+      throw new Error("Checkout response returned an unexpected redirect URL.");
+    }
+
     window.location.href = data.url;
   } catch (error) {
     console.error("Checkout error:", error);
     alert("We couldn't start checkout right now. Please try again.");
+    isCheckoutInProgress = false;
+    setCheckoutButtonsBusy(false);
   }
 }
 
@@ -740,7 +1271,7 @@ function getSlugFromUrl() {
 }
 
 function createProductCard(product) {
-  const specificationItems = product.specifications
+  const featureItems = getProductKeyFeatures(product)
     .slice(0, 3)
     .map((item) => `<li>${escapeHtml(item)}</li>`)
     .join("");
@@ -754,12 +1285,12 @@ function createProductCard(product) {
 
   return `
     <article class="${cardClass}" data-product-url="${escapeHtml(productUrl)}" role="link" tabindex="0" aria-label="Open ${escapeHtml(product.name)} details">
-      <img class="product-card-image" src="${escapeHtml(productImage)}" alt="${escapeHtml(product.name)} desktop PC">
+      <img class="product-card-image" src="${escapeHtml(productImage)}" alt="${escapeHtml(product.name)}">
       <div class="product-card-body">
         <h3 class="product-card-title">${escapeHtml(product.name)}</h3>
         <p class="product-price">${formatPrice(product.price)}</p>
-        <p class="product-card-description">${escapeHtml(getProductDescription(product))}</p>
-        <ul class="product-specs">${specificationItems}</ul>
+        <p class="product-card-description">${escapeHtml(getProductSummary(product))}</p>
+        <ul class="product-specs product-card-specs">${featureItems}</ul>
         <div class="card-actions">
           <a class="button button-secondary" href="${escapeHtml(productUrl)}">View details</a>
           ${addAction}
@@ -838,6 +1369,12 @@ function createProductDetail(product) {
     .map((item) => `<li>${escapeHtml(item)}</li>`)
     .join("");
   const productKey = getProductKey(product);
+  const productTypeLabel = getProductTypeLabel(product);
+  const productSummary = getProductSummary(product);
+  const productDescription = getProductDescription(product);
+  const keyFeatureItems = getProductKeyFeatures(product)
+    .map((item) => `<li>${escapeHtml(item)}</li>`)
+    .join("");
   const otherInfoItems = getProductArrayField(product, "otherInfo", [
     "UK delivery only. See the shipping page for delivery timing and rates.",
     "Returns are available under our returns policy and UK consumer law.",
@@ -845,6 +1382,25 @@ function createProductDetail(product) {
   ])
     .map((item) => `<li>${escapeHtml(item)}</li>`)
     .join("");
+  const keyFeaturesSection = keyFeatureItems
+    ? `
+      <section class="product-detail-section">
+        <h2>Key Features</h2>
+        <ul class="specification-list feature-list">${keyFeatureItems}</ul>
+      </section>
+    `
+    : "";
+  const measurementsSection = createMeasurementsMarkup(product);
+  const whatItCanRunSection = createWhatItCanRunMarkup(product);
+  const bundleIncludesSection = isBundleProduct(product)
+    ? createBundleIncludesMarkup(product)
+    : "";
+  const bundleSavings = isBundleProduct(product) ? getBundleSavings(product) : 0;
+  const bundleValueNote = bundleSavings > 0
+    ? `<p class="bundle-value-note">Better value bundle. Save ${formatPrice(bundleSavings)} versus buying separately.</p>`
+    : "";
+  const frequentlyBoughtTogetherSection = createFrequentlyBoughtTogetherMarkup(product);
+  const trustIndicators = createTrustIndicatorsMarkup();
   const gallerySlideData = getProductGallerySlides(product);
   const gallerySlides = gallerySlideData
     .map((slide, index) => {
@@ -881,21 +1437,29 @@ function createProductDetail(product) {
       ${galleryControls}
     </section>
     <div class="product-detail-copy">
-      <p class="kicker">Prebuilt Desktop PC</p>
+      <p class="kicker">${escapeHtml(productTypeLabel)}</p>
       <h1>${escapeHtml(product.name)}</h1>
       <p class="product-price">${formatPrice(product.price)}</p>
+      <p class="product-summary">${escapeHtml(productSummary)}</p>
+      ${bundleValueNote}
+      ${trustIndicators}
       <section class="product-detail-section">
         <h2>Description</h2>
-        <p>${escapeHtml(getProductDescription(product))}</p>
+        <p>${escapeHtml(productDescription)}</p>
       </section>
+      ${keyFeaturesSection}
+      ${whatItCanRunSection}
+      ${measurementsSection}
       <section class="product-detail-section">
         <h2>Specifications</h2>
         <ul class="specification-list">${specificationItems}</ul>
       </section>
+      ${bundleIncludesSection}
       <section class="product-detail-section">
         <h2>Other information</h2>
         <ul class="specification-list">${otherInfoItems}</ul>
       </section>
+      ${frequentlyBoughtTogetherSection}
       <div class="product-purchase" data-product-purchase>
         <label class="product-quantity-label" for="product-quantity">Quantity</label>
         <input class="product-quantity-input" id="product-quantity" type="number" min="1" step="1" value="1" data-add-quantity inputmode="numeric">
@@ -1088,7 +1652,7 @@ function renderFeaturedProducts() {
   }
 
   const popularProducts = PRODUCTS
-    .filter((product) => isProductPopular(product))
+    .filter((product) => shouldShowInCatalog(product) && isProductPopular(product))
     .slice(0, 3);
 
   mount.innerHTML = popularProducts.map((product) => createProductCard(product)).join("");
@@ -1108,6 +1672,10 @@ function renderProductsPage() {
   const sortValue = String(sortSelect?.value || "name-asc");
 
   let visibleProducts = PRODUCTS.filter((product) => {
+    if (!shouldShowInCatalog(product)) {
+      return false;
+    }
+
     if (!searchTerm) {
       return true;
     }
@@ -1115,7 +1683,10 @@ function renderProductsPage() {
     const searchTarget = [
       product.name,
       product.slug,
+      getProductSummary(product),
       getProductDescription(product),
+      ...getProductKeyFeatures(product),
+      ...getProductWhatItCanRun(product),
       ...(Array.isArray(product.specifications) ? product.specifications : [])
     ]
       .join(" ")
@@ -1277,12 +1848,16 @@ function renderProductPage() {
   document.title = `${product.name} | BPP PCs`;
   const metaDescription = document.querySelector('meta[name="description"]');
   if (metaDescription) {
-    metaDescription.setAttribute("content", `${product.name} specifications and secure checkout from BPP PCs.`);
+    metaDescription.setAttribute("content", `${product.name}. ${getProductSummary(product)} Secure checkout from BPP PCs.`);
   }
 
   document.body.classList.toggle("is-work-ready-product", isWorkReadyProduct(product));
   mount.innerHTML = createProductDetail(product);
   initProductGalleries();
+}
+
+function createBasketUpsellMarkup(cart) {
+  return "";
 }
 
 function renderBasket() {
@@ -1339,6 +1914,7 @@ function renderBasket() {
     .join("");
 
   const total = cart.reduce((sum, item) => sum + Number(item.price) * Number(item.quantity), 0);
+  const basketUpsell = createBasketUpsellMarkup(cart);
 
   mount.innerHTML = `
     <div class="basket-list">${itemsHtml}</div>
@@ -1352,31 +1928,45 @@ function renderBasket() {
         <button class="button button-primary" type="button" data-checkout-button>Checkout</button>
       </div>
     </div>
+    ${basketUpsell}
   `;
 }
 
 function initCheckoutOutcomePages() {
   const fileName = getCurrentFileName();
-  if (fileName === "success.html" || fileName === "thank-you.html") {
+  const params = new URLSearchParams(window.location.search);
+  const checkoutStatus = params.get("checkout");
+  const hasSessionId = params.has("session_id");
+
+  if (fileName === "success.html" && (checkoutStatus === CHECKOUT_SUCCESS_FLAG || hasSessionId)) {
+    saveCart([]);
+  }
+
+  if (fileName === "thank-you.html") {
     saveCart([]);
   }
 }
 
 function initBasketIndicatorSync() {
   updateBasketIndicators();
+  refreshUpsellButtons();
 
   window.addEventListener("storage", (event) => {
     if (event.key === CART_STORAGE_KEY) {
       updateBasketIndicators();
+      renderBasket();
+      refreshUpsellButtons();
     }
   });
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  syncCartWithCatalog();
   setCopyrightYear();
   setActiveNavigation();
   initMobileNavigation();
   initAccessibilityMenu();
+  initUpsellActions();
   initCartActions();
   initBasketActions();
   initProductCardNavigation();
@@ -1389,4 +1979,5 @@ document.addEventListener("DOMContentLoaded", () => {
   initCheckoutOutcomePages();
   initBasketIndicatorSync();
   syncAmbientVideos();
+  refreshUpsellButtons();
 });

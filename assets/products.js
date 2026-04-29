@@ -27,24 +27,46 @@ const PRODUCT_IMAGES = {
     ram: "assets/images/productivity-ram.png",
     ssd: "assets/images/productivity-ssd.png"
   },
-  
   fortnite: {
     main: "assets/images/fortnite-main.svg",
     cpu: "assets/images/fortnite-cpu.svg",
     gpu: "assets/images/fortnite-gpu.svg",
     power: "assets/images/fortnite-power.svg"
+  },
+  accessories: {
+    mouse: "assets/images/bpp-gaming-mouse.jpg",
+    keyboard: "assets/images/bpp-mechanical-gaming-keyboard.jpg"
   }
 };
 
 window.PC_PRODUCTS = [
   {
     id: "office-ready-pc",
+    category: "PC",
     popular: "yes",
     name: "Office Ready",
     slug: "work-ready-pc",
     price: 379.99,
-    description: "A tidy office desktop built for email, browser tabs, spreadsheets, and video calls, powered by an Intel Core i3 and fast NVMe storage.",
-    longDescription: "The Work Ready PC pairs the Intel Core i3-10105 with the ASRock H470M-HVS motherboard, 8GB dual-channel DDR4, and a Patriot P300 NVMe SSD, all housed in the compact ASUS Prime AP201 mesh case. Integrated Intel UHD 630 graphics handle day-to-day business workloads, while the MSI MAG A550BN 550W PSU keeps power delivery stable.",
+    description: "Perfect for school, office work, browsing, and everyday use.",
+    longDescription: "The Office Ready PC is a tidy desktop for daily tasks, office software, online learning, and general home use. It combines a reliable Intel Core i3 platform with fast NVMe storage so setup feels simple and responsive straight out of the box.",
+    keyFeatures: [
+      "Quick startup for work, school, and browsing",
+      "Compact design that fits neatly on smaller desks",
+      "Fast NVMe storage keeps everyday tasks responsive",
+      "Built and tested in the UK before dispatch"
+    ],
+    whatItCanRun: [
+      "Microsoft Office and Google Workspace",
+      "Zoom, Teams, and everyday web browsing",
+      "Minecraft and lighter esports titles",
+      "Streaming, homework, and daily admin tasks"
+    ],
+    measurements: {
+      length: "",
+      width: "",
+      height: "",
+      weight: ""
+    },
     specifications: [
       "Case: Asus Prime AP201 Micro ATX Mini Tower Black with Mesh Side Panel and USB 3.2 Gen 2 Type-C and USB 3.2 Gen 1 Type-A",
       "CPU: Intel Core i3 10105 3.7 GHz 4-Core LGA1200",
@@ -107,25 +129,42 @@ window.PC_PRODUCTS = [
         description: "NVMe storage shortens boot times and speeds up file access."
       }
     ],
-    whyBuy: [
-      "Intel Core i3-10105 with integrated UHD 630 graphics is ideal for office workloads.",
-      "ASUS Prime AP201 mesh case keeps the system cool in a compact footprint.",
-      "8GB dual-channel DDR4 plus Patriot P300 NVMe storage helps apps open quickly.",
-      "MSI MAG A550BN 550W 80+ Bronze PSU provides stable, efficient power."
-    ],
     otherInfo: [
       "Prebuilt and tested before dispatch by BPP PCs.",
-      "Best suited to office software, admin workloads, web platforms, and remote meeting tools.",
-      "Integrated graphics only; not designed for high-end gaming or GPU-heavy tasks."
+      "Best suited to office software, school tasks, web platforms, and remote meeting tools.",
+      "Integrated graphics only; not designed for high-end gaming."
     ]
   },
   {
     id: "bpp-ultimate-pc",
+    category: "PC",
+    triggersBundleUpsell: true,
     popular: "yes",
     name: "The BPP Ultimate PC",
     slug: "The BPP Ultimate PC",
     price: 2699,
-    description: "The highest performance PC that BPP offers. A 4K-ready gaming tower with a Ryzen 7 9800X3D, RTX 5080, DDR5 memory, and PCIe 5.0 storage.",
+    description: "Perfect for high-end gaming, streaming, and demanding creator work.",
+    longDescription: "The BPP Ultimate PC is our highest performance desktop for players and creators who want serious headroom. With a Ryzen 7 9800X3D, RTX 5080 graphics, fast DDR5 memory, and 4TB of PCIe 5.0 storage, it is built for premium gaming and heavier workloads without the setup hassle.",
+    keyFeatures: [
+      "High-refresh 1440p and 4K-ready gaming performance",
+      "Strong headroom for streaming and creator workflows",
+      "Fast 4TB PCIe 5.0 storage for quick load times",
+      "Premium airflow and cooling for longer sessions"
+    ],
+    whatItCanRun: [
+      "Fortnite",
+      "Call of Duty: Warzone",
+      "GTA V",
+      "Cyberpunk 2077",
+      "Minecraft with shaders",
+      "Streaming and creator apps"
+    ],
+    measurements: {
+      length: "",
+      width: "",
+      height: "",
+      weight: ""
+    },
     specifications: [
       "Case: NZXT H9 Flow RGB+ (2025) ATX Mid Tower White Tempered Glass",
       "CPU: AMD Ryzen 7 9800X3D 4.7 GHz 8-Core AM5",
@@ -142,16 +181,65 @@ window.PC_PRODUCTS = [
       PRODUCT_IMAGES.ultimate.cpu,
       PRODUCT_IMAGES.ultimate.gpu,
       PRODUCT_IMAGES.ultimate.power
+    ],
+    gallerySlides: [
+      {
+        image: PRODUCT_IMAGES.ultimate.main,
+        title: "Premium showcase build",
+        description: "A high-end tower layout built around airflow, clean cable routing, and standout presentation."
+      },
+      {
+        image: PRODUCT_IMAGES.ultimate.cpu,
+        title: "Ryzen 7 9800X3D gaming CPU",
+        description: "Fast gaming-focused CPU performance for high refresh-rate titles and heavy multitasking."
+      },
+      {
+        image: PRODUCT_IMAGES.ultimate.gpu,
+        title: "RTX 5080 graphics power",
+        description: "Strong GPU horsepower for 1440p and 4K gaming, streaming, and demanding visual workloads."
+      },
+      {
+        image: PRODUCT_IMAGES.ultimate.power,
+        title: "1000W Platinum PSU",
+        description: "High-efficiency power delivery ready for enthusiast-grade hardware."
+      }
+    ],
+    otherInfo: [
+      "Built, stress-tested, and quality-checked by BPP PCs before dispatch.",
+      "Ideal for premium gaming setups, streaming, and advanced creator workloads.",
+      "Keyboard and mouse are sold separately unless added as a bundle."
     ]
   },
   {
     id: "productivity-editing-pc",
+    category: "PC",
+    triggersBundleUpsell: false,
     popular: "no",
     name: "Content Creation PC",
     slug: "productivity-editing-pc",
     price: 649.99,
-    description: "A productivity-focused desktop with a strong Intel CPU for content workflows, fast editing timelines, and responsive multitasking.",
-    longDescription: "Built in the NZXT H3 Flow chassis, this system is tuned for office productivity and entry-to-mid video editing with good CPU performance, fast DDR4 memory, and PCIe 4.0 NVMe storage.",
+    description: "Perfect for editing, productivity, school, and everyday work.",
+    longDescription: "The Content Creation PC is a practical desktop for productivity software, light editing, multitasking, and everyday home use. It pairs a strong Intel processor with fast storage and a clean airflow-focused build to keep the day-to-day experience simple.",
+    keyFeatures: [
+      "Smooth multitasking for editing and office workloads",
+      "Responsive boot and project loading with PCIe 4.0 NVMe storage",
+      "Clean airflow-focused case design for steady daily use",
+      "Ready to use straight out of the box"
+    ],
+    whatItCanRun: [
+      "Adobe Premiere Pro",
+      "Photoshop and Canva",
+      "Minecraft",
+      "Valorant",
+      "Roblox",
+      "School and office apps"
+    ],
+    measurements: {
+      length: "",
+      width: "",
+      height: "",
+      weight: ""
+    },
     specifications: [
       "Case: NZXT H3 Flow Micro ATX Mid Tower Black with Tinted Tempered Glass, USB 3.2 Gen 2x2 Type-C + USB 3.2 Gen 1 Type-A",
       "CPU: Intel Core i5-12400 2.5 GHz 6-Core LGA1700",
@@ -221,25 +309,40 @@ window.PC_PRODUCTS = [
         description: "140mm fans to keep airflow steady during longer sessions."
       }
     ],
-    whyBuy: [
-      "Intel Core i5-12400 gives stronger CPU headroom for productivity software and video editing tasks.",
-      "16GB dual-channel DDR4 memory helps smoother timeline work and stable multitasking across creator apps.",
-      "PCIe 4.0 NVMe SSD improves startup, loading, and media/project handling speed.",
-      "NZXT H3 Flow airflow design with added 140mm fans helps maintain stable thermals during longer workloads."
-    ],
     otherInfo: [
       "Built and tested by BPP PCs before release.",
-      "Best for productivity and editing workflows; heavier GPU-accelerated effects may benefit from a dedicated graphics card upgrade later."
+      "Best for productivity and editing workflows with light gaming on the side.",
+      "A later graphics-card upgrade can help heavier GPU-accelerated workloads."
     ]
   },
   {
     id: "checkout-test-pc",
+    category: "PC",
+    triggersBundleUpsell: false,
     popular: "no",
     name: "Checkout Test PC",
     slug: "checkout-test-pc",
     price: 0.5,
-    description: "A full catalogue test product priced at GBP 0.50 for checking the basket and Stripe checkout flow.",
-    longDescription: "The Checkout Test PC is a dedicated low-value listing for verifying product pages, basket behaviour, quantity handling, and Stripe checkout redirects. It is set up like a normal BPP PCs product so the full buying journey can be tested end to end.",
+    description: "Perfect for basket, checkout, and catalogue testing.",
+    longDescription: "The Checkout Test PC is a low-value listing used to verify basket behaviour, checkout redirects, and the full product journey on the website. It behaves like a normal BPP PCs listing so the end-to-end buying flow can be checked without using a full-price product.",
+    keyFeatures: [
+      "Useful for end-to-end basket and checkout checks",
+      "Low-value product for live payment testing",
+      "Supports quantity changes and product-page testing",
+      "Matches the same product structure as the main catalogue"
+    ],
+    whatItCanRun: [
+      "Basket testing",
+      "Quantity checks",
+      "Checkout redirects",
+      "Catalogue flow reviews"
+    ],
+    measurements: {
+      length: "",
+      width: "",
+      height: "",
+      weight: ""
+    },
     specifications: [
       "Test Product Type: Catalogue and checkout verification item",
       "Price: GBP 0.50",
@@ -277,32 +380,49 @@ window.PC_PRODUCTS = [
         description: "Useful for checking success and cancel redirects after completing or exiting checkout."
       }
     ],
-    whyBuy: [
-      "Lets you test the live basket and Stripe journey without using a normal product price.",
-      "Behaves like a full product page, so the customer flow can be reviewed properly.",
-      "Supports quantity changes, basket edits, and checkout redirects.",
-      "Useful for confirming success and cancel pages are working as expected."
-    ],
     otherInfo: [
       "Created for checkout and basket testing on the live website.",
       "Not intended as a standard retail dispatch product.",
-      "If a test order is placed, support can review it via support@bpppcs.com."
+      "Support can review test orders via support@bpppcs.com."
     ]
   },
   {
     id: "fortnite-ready",
+    category: "PC",
+    triggersBundleUpsell: true,
     popular: "no",
     name: "240FPS Fortnite Ready PC",
     slug: "240FPS Fortnite Ready PC",
     price: 1199,
-    description: "A PC designed to get 240FPS on Fortnite to give the smoothest gameplay",
+    description: "Perfect for competitive Fortnite, fast-paced gaming, and streaming.",
+    longDescription: "The 240FPS Fortnite Ready PC is built for players who want fast, responsive gameplay in competitive titles. With a strong Ryzen processor, RTX graphics, and generous storage, it is designed to keep gaming smooth while still being easy to set up and use from day one.",
+    keyFeatures: [
+      "Built for high frame-rate competitive play",
+      "Strong CPU and GPU pairing for modern gaming and streaming",
+      "Fast storage with plenty of room for a growing game library",
+      "Ready to play straight out of the box"
+    ],
+    whatItCanRun: [
+      "Fortnite",
+      "GTA V",
+      "Minecraft",
+      "Apex Legends",
+      "Rocket League",
+      "Valorant"
+    ],
+    measurements: {
+      length: "",
+      width: "",
+      height: "",
+      weight: ""
+    },
     specifications: [
-      "AMD Ryzen 9 7900X",
-      "NVIDIA GeForce RTX 5080",
-      "16GB DDR4 3200MHz",
-      "2TB NVMe Gen4 SSD + 4TB SATA SSD",
-      "850W 80 Plus Gold PSU",
-      "Quiet airflow tower chassis"
+      "CPU: AMD Ryzen 9 7900X",
+      "Graphics: NVIDIA GeForce RTX 5080",
+      "Memory: 16GB DDR4 3200MHz",
+      "Storage: 2TB NVMe Gen4 SSD + 4TB SATA SSD",
+      "Power Supply: 850W 80 Plus Gold PSU",
+      "Case: Quiet airflow tower chassis"
     ],
     image: PRODUCT_IMAGES.fortnite.main,
     images: [
@@ -310,7 +430,181 @@ window.PC_PRODUCTS = [
       PRODUCT_IMAGES.fortnite.cpu,
       PRODUCT_IMAGES.fortnite.gpu,
       PRODUCT_IMAGES.fortnite.power
+    ],
+    gallerySlides: [
+      {
+        image: PRODUCT_IMAGES.fortnite.main,
+        title: "Fortnite-ready overview",
+        description: "A gaming-focused tower built for smooth, high frame-rate play."
+      },
+      {
+        image: PRODUCT_IMAGES.fortnite.cpu,
+        title: "Ryzen 9 processing power",
+        description: "Strong CPU performance helps keep competitive titles responsive."
+      },
+      {
+        image: PRODUCT_IMAGES.fortnite.gpu,
+        title: "RTX graphics muscle",
+        description: "High-end GPU power aimed at fast, fluid gameplay and modern visuals."
+      },
+      {
+        image: PRODUCT_IMAGES.fortnite.power,
+        title: "Reliable power delivery",
+        description: "Gold-rated PSU support for a performance-focused gaming build."
+      }
+    ],
+    otherInfo: [
+      "Built and tested by BPP PCs before shipping.",
+      "Best suited to esports and performance-focused gaming setups.",
+      "Keyboard and mouse are available separately or through the BPP Starter Gaming Combo."
     ]
   },
-
+  {
+    id: "bpp-gaming-mouse",
+    category: "Accessory",
+    visibleInCatalog: true,
+    popular: "no",
+    name: "BPP Gaming Mouse",
+    slug: "bpp-gaming-mouse",
+    price: 19.99,
+    description: "Gaming mouse with up to 8000 DPI, RGB lighting, ergonomic design, and USB wired setup.",
+    longDescription: "The BPP Gaming Mouse is a simple plug-and-play add-on for new desktop setups. It combines adjustable sensitivity, RGB styling, and a comfortable shape in a wired design that is easy to use straight away.",
+    keyFeatures: [
+      "Plug and play wired setup",
+      "Up to 8000 DPI for quick control",
+      "RGB lighting to match gaming desks",
+      "Ergonomic shape for longer sessions"
+    ],
+    measurements: {
+      length: "",
+      width: "",
+      height: "",
+      weight: ""
+    },
+    specifications: [
+      "Type: Gaming mouse",
+      "Sensor: Up to 8000 DPI",
+      "Lighting: RGB lighting",
+      "Shape: Ergonomic design",
+      "Connection: USB wired"
+    ],
+    image: PRODUCT_IMAGES.accessories.mouse,
+    images: [
+      PRODUCT_IMAGES.accessories.mouse
+    ],
+    gallerySlides: [
+      {
+        image: PRODUCT_IMAGES.accessories.mouse,
+        title: "BPP Gaming Mouse",
+        description: "A clean wired gaming mouse designed to be easy to plug in and start using straight away."
+      }
+    ],
+    otherInfo: [
+      "Sold by BPP PCs as a simple add-on for new desktop setups.",
+      "USB wired connection makes it easy to use with new systems right away.",
+      "Pairs with the BPP Mechanical Gaming Keyboard in the BPP Starter Gaming Combo."
+    ]
+  },
+  {
+    id: "bpp-mechanical-gaming-keyboard",
+    category: "Accessory",
+    visibleInCatalog: true,
+    popular: "no",
+    name: "BPP Mechanical Gaming Keyboard",
+    slug: "bpp-mechanical-gaming-keyboard",
+    price: 24.99,
+    description: "Mechanical keyboard with a 60% compact layout, RGB lighting, UK layout, and wired setup.",
+    longDescription: "The BPP Mechanical Gaming Keyboard is a compact wired board built for tidy gaming desks and easy setup. Its 60 percent layout saves space while keeping the feel and styling expected from a gaming keyboard.",
+    keyFeatures: [
+      "Compact 60 percent layout saves desk space",
+      "Mechanical feel for gaming and typing",
+      "RGB lighting matches gaming setups",
+      "Wired connection keeps setup simple"
+    ],
+    measurements: {
+      length: "",
+      width: "",
+      height: "",
+      weight: ""
+    },
+    specifications: [
+      "Type: Mechanical keyboard",
+      "Layout: 60% compact layout",
+      "Lighting: RGB lighting",
+      "Region: UK layout",
+      "Connection: Wired"
+    ],
+    image: PRODUCT_IMAGES.accessories.keyboard,
+    images: [
+      PRODUCT_IMAGES.accessories.keyboard
+    ],
+    gallerySlides: [
+      {
+        image: PRODUCT_IMAGES.accessories.keyboard,
+        title: "BPP Mechanical Gaming Keyboard",
+        description: "A compact keyboard designed to keep gaming desks neat while still feeling responsive."
+      }
+    ],
+    otherInfo: [
+      "Sold by BPP PCs as a clean starter keyboard option for gaming systems.",
+      "UK layout is ready for local users without needing remapping.",
+      "Pairs with the BPP Gaming Mouse in the BPP Starter Gaming Combo."
+    ]
+  },
+  {
+    id: "bpp-starter-gaming-combo",
+    category: "Bundle",
+    visibleInCatalog: false,
+    popular: "no",
+    name: "BPP Starter Gaming Combo",
+    slug: "bpp-starter-gaming-combo",
+    price: 34.99,
+    description: "Mechanical RGB keyboard and gaming mouse bundle with a simple plug and play setup.",
+    longDescription: "The BPP Starter Gaming Combo is an easy add-on for anyone buying a new PC and wanting the basics sorted in one click. It bundles the BPP Mechanical Gaming Keyboard with the BPP Gaming Mouse and offers better value than buying both separately.",
+    keyFeatures: [
+      "Better value than buying the keyboard and mouse separately",
+      "Adds both starter peripherals in one quick basket action",
+      "Simple plug and play wired setup",
+      "Ideal first setup for a new gaming PC"
+    ],
+    measurements: {
+      length: "",
+      width: "",
+      height: "",
+      weight: ""
+    },
+    specifications: [
+      "Includes: BPP Mechanical Gaming Keyboard",
+      "Includes: BPP Gaming Mouse",
+      "Setup: Plug and play wired setup",
+      "Best For: Starter gaming PC setups",
+      "Bundle Price: GBP 34.99"
+    ],
+    bundleItems: [
+      "bpp-mechanical-gaming-keyboard",
+      "bpp-gaming-mouse"
+    ],
+    image: PRODUCT_IMAGES.accessories.keyboard,
+    images: [
+      PRODUCT_IMAGES.accessories.keyboard,
+      PRODUCT_IMAGES.accessories.mouse
+    ],
+    gallerySlides: [
+      {
+        image: PRODUCT_IMAGES.accessories.keyboard,
+        title: "Mechanical RGB keyboard included",
+        description: "Compact wired keyboard included in the BPP Starter Gaming Combo."
+      },
+      {
+        image: PRODUCT_IMAGES.accessories.mouse,
+        title: "Gaming mouse included",
+        description: "RGB gaming mouse included so a new setup is ready to go straight away."
+      }
+    ],
+    otherInfo: [
+      "Bundle created by BPP PCs to support new desktop purchases.",
+      "Ideal for first-time setups, spare-room systems, and gift builds.",
+      "Shown as the only upsell across the site to keep the buying journey simple."
+    ]
+  }
 ];
